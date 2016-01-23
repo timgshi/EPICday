@@ -10,12 +10,13 @@
 		091A9C8DEFE5DE4DBEADCA9A /* Pods_EPICday.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A094ED59DDEBB334E8CBE3DC /* Pods_EPICday.framework */; };
 		4B7D3A031C543E1A00E170FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A021C543E1A00E170FB /* main.m */; };
 		4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A051C543E1A00E170FB /* AppDelegate.m */; };
-		4B7D3A091C543E1A00E170FB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A081C543E1A00E170FB /* ViewController.m */; };
+		4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A081C543E1A00E170FB /* WelcomeViewController.m */; };
 		4B7D3A0C1C543E1A00E170FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B7D3A0A1C543E1A00E170FB /* Main.storyboard */; };
 		4B7D3A0E1C543E1A00E170FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B7D3A0D1C543E1A00E170FB /* Assets.xcassets */; };
 		4B7D3A111C543E1A00E170FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B7D3A0F1C543E1A00E170FB /* LaunchScreen.storyboard */; };
 		4B7D3A1C1C543E1A00E170FB /* EPICdayTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A1B1C543E1A00E170FB /* EPICdayTests.m */; };
 		4B7D3A271C543E1A00E170FB /* EPICdayUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A261C543E1A00E170FB /* EPICdayUITests.m */; };
+		4B7D3A361C54468F00E170FB /* ChannelStreamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,8 +41,8 @@
 		4B7D3A021C543E1A00E170FB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4B7D3A041C543E1A00E170FB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4B7D3A051C543E1A00E170FB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4B7D3A071C543E1A00E170FB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		4B7D3A081C543E1A00E170FB /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4B7D3A071C543E1A00E170FB /* WelcomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
+		4B7D3A081C543E1A00E170FB /* WelcomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
 		4B7D3A0B1C543E1A00E170FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4B7D3A0D1C543E1A00E170FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B7D3A101C543E1A00E170FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -52,6 +53,8 @@
 		4B7D3A221C543E1A00E170FB /* EPICdayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EPICdayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7D3A261C543E1A00E170FB /* EPICdayUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EPICdayUITests.m; sourceTree = "<group>"; };
 		4B7D3A281C543E1A00E170FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4B7D3A341C54468F00E170FB /* ChannelStreamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelStreamViewController.h; sourceTree = "<group>"; };
+		4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelStreamViewController.m; sourceTree = "<group>"; };
 		A094ED59DDEBB334E8CBE3DC /* Pods_EPICday.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EPICday.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF35F7CA9648ED7E533241A5 /* Pods-EPICday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EPICday.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EPICday/Pods-EPICday.debug.xcconfig"; sourceTree = "<group>"; };
 		FE997C1BCE6A49E12F40752D /* Pods-EPICday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EPICday.release.xcconfig"; path = "Pods/Target Support Files/Pods-EPICday/Pods-EPICday.release.xcconfig"; sourceTree = "<group>"; };
@@ -119,8 +122,10 @@
 			children = (
 				4B7D3A041C543E1A00E170FB /* AppDelegate.h */,
 				4B7D3A051C543E1A00E170FB /* AppDelegate.m */,
-				4B7D3A071C543E1A00E170FB /* ViewController.h */,
-				4B7D3A081C543E1A00E170FB /* ViewController.m */,
+				4B7D3A071C543E1A00E170FB /* WelcomeViewController.h */,
+				4B7D3A081C543E1A00E170FB /* WelcomeViewController.m */,
+				4B7D3A341C54468F00E170FB /* ChannelStreamViewController.h */,
+				4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */,
 				4B7D3A0A1C543E1A00E170FB /* Main.storyboard */,
 				4B7D3A0D1C543E1A00E170FB /* Assets.xcassets */,
 				4B7D3A0F1C543E1A00E170FB /* LaunchScreen.storyboard */,
@@ -345,7 +350,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B7D3A091C543E1A00E170FB /* ViewController.m in Sources */,
+				4B7D3A361C54468F00E170FB /* ChannelStreamViewController.m in Sources */,
+				4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */,
 				4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */,
 				4B7D3A031C543E1A00E170FB /* main.m in Sources */,
 			);

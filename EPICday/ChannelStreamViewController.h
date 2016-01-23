@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  ChannelStreamViewController.h
 //  EPICday
 //
 //  Created by Tim Shi on 1/23/16.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface ChannelStreamViewController : UIViewController
 
 @end
-
