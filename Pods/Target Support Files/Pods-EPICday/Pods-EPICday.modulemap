@@ -1,0 +1,6 @@
+framework module Pods_EPICday {
+  umbrella header "Pods-EPICday-umbrella.h"
+
+  export *
+  module * { export * }
+}

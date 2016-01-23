@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		091A9C8DEFE5DE4DBEADCA9A /* Pods_EPICday.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A094ED59DDEBB334E8CBE3DC /* Pods_EPICday.framework */; };
 		4B7D3A031C543E1A00E170FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A021C543E1A00E170FB /* main.m */; };
 		4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A051C543E1A00E170FB /* AppDelegate.m */; };
 		4B7D3A091C543E1A00E170FB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A081C543E1A00E170FB /* ViewController.m */; };
@@ -51,6 +52,9 @@
 		4B7D3A221C543E1A00E170FB /* EPICdayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EPICdayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7D3A261C543E1A00E170FB /* EPICdayUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EPICdayUITests.m; sourceTree = "<group>"; };
 		4B7D3A281C543E1A00E170FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A094ED59DDEBB334E8CBE3DC /* Pods_EPICday.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EPICday.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF35F7CA9648ED7E533241A5 /* Pods-EPICday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EPICday.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EPICday/Pods-EPICday.debug.xcconfig"; sourceTree = "<group>"; };
+		FE997C1BCE6A49E12F40752D /* Pods-EPICday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EPICday.release.xcconfig"; path = "Pods/Target Support Files/Pods-EPICday/Pods-EPICday.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				091A9C8DEFE5DE4DBEADCA9A /* Pods_EPICday.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		00579C68C71FEA3A0909F313 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AF35F7CA9648ED7E533241A5 /* Pods-EPICday.debug.xcconfig */,
+				FE997C1BCE6A49E12F40752D /* Pods-EPICday.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		4B7D39F51C543E1A00E170FB = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +99,8 @@
 				4B7D3A1A1C543E1A00E170FB /* EPICdayTests */,
 				4B7D3A251C543E1A00E170FB /* EPICdayUITests */,
 				4B7D39FF1C543E1A00E170FB /* Products */,
+				00579C68C71FEA3A0909F313 /* Pods */,
+				D372DB2E72A675A223AB2BE8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -140,6 +156,14 @@
 			path = EPICdayUITests;
 			sourceTree = "<group>";
 		};
+		D372DB2E72A675A223AB2BE8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A094ED59DDEBB334E8CBE3DC /* Pods_EPICday.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -147,9 +171,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4B7D3A2B1C543E1A00E170FB /* Build configuration list for PBXNativeTarget "EPICday" */;
 			buildPhases = (
+				1DCB932D78D28339B9140C82 /* Check Pods Manifest.lock */,
 				4B7D39FA1C543E1A00E170FB /* Sources */,
 				4B7D39FB1C543E1A00E170FB /* Frameworks */,
 				4B7D39FC1C543E1A00E170FB /* Resources */,
+				C98A9738BDFA27F8911ED8E6 /* Embed Pods Frameworks */,
+				649653BBCA5F0B0A1C8EE161 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -264,6 +291,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1DCB932D78D28339B9140C82 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		649653BBCA5F0B0A1C8EE161 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EPICday/Pods-EPICday-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C98A9738BDFA27F8911ED8E6 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EPICday/Pods-EPICday-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4B7D39FA1C543E1A00E170FB /* Sources */ = {
@@ -409,6 +484,7 @@
 		};
 		4B7D3A2C1C543E1A00E170FB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF35F7CA9648ED7E533241A5 /* Pods-EPICday.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = EPICday/Info.plist;
@@ -420,6 +496,7 @@
 		};
 		4B7D3A2D1C543E1A00E170FB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FE997C1BCE6A49E12F40752D /* Pods-EPICday.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = EPICday/Info.plist;
@@ -496,6 +573,7 @@
 				4B7D3A2D1C543E1A00E170FB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4B7D3A2E1C543E1A00E170FB /* Build configuration list for PBXNativeTarget "EPICdayTests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +582,7 @@
 				4B7D3A301C543E1A00E170FB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4B7D3A311C543E1A00E170FB /* Build configuration list for PBXNativeTarget "EPICdayUITests" */ = {
 			isa = XCConfigurationList;
@@ -512,6 +591,7 @@
 				4B7D3A331C543E1A00E170FB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
