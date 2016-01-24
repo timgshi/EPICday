@@ -11,6 +11,7 @@
 #import <Bolts/Bolts.h>
 #import <Parse/Parse.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 #import "ChannelStreamViewController.h"
 
@@ -31,7 +32,17 @@
     NSArray *readPermissions = @[@"public_profile",
                                  @"email"];
     [[PFFacebookUtils logInInBackgroundWithReadPermissions:readPermissions] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask<PFUser *> * _Nonnull task) {
-        [self pushChannelStreamVC:YES];
+        FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me/?fields=email,first_name,last_name" parameters:nil];
+        [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+            PFUser *user = [PFUser currentUser];
+            user[@"first_name"] = result[@"first_name"];
+            user[@"last_name"] = result[@"last_name"];
+            user.email = result[@"email"];
+            [[user saveInBackground] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask<NSNumber *> * _Nonnull task) {
+                [self pushChannelStreamVC:YES];
+                return nil;
+            }];
+        }];
         return nil;
     }];
 }
