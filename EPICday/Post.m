@@ -12,6 +12,11 @@
 
 @implementation Post
 
+@dynamic channel;
+@dynamic user;
+
+@synthesize photos;
+
 + (void)load {
     [self registerSubclass];
 }

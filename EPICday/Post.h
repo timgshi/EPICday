@@ -15,4 +15,6 @@
 @property (nonatomic, strong) Channel *channel;
 @property (nonatomic, strong) PFUser *user;
 
+@property (nonatomic, strong) NSArray *photos;
+
 @end
