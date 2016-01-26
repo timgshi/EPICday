@@ -74,7 +74,11 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(100, 100);
+    Photo *photo = [self photoAtIndexPath:indexPath];
+    CGFloat width = CGRectGetWidth(self.collectionView.frame) - 30;
+    CGFloat ratio = width / photo.size.width;
+    CGFloat height = photo.size.height * ratio;
+    return CGSizeMake(width, height);
 }
 
 @end

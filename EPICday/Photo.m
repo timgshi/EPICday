@@ -29,4 +29,8 @@
     return @"Photo";
 }
 
+- (CGSize)size {
+    return CGSizeMake([self.dimensions[@"width"] floatValue], [self.dimensions[@"height"] floatValue]);
+}
+
 @end

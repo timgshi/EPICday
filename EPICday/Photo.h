@@ -22,4 +22,6 @@
 @property (nonatomic, strong) NSArray *robbers;
 @property (nonatomic, strong) PFFile *image;
 
+@property (nonatomic, readonly) CGSize size;
+
 @end
