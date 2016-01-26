@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+#import "Photo.h"
+
 @interface PhotoCollectionViewCell : UICollectionViewCell
+
+@property (nonatomic, strong) Photo *photo;
 
 + (NSString *)defaultIdentifier;
 + (void)registerWithCollectionView:(UICollectionView *)collectionView;

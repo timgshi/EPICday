@@ -15,4 +15,6 @@
 @property (nonatomic, strong) NSArray *members;
 @property (nonatomic, strong) PFFile *avatar;
 
+- (BFTask *)getRecentPostsAndPhotos;
+
 @end
