@@ -84,10 +84,18 @@
                   layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     Photo *photo = [self photoAtIndexPath:indexPath];
-    CGFloat width = CGRectGetWidth(self.collectionView.frame) - 30;
+    CGFloat width = (CGRectGetWidth(self.collectionView.frame) / 2) - 20;
     CGFloat ratio = width / photo.size.width;
     CGFloat height = photo.size.height * ratio;
     return CGSizeMake(width, height);
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(15, 15, 15, 15);
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 0;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {

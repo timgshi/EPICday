@@ -14,6 +14,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <Masonry/Masonry.h>
 
+#import "BigCameraButton.h"
 #import "Channel.h"
 #import "ChannelBarView.h"
 #import "ChannelStreamCollectionViewController.h"
@@ -25,6 +26,7 @@
 
 @property (nonatomic, strong) ChannelStreamCollectionViewController *streamCollectionVC;
 @property (nonatomic, strong) ChannelBarView *channelBarView;
+@property (nonatomic, strong) BigCameraButton *cameraButton;
 
 @end
 
@@ -51,7 +53,7 @@
             make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);
             make.left.equalTo(self.view.mas_left);
             make.right.equalTo(self.view.mas_right);
-            make.height.equalTo(@45);
+            make.height.equalTo(@55);
         }];
         
         self.streamCollectionVC = [ChannelStreamCollectionViewController streamCollectionVCForChannel:self.selectedChannel];
@@ -65,8 +67,22 @@
             make.right.equalTo(self.view.mas_right);
         }];
         
+        self.cameraButton = [BigCameraButton button];
+        [self.cameraButton addTarget:self action:@selector(cameraButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:self.cameraButton];
+        [self.cameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.view.mas_bottom).with.offset(-40);
+            make.centerX.equalTo(self.view.mas_centerX);
+            make.height.equalTo(@72);
+            make.width.equalTo(self.cameraButton.mas_height);
+        }];
+        
         return nil;
     }];
+}
+
+- (void)cameraButtonPressed {
+    NSLog(@"TAP");
 }
 
 @end

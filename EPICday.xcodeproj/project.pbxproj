@@ -17,6 +17,7 @@
 		22254BAC1C585A630031BBC0 /* UIColor+EPIC.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BAB1C585A630031BBC0 /* UIColor+EPIC.m */; };
 		22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BAE1C585B350031BBC0 /* UIFont+EPIC.m */; };
 		22254BB21C5894A10031BBC0 /* PostCollectionViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BB11C5894A10031BBC0 /* PostCollectionViewHeader.m */; };
+		22254BB51C58A20C0031BBC0 /* BigCameraButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BB41C58A20C0031BBC0 /* BigCameraButton.m */; };
 		4B7D3A031C543E1A00E170FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A021C543E1A00E170FB /* main.m */; };
 		4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A051C543E1A00E170FB /* AppDelegate.m */; };
 		4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A081C543E1A00E170FB /* WelcomeViewController.m */; };
@@ -64,6 +65,8 @@
 		22254BAE1C585B350031BBC0 /* UIFont+EPIC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+EPIC.m"; sourceTree = "<group>"; };
 		22254BB01C5894A10031BBC0 /* PostCollectionViewHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCollectionViewHeader.h; sourceTree = "<group>"; };
 		22254BB11C5894A10031BBC0 /* PostCollectionViewHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostCollectionViewHeader.m; sourceTree = "<group>"; };
+		22254BB31C58A20C0031BBC0 /* BigCameraButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigCameraButton.h; sourceTree = "<group>"; };
+		22254BB41C58A20C0031BBC0 /* BigCameraButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigCameraButton.m; sourceTree = "<group>"; };
 		4B7D39FE1C543E1A00E170FB /* EPICday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EPICday.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7D3A021C543E1A00E170FB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4B7D3A041C543E1A00E170FB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -161,6 +164,8 @@
 				221D7ED21C56E3A30090A542 /* PhotoCollectionViewCell.m */,
 				22254BB01C5894A10031BBC0 /* PostCollectionViewHeader.h */,
 				22254BB11C5894A10031BBC0 /* PostCollectionViewHeader.m */,
+				22254BB31C58A20C0031BBC0 /* BigCameraButton.h */,
+				22254BB41C58A20C0031BBC0 /* BigCameraButton.m */,
 				221D7EC51C56E0540090A542 /* Channel.h */,
 				221D7EC61C56E0540090A542 /* Channel.m */,
 				221D7EC81C56E05F0090A542 /* Photo.h */,
@@ -404,6 +409,7 @@
 				22254BA91C584E820031BBC0 /* ChannelBarView.m in Sources */,
 				4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */,
 				4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */,
+				22254BB51C58A20C0031BBC0 /* BigCameraButton.m in Sources */,
 				22254BB21C5894A10031BBC0 /* PostCollectionViewHeader.m in Sources */,
 				221D7EC71C56E0540090A542 /* Channel.m in Sources */,
 				4B7D3A031C543E1A00E170FB /* main.m in Sources */,

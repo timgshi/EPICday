@@ -78,7 +78,7 @@
         self.hasInstalledViewConstraints = YES;
         
         const CGFloat kMargin = 15;
-        const CGFloat kVerticalMargin = 5;
+        const CGFloat kVerticalMargin = 10;
         
         [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.mas_left).with.offset(kMargin);
