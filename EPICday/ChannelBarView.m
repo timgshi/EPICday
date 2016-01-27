@@ -11,6 +11,8 @@
 #import <Masonry/Masonry.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
+#import "UIColor+EPIC.h"
+
 @interface ChannelBarView ()
 
 @property (nonatomic, strong) Channel *selectedChannel;
@@ -40,10 +42,15 @@
 }
 
 - (void)createViews {
+    
+    self.backgroundColor = [UIColor epicDarkGrayColor];
+    
     self.avatarImageView = [UIImageView new];
     self.avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
     self.avatarImageView.layer.cornerRadius = 5;
+    self.avatarImageView.backgroundColor = [UIColor blackColor];
     [self addSubview:self.avatarImageView];
+    
     
     
 }
