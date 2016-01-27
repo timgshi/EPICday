@@ -30,6 +30,10 @@
 
 @implementation ChannelStreamViewController
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -47,7 +51,7 @@
             make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);
             make.left.equalTo(self.view.mas_left);
             make.right.equalTo(self.view.mas_right);
-            make.height.equalTo(@65);
+            make.height.equalTo(@45);
         }];
         
         self.streamCollectionVC = [ChannelStreamCollectionViewController streamCollectionVCForChannel:self.selectedChannel];

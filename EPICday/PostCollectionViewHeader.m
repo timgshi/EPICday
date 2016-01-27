@@ -37,17 +37,22 @@
               withReuseIdentifier:[self defaultIdentifier]];
 }
 
-- (instancetype)init {
-    self = [super init];
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
     if (self) {
         [self createViews];
     }
     return self;
 }
 
+- (void)setPost:(Post *)post {
+    _post = post;
+    [self updateUIWithPost:post];
+}
+
 - (void)createViews {
     
-    self.backgroundColor = [UIColor lightGrayColor];
+    self.backgroundColor = [UIColor epicLightGrayColor];
     
     self.avatarImageView = [UIImageView new];
     self.avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -62,7 +67,8 @@
     
     self.timeLabel = [UILabel new];
     self.timeLabel.font = [UIFont epicLightFontOfSize:12];
-    self.timeLabel.textColor = [UIColor epicLightGrayColor];
+    self.timeLabel.textColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.5];
+    self.timeLabel.textAlignment = NSTextAlignmentRight;
     [self addSubview:self.timeLabel];
 }
 
@@ -76,20 +82,21 @@
         self.hasInstalledViewConstraints = YES;
         
         const CGFloat kMargin = 15;
+        const CGFloat kVerticalMargin = 5;
         
         [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.mas_left).with.offset(kMargin);
-            make.top.equalTo(self.mas_top).with.offset(kMargin);
-            make.bottom.equalTo(self.mas_bottom).with.offset(-kMargin);
+            make.top.equalTo(self.mas_top).with.offset(kVerticalMargin);
+            make.bottom.equalTo(self.mas_bottom).with.offset(-kVerticalMargin);
             make.width.equalTo(self.avatarImageView.mas_height);
         }];
         [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.avatarImageView.mas_right).with.offset(kMargin);
-            make.top.equalTo(self.mas_top).with.offset(kMargin);
+            make.centerY.equalTo(self.mas_centerY);
         }];
         [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.avatarImageView.mas_right).with.offset(kMargin);
-            make.bottom.equalTo(self.avatarImageView.mas_bottom);
+            make.right.equalTo(self.mas_right).with.offset(-kMargin);
+            make.centerY.equalTo(self.mas_centerY);
         }];
     }
 }

@@ -91,7 +91,7 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return CGSizeMake(CGRectGetWidth(collectionView.frame), 44);
+    return CGSizeMake(CGRectGetWidth(collectionView.frame), 45);
 }
 
 @end

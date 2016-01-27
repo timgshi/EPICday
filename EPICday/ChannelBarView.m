@@ -78,16 +78,17 @@
         self.hasInstalledViewConstraints = YES;
         
         const CGFloat kMargin = 15;
+        const CGFloat kVerticalMargin = 5;
         
         [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.mas_left).with.offset(kMargin);
-            make.top.equalTo(self.mas_top).with.offset(kMargin);
-            make.bottom.equalTo(self.mas_bottom).with.offset(-kMargin);
+            make.top.equalTo(self.mas_top).with.offset(kVerticalMargin);
+            make.bottom.equalTo(self.mas_bottom).with.offset(-kVerticalMargin);
             make.width.equalTo(self.avatarImageView.mas_height);
         }];
         [self.channelNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.avatarImageView.mas_right).with.offset(kMargin);
-            make.top.equalTo(self.mas_top).with.offset(kMargin);
+            make.top.equalTo(self.avatarImageView.mas_top);
         }];
         [self.memberCountLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.avatarImageView.mas_right).with.offset(kMargin);
