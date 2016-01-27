@@ -13,6 +13,8 @@
 		221D7ECD1C56E0680090A542 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7ECC1C56E0680090A542 /* Post.m */; };
 		221D7ED01C56E3780090A542 /* ChannelStreamCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7ECF1C56E3780090A542 /* ChannelStreamCollectionViewController.m */; };
 		221D7ED31C56E3A30090A542 /* PhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7ED21C56E3A30090A542 /* PhotoCollectionViewCell.m */; };
+		22254BA91C584E820031BBC0 /* ChannelBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BA81C584E820031BBC0 /* ChannelBarView.m */; };
+		22254BAC1C585A630031BBC0 /* UIColor+EPIC.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BAB1C585A630031BBC0 /* UIColor+EPIC.m */; };
 		4B7D3A031C543E1A00E170FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A021C543E1A00E170FB /* main.m */; };
 		4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A051C543E1A00E170FB /* AppDelegate.m */; };
 		4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A081C543E1A00E170FB /* WelcomeViewController.m */; };
@@ -52,6 +54,10 @@
 		221D7ECF1C56E3780090A542 /* ChannelStreamCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelStreamCollectionViewController.m; sourceTree = "<group>"; };
 		221D7ED11C56E3A30090A542 /* PhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionViewCell.h; sourceTree = "<group>"; };
 		221D7ED21C56E3A30090A542 /* PhotoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCollectionViewCell.m; sourceTree = "<group>"; };
+		22254BA71C584E820031BBC0 /* ChannelBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelBarView.h; sourceTree = "<group>"; };
+		22254BA81C584E820031BBC0 /* ChannelBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelBarView.m; sourceTree = "<group>"; };
+		22254BAA1C585A630031BBC0 /* UIColor+EPIC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+EPIC.h"; sourceTree = "<group>"; };
+		22254BAB1C585A630031BBC0 /* UIColor+EPIC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+EPIC.m"; sourceTree = "<group>"; };
 		4B7D39FE1C543E1A00E170FB /* EPICday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EPICday.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7D3A021C543E1A00E170FB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4B7D3A041C543E1A00E170FB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -143,6 +149,8 @@
 				4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */,
 				221D7ECE1C56E3780090A542 /* ChannelStreamCollectionViewController.h */,
 				221D7ECF1C56E3780090A542 /* ChannelStreamCollectionViewController.m */,
+				22254BA71C584E820031BBC0 /* ChannelBarView.h */,
+				22254BA81C584E820031BBC0 /* ChannelBarView.m */,
 				221D7ED11C56E3A30090A542 /* PhotoCollectionViewCell.h */,
 				221D7ED21C56E3A30090A542 /* PhotoCollectionViewCell.m */,
 				221D7EC51C56E0540090A542 /* Channel.h */,
@@ -151,6 +159,8 @@
 				221D7EC91C56E05F0090A542 /* Photo.m */,
 				221D7ECB1C56E0680090A542 /* Post.h */,
 				221D7ECC1C56E0680090A542 /* Post.m */,
+				22254BAA1C585A630031BBC0 /* UIColor+EPIC.h */,
+				22254BAB1C585A630031BBC0 /* UIColor+EPIC.m */,
 				4B7D3A0A1C543E1A00E170FB /* Main.storyboard */,
 				4B7D3A0D1C543E1A00E170FB /* Assets.xcassets */,
 				4B7D3A0F1C543E1A00E170FB /* LaunchScreen.storyboard */,
@@ -377,8 +387,10 @@
 			files = (
 				221D7ECA1C56E05F0090A542 /* Photo.m in Sources */,
 				221D7ED31C56E3A30090A542 /* PhotoCollectionViewCell.m in Sources */,
+				22254BAC1C585A630031BBC0 /* UIColor+EPIC.m in Sources */,
 				4B7D3A361C54468F00E170FB /* ChannelStreamViewController.m in Sources */,
 				221D7ED01C56E3780090A542 /* ChannelStreamCollectionViewController.m in Sources */,
+				22254BA91C584E820031BBC0 /* ChannelBarView.m in Sources */,
 				4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */,
 				4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */,
 				221D7EC71C56E0540090A542 /* Channel.m in Sources */,

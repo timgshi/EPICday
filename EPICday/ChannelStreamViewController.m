@@ -20,6 +20,7 @@
 
 @property (nonatomic, strong) ChannelStreamCollectionViewController *streamCollectionVC;
 
+
 @end
 
 @implementation ChannelStreamViewController
