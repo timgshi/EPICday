@@ -12,6 +12,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 
 #import "UIColor+EPIC.h"
+#import "UIFont+EPIC.h"
 
 @interface ChannelBarView ()
 
@@ -51,8 +52,15 @@
     self.avatarImageView.backgroundColor = [UIColor blackColor];
     [self addSubview:self.avatarImageView];
     
+    self.channelNameLabel = [UILabel new];
+    self.channelNameLabel.font = [UIFont epicBoldFontOfSize:16];
+    self.channelNameLabel.textColor = [UIColor whiteColor];
+    [self addSubview:self.channelNameLabel];
     
-    
+    self.memberCountLabel = [UILabel new];
+    self.memberCountLabel.font = [UIFont epicLightFontOfSize:12];
+    self.memberCountLabel.textColor = [UIColor epicLightGrayColor];
+    [self addSubview:self.memberCountLabel];
 }
 
 - (void)setSelectedChannel:(Channel *)selectedChannel {
@@ -82,7 +90,8 @@
             make.top.equalTo(self.mas_top).with.offset(kMargin);
         }];
         [self.memberCountLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            
+            make.left.equalTo(self.avatarImageView.mas_right).with.offset(kMargin);
+            make.bottom.equalTo(self.avatarImageView.mas_bottom);
         }];
     }
 }
@@ -91,11 +100,12 @@
     NSURL *avatarUrl = [NSURL URLWithString:channel.avatar.url];
     [self.avatarImageView sd_setImageWithURL:avatarUrl];
     self.channelNameLabel.text = channel.name;
-    NSString *memberCountText = [NSString stringWithFormat:@"w/ %lu other", (channel.members.count - 1)];
-    if (channel.members.count > 2) {
+    NSInteger memberCount = channel.members.count - 1;
+    NSString *memberCountText = [NSString stringWithFormat:@"w/ %lu other", memberCount];
+    if (memberCount != 1) {
         memberCountText = [memberCountText stringByAppendingString:@"s"];
     }
-    self.channelNameLabel.text = memberCountText;
+    self.memberCountLabel.text = memberCountText;
 }
 
 @end

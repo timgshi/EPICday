@@ -12,7 +12,9 @@
 
 #import "PhotoCollectionViewCell.h"
 #import "Post.h"
+#import "PostCollectionViewHeader.h"
 #import "Photo.h"
+#import "UIColor+EPIC.h"
 
 @interface ChannelStreamCollectionViewController () <UICollectionViewDelegateFlowLayout>
 
@@ -34,10 +36,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor blueColor];
-    self.collectionView.backgroundColor = [UIColor blueColor];
+    self.view.backgroundColor = [UIColor epicDarkGrayColor];
+    self.collectionView.backgroundColor = [UIColor epicDarkGrayColor];
     
     [PhotoCollectionViewCell registerWithCollectionView:self.collectionView];
+    [PostCollectionViewHeader registerWithCollectionView:self.collectionView];
     
     [[self.channel getRecentPostsAndPhotos] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask * _Nonnull task) {
         self.posts = task.result;
@@ -69,6 +72,12 @@
     return cell;
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    PostCollectionViewHeader *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[PostCollectionViewHeader defaultIdentifier] forIndexPath:indexPath];
+    header.post = self.posts[indexPath.section];
+    return header;
+}
+
 #pragma mark UICollectionViewDelegateFlowLayout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
@@ -79,6 +88,10 @@
     CGFloat ratio = width / photo.size.width;
     CGFloat height = photo.size.height * ratio;
     return CGSizeMake(width, height);
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    return CGSizeMake(CGRectGetWidth(collectionView.frame), 44);
 }
 
 @end
