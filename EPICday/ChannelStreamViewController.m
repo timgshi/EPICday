@@ -15,6 +15,7 @@
 #import <Masonry/Masonry.h>
 
 #import "BigCameraButton.h"
+#import "CaptureViewController.h"
 #import "Channel.h"
 #import "ChannelBarView.h"
 #import "ChannelStreamCollectionViewController.h"
@@ -82,7 +83,8 @@
 }
 
 - (void)cameraButtonPressed {
-    NSLog(@"TAP");
+    CaptureViewController *captureVC = [CaptureViewController new];
+    [self.navigationController pushViewController:captureVC animated:YES];
 }
 
 @end

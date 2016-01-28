@@ -51,6 +51,14 @@
     [self setupScanCapture];
 }
 
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+#if !(TARGET_IPHONE_SIMULATOR)
+    [self.captureSession startRunning];
+#endif
+}
+
 - (void)setupScanCapture {
     
     // Communicate with the session and other session objects on this queue.
@@ -58,7 +66,7 @@
     
     self.captureLayerView = [UIView new];
     self.captureLayerView.clipsToBounds = YES;
-    self.captureLayerView.backgroundColor = [UIColor whiteColor];
+    self.captureLayerView.backgroundColor = [UIColor blueColor];
     [self.view addSubview:self.captureLayerView];
     [self.captureLayerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.channelBarView.mas_bottom);
@@ -69,6 +77,8 @@
     
 #if !(TARGET_IPHONE_SIMULATOR)
     
+    self.captureSession = [[AVCaptureSession alloc] init];
+    
     dispatch_async(self.sessionQueue, ^{
         
         AVCaptureDevice *inputDevice = [self backCamera];
@@ -77,7 +87,6 @@
             return;
         }
         
-        self.captureSession = [[AVCaptureSession alloc] init];
         self.captureSession.sessionPreset = AVCaptureSessionPresetPhoto;
         if ([self.captureSession canAddInput:captureInput]) {
             [self.captureSession addInput:captureInput];
@@ -90,13 +99,15 @@
             [self.captureSession addOutput:self.captureOutput];
         }
         
-        if (!self.capturePreviewLayer) {
-            self.capturePreviewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
-        }
-        
-        self.capturePreviewLayer.frame = self.captureLayerView.bounds;
-        self.capturePreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        [self.captureLayerView.layer addSublayer:self.capturePreviewLayer];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!self.capturePreviewLayer) {
+                self.capturePreviewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
+            }
+            
+            self.capturePreviewLayer.frame = self.captureLayerView.bounds;
+            self.capturePreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            [self.captureLayerView.layer addSublayer:self.capturePreviewLayer];
+        });
     });
     
 #endif // !(TARGET_IPHONE_SIMULATOR)
