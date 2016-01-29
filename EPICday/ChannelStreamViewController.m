@@ -14,6 +14,8 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <Masonry/Masonry.h>
 
+#import <Firebase/Firebase.h>
+
 #import "BigCameraButton.h"
 #import "CaptureViewController.h"
 #import "Channel.h"
@@ -40,22 +42,33 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    CGFloat statusBarHeight = CGRectGetHeight([[UIApplication sharedApplication] statusBarFrame]);
+    
+    NSString *channelId = @"-K9BFMuy_74cIqk9RUz9";
+    NSString *channelRefUrl = [NSString stringWithFormat:@"https://incandescent-inferno-9043.firebaseio.com/channels/%@", channelId];
+    Firebase *channelRef = [[Firebase alloc] initWithUrl:channelRefUrl];
+    [channelRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        NSLog(@"%@", snapshot.value);
+    }];
+    
+//    self.channelBarView = [ChannelBarView barViewWithSelectedChannel:self.selectedChannel];
+    self.channelBarView = [ChannelBarView barViewWithChannelId:channelId];
+    [self.view addSubview:self.channelBarView];
+    [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.height.equalTo(@55);
+    }];
+    
     self.selectedChannel = [Channel objectWithoutDataWithObjectId:@"amqf4a9kPl"];
     
     self.view.backgroundColor = [UIColor epicDarkGrayColor];
     
-    CGFloat statusBarHeight = CGRectGetHeight([[UIApplication sharedApplication] statusBarFrame]);
     
     [[self.selectedChannel fetchInBackground] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask<__kindof PFObject *> * _Nonnull task) {
         
-        self.channelBarView = [ChannelBarView barViewWithSelectedChannel:self.selectedChannel];
-        [self.view addSubview:self.channelBarView];
-        [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);
-            make.left.equalTo(self.view.mas_left);
-            make.right.equalTo(self.view.mas_right);
-            make.height.equalTo(@55);
-        }];
+        
         
         self.streamCollectionVC = [ChannelStreamCollectionViewController streamCollectionVCForChannel:self.selectedChannel];
         [self addChildViewController:self.streamCollectionVC];

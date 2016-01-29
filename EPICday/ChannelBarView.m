@@ -10,6 +10,7 @@
 
 #import <Masonry/Masonry.h>
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <Firebase/Firebase.h>
 
 #import "UIColor+EPIC.h"
 #import "UIFont+EPIC.h"
@@ -17,6 +18,9 @@
 @interface ChannelBarView ()
 
 @property (nonatomic, strong) Channel *selectedChannel;
+@property (nonatomic, copy) NSString *selectedChannelId;
+@property (nonatomic, strong) Firebase *selectedChannelRef;
+@property (nonatomic) FirebaseHandle selectedChannelHandle;
 
 @property (nonatomic) BOOL hasInstalledViewConstraints;
 
@@ -31,6 +35,12 @@
 + (instancetype)barViewWithSelectedChannel:(Channel *)channel {
     ChannelBarView *barView = [self new];
     barView.selectedChannel = channel;
+    return barView;
+}
+
++ (instancetype)barViewWithChannelId:(NSString *)channelId {
+    ChannelBarView *barView = [self new];
+    barView.selectedChannelId = channelId;
     return barView;
 }
 
@@ -66,6 +76,27 @@
 - (void)setSelectedChannel:(Channel *)selectedChannel {
     _selectedChannel = selectedChannel;
     [self updateUIWithChannel:selectedChannel];
+}
+
+- (void)setSelectedChannelId:(NSString *)selectedChannelId {
+    _selectedChannelId = [selectedChannelId copy];
+    if (self.selectedChannelRef) {
+        [self.selectedChannelRef removeObserverWithHandle:self.selectedChannelHandle];
+    }
+    NSString *channelRefUrl = [NSString stringWithFormat:@"https://incandescent-inferno-9043.firebaseio.com/channels/%@", selectedChannelId];
+    self.selectedChannelRef = [[Firebase alloc] initWithUrl:channelRefUrl];
+    self.selectedChannelHandle = [self.selectedChannelRef observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        self.channelNameLabel.text = snapshot.value[@"name"];
+        NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:snapshot.value[@"avatar"]]];
+        UIImage *avatarImage = [UIImage imageWithData:imgData];
+        self.avatarImageView.image = avatarImage;
+        NSInteger memberCount = [snapshot.value[@"members"] allKeys].count - 1;
+        NSString *memberCountText = [NSString stringWithFormat:@"w/ %lu other", memberCount];
+        if (memberCount != 1) {
+            memberCountText = [memberCountText stringByAppendingString:@"s"];
+        }
+        self.memberCountLabel.text = memberCountText;
+    }];
 }
 
 - (void)updateConstraints {

@@ -13,5 +13,6 @@
 @interface ChannelBarView : UIView
 
 + (instancetype)barViewWithSelectedChannel:(Channel *)channel;
++ (instancetype)barViewWithChannelId:(NSString *)channelId;
 
 @end
