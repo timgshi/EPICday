@@ -8,6 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		091A9C8DEFE5DE4DBEADCA9A /* Pods_EPICday.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A094ED59DDEBB334E8CBE3DC /* Pods_EPICday.framework */; };
+		221D7EC71C56E0540090A542 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7EC61C56E0540090A542 /* Channel.m */; };
+		221D7ECA1C56E05F0090A542 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7EC91C56E05F0090A542 /* Photo.m */; };
+		221D7ECD1C56E0680090A542 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7ECC1C56E0680090A542 /* Post.m */; };
+		221D7ED01C56E3780090A542 /* ChannelStreamCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7ECF1C56E3780090A542 /* ChannelStreamCollectionViewController.m */; };
+		221D7ED31C56E3A30090A542 /* PhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7ED21C56E3A30090A542 /* PhotoCollectionViewCell.m */; };
+		22254BA91C584E820031BBC0 /* ChannelBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BA81C584E820031BBC0 /* ChannelBarView.m */; };
+		22254BAC1C585A630031BBC0 /* UIColor+EPIC.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BAB1C585A630031BBC0 /* UIColor+EPIC.m */; };
+		22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BAE1C585B350031BBC0 /* UIFont+EPIC.m */; };
+		22254BB21C5894A10031BBC0 /* PostCollectionViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BB11C5894A10031BBC0 /* PostCollectionViewHeader.m */; };
+		22254BB51C58A20C0031BBC0 /* BigCameraButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BB41C58A20C0031BBC0 /* BigCameraButton.m */; };
+		22485EDC1C5AEFEE0091F736 /* CapturePreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 22485EDB1C5AEFEE0091F736 /* CapturePreviewView.m */; };
+		22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22F15EAC1C59D71600B07F63 /* CaptureViewController.m */; };
+		22F15EAF1C59DC8F00B07F63 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F15EAE1C59DC8F00B07F63 /* ImageIO.framework */; };
 		4B7D3A031C543E1A00E170FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A021C543E1A00E170FB /* main.m */; };
 		4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A051C543E1A00E170FB /* AppDelegate.m */; };
 		4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A081C543E1A00E170FB /* WelcomeViewController.m */; };
@@ -37,6 +50,31 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		221D7EC51C56E0540090A542 /* Channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Channel.h; sourceTree = "<group>"; };
+		221D7EC61C56E0540090A542 /* Channel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Channel.m; sourceTree = "<group>"; };
+		221D7EC81C56E05F0090A542 /* Photo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photo.h; sourceTree = "<group>"; };
+		221D7EC91C56E05F0090A542 /* Photo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Photo.m; sourceTree = "<group>"; };
+		221D7ECB1C56E0680090A542 /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
+		221D7ECC1C56E0680090A542 /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
+		221D7ECE1C56E3780090A542 /* ChannelStreamCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelStreamCollectionViewController.h; sourceTree = "<group>"; };
+		221D7ECF1C56E3780090A542 /* ChannelStreamCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelStreamCollectionViewController.m; sourceTree = "<group>"; };
+		221D7ED11C56E3A30090A542 /* PhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionViewCell.h; sourceTree = "<group>"; };
+		221D7ED21C56E3A30090A542 /* PhotoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCollectionViewCell.m; sourceTree = "<group>"; };
+		22254BA71C584E820031BBC0 /* ChannelBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelBarView.h; sourceTree = "<group>"; };
+		22254BA81C584E820031BBC0 /* ChannelBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelBarView.m; sourceTree = "<group>"; };
+		22254BAA1C585A630031BBC0 /* UIColor+EPIC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+EPIC.h"; sourceTree = "<group>"; };
+		22254BAB1C585A630031BBC0 /* UIColor+EPIC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+EPIC.m"; sourceTree = "<group>"; };
+		22254BAD1C585B350031BBC0 /* UIFont+EPIC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+EPIC.h"; sourceTree = "<group>"; };
+		22254BAE1C585B350031BBC0 /* UIFont+EPIC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+EPIC.m"; sourceTree = "<group>"; };
+		22254BB01C5894A10031BBC0 /* PostCollectionViewHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCollectionViewHeader.h; sourceTree = "<group>"; };
+		22254BB11C5894A10031BBC0 /* PostCollectionViewHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostCollectionViewHeader.m; sourceTree = "<group>"; };
+		22254BB31C58A20C0031BBC0 /* BigCameraButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigCameraButton.h; sourceTree = "<group>"; };
+		22254BB41C58A20C0031BBC0 /* BigCameraButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigCameraButton.m; sourceTree = "<group>"; };
+		22485EDA1C5AEFEE0091F736 /* CapturePreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturePreviewView.h; sourceTree = "<group>"; };
+		22485EDB1C5AEFEE0091F736 /* CapturePreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapturePreviewView.m; sourceTree = "<group>"; };
+		22F15EAB1C59D71600B07F63 /* CaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureViewController.h; sourceTree = "<group>"; };
+		22F15EAC1C59D71600B07F63 /* CaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureViewController.m; sourceTree = "<group>"; };
+		22F15EAE1C59DC8F00B07F63 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		4B7D39FE1C543E1A00E170FB /* EPICday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EPICday.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7D3A021C543E1A00E170FB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4B7D3A041C543E1A00E170FB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -65,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22F15EAF1C59DC8F00B07F63 /* ImageIO.framework in Frameworks */,
 				091A9C8DEFE5DE4DBEADCA9A /* Pods_EPICday.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -126,6 +165,30 @@
 				4B7D3A081C543E1A00E170FB /* WelcomeViewController.m */,
 				4B7D3A341C54468F00E170FB /* ChannelStreamViewController.h */,
 				4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */,
+				22254BA71C584E820031BBC0 /* ChannelBarView.h */,
+				22254BA81C584E820031BBC0 /* ChannelBarView.m */,
+				221D7ECE1C56E3780090A542 /* ChannelStreamCollectionViewController.h */,
+				221D7ECF1C56E3780090A542 /* ChannelStreamCollectionViewController.m */,
+				221D7ED11C56E3A30090A542 /* PhotoCollectionViewCell.h */,
+				221D7ED21C56E3A30090A542 /* PhotoCollectionViewCell.m */,
+				22254BB01C5894A10031BBC0 /* PostCollectionViewHeader.h */,
+				22254BB11C5894A10031BBC0 /* PostCollectionViewHeader.m */,
+				22254BB31C58A20C0031BBC0 /* BigCameraButton.h */,
+				22254BB41C58A20C0031BBC0 /* BigCameraButton.m */,
+				22F15EAB1C59D71600B07F63 /* CaptureViewController.h */,
+				22F15EAC1C59D71600B07F63 /* CaptureViewController.m */,
+				22485EDA1C5AEFEE0091F736 /* CapturePreviewView.h */,
+				22485EDB1C5AEFEE0091F736 /* CapturePreviewView.m */,
+				221D7EC51C56E0540090A542 /* Channel.h */,
+				221D7EC61C56E0540090A542 /* Channel.m */,
+				221D7EC81C56E05F0090A542 /* Photo.h */,
+				221D7EC91C56E05F0090A542 /* Photo.m */,
+				221D7ECB1C56E0680090A542 /* Post.h */,
+				221D7ECC1C56E0680090A542 /* Post.m */,
+				22254BAA1C585A630031BBC0 /* UIColor+EPIC.h */,
+				22254BAB1C585A630031BBC0 /* UIColor+EPIC.m */,
+				22254BAD1C585B350031BBC0 /* UIFont+EPIC.h */,
+				22254BAE1C585B350031BBC0 /* UIFont+EPIC.m */,
 				4B7D3A0A1C543E1A00E170FB /* Main.storyboard */,
 				4B7D3A0D1C543E1A00E170FB /* Assets.xcassets */,
 				4B7D3A0F1C543E1A00E170FB /* LaunchScreen.storyboard */,
@@ -164,6 +227,7 @@
 		D372DB2E72A675A223AB2BE8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22F15EAE1C59DC8F00B07F63 /* ImageIO.framework */,
 				A094ED59DDEBB334E8CBE3DC /* Pods_EPICday.framework */,
 			);
 			name = Frameworks;
@@ -239,6 +303,7 @@
 				TargetAttributes = {
 					4B7D39FD1C543E1A00E170FB = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = QUDK66W5DF;
 					};
 					4B7D3A161C543E1A00E170FB = {
 						CreatedOnToolsVersion = 7.2;
@@ -350,10 +415,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				221D7ECA1C56E05F0090A542 /* Photo.m in Sources */,
+				22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */,
+				221D7ED31C56E3A30090A542 /* PhotoCollectionViewCell.m in Sources */,
+				22254BAC1C585A630031BBC0 /* UIColor+EPIC.m in Sources */,
 				4B7D3A361C54468F00E170FB /* ChannelStreamViewController.m in Sources */,
+				221D7ED01C56E3780090A542 /* ChannelStreamCollectionViewController.m in Sources */,
+				22254BA91C584E820031BBC0 /* ChannelBarView.m in Sources */,
+				22485EDC1C5AEFEE0091F736 /* CapturePreviewView.m in Sources */,
 				4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */,
+				22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */,
 				4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */,
+				22254BB51C58A20C0031BBC0 /* BigCameraButton.m in Sources */,
+				22254BB21C5894A10031BBC0 /* PostCollectionViewHeader.m in Sources */,
+				221D7EC71C56E0540090A542 /* Channel.m in Sources */,
 				4B7D3A031C543E1A00E170FB /* main.m in Sources */,
+				221D7ECD1C56E0680090A542 /* Post.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,10 +570,13 @@
 			baseConfigurationReference = AF35F7CA9648ED7E533241A5 /* Pods-EPICday.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = EPICday/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.epicurrence.EPICday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -505,10 +585,13 @@
 			baseConfigurationReference = FE997C1BCE6A49E12F40752D /* Pods-EPICday.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = EPICday/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.epicurrence.EPICday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
