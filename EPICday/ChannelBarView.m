@@ -18,7 +18,6 @@
 @interface ChannelBarView ()
 
 @property (nonatomic, strong) Channel *selectedChannel;
-@property (nonatomic, copy) NSString *selectedChannelId;
 @property (nonatomic, strong) Firebase *selectedChannelRef;
 @property (nonatomic) FirebaseHandle selectedChannelHandle;
 
@@ -38,9 +37,9 @@
     return barView;
 }
 
-+ (instancetype)barViewWithChannelId:(NSString *)channelId {
++ (instancetype)barViewWithChannelRef:(Firebase *)channelRef {
     ChannelBarView *barView = [self new];
-    barView.selectedChannelId = channelId;
+    barView.selectedChannelRef = channelRef;
     return barView;
 }
 
@@ -73,29 +72,13 @@
     [self addSubview:self.memberCountLabel];
 }
 
-- (void)setSelectedChannel:(Channel *)selectedChannel {
-    _selectedChannel = selectedChannel;
-    [self updateUIWithChannel:selectedChannel];
-}
-
-- (void)setSelectedChannelId:(NSString *)selectedChannelId {
-    _selectedChannelId = [selectedChannelId copy];
+- (void)setSelectedChannelRef:(Firebase *)selectedChannelRef {
     if (self.selectedChannelRef) {
         [self.selectedChannelRef removeObserverWithHandle:self.selectedChannelHandle];
     }
-    NSString *channelRefUrl = [NSString stringWithFormat:@"https://incandescent-inferno-9043.firebaseio.com/channels/%@", selectedChannelId];
-    self.selectedChannelRef = [[Firebase alloc] initWithUrl:channelRefUrl];
+    _selectedChannelRef = selectedChannelRef;
     self.selectedChannelHandle = [self.selectedChannelRef observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        self.channelNameLabel.text = snapshot.value[@"name"];
-        NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:snapshot.value[@"avatar"]]];
-        UIImage *avatarImage = [UIImage imageWithData:imgData];
-        self.avatarImageView.image = avatarImage;
-        NSInteger memberCount = [snapshot.value[@"members"] allKeys].count - 1;
-        NSString *memberCountText = [NSString stringWithFormat:@"w/ %lu other", memberCount];
-        if (memberCount != 1) {
-            memberCountText = [memberCountText stringByAppendingString:@"s"];
-        }
-        self.memberCountLabel.text = memberCountText;
+        [self updateUIWithSnapshot:snapshot];
     }];
 }
 
@@ -128,11 +111,12 @@
     }
 }
 
-- (void)updateUIWithChannel:(Channel *)channel {
-    NSURL *avatarUrl = [NSURL URLWithString:channel.avatar.url];
-    [self.avatarImageView sd_setImageWithURL:avatarUrl];
-    self.channelNameLabel.text = channel.name;
-    NSInteger memberCount = channel.members.count - 1;
+- (void)updateUIWithSnapshot:(FDataSnapshot *)snapshot {
+    self.channelNameLabel.text = snapshot.value[@"name"];
+    NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:snapshot.value[@"avatar"]]];
+    UIImage *avatarImage = [UIImage imageWithData:imgData];
+    self.avatarImageView.image = avatarImage;
+    NSInteger memberCount = [snapshot.value[@"members"] allKeys].count - 1;
     NSString *memberCountText = [NSString stringWithFormat:@"w/ %lu other", memberCount];
     if (memberCount != 1) {
         memberCountText = [memberCountText stringByAppendingString:@"s"];

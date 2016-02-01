@@ -31,6 +31,8 @@
 @property (nonatomic, strong) ChannelBarView *channelBarView;
 @property (nonatomic, strong) BigCameraButton *cameraButton;
 
+@property (nonatomic, strong) Firebase *baseRef;
+
 @end
 
 @implementation ChannelStreamViewController
@@ -45,14 +47,10 @@
     CGFloat statusBarHeight = CGRectGetHeight([[UIApplication sharedApplication] statusBarFrame]);
     
     NSString *channelId = @"-K9BFMuy_74cIqk9RUz9";
-    NSString *channelRefUrl = [NSString stringWithFormat:@"https://incandescent-inferno-9043.firebaseio.com/channels/%@", channelId];
-    Firebase *channelRef = [[Firebase alloc] initWithUrl:channelRefUrl];
-    [channelRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        NSLog(@"%@", snapshot.value);
-    }];
+    self.baseRef = [[Firebase alloc] initWithUrl:@"https://incandescent-inferno-9043.firebaseio.com/"];
     
-//    self.channelBarView = [ChannelBarView barViewWithSelectedChannel:self.selectedChannel];
-    self.channelBarView = [ChannelBarView barViewWithChannelId:channelId];
+    
+    self.channelBarView = [ChannelBarView barViewWithChannelRef:[self.baseRef childByAppendingPath:[NSString stringWithFormat:@"channels/%@", channelId]]];
     [self.view addSubview:self.channelBarView];
     [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);

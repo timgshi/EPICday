@@ -10,9 +10,10 @@
 
 #import "Channel.h"
 
+@class Firebase;
+
 @interface ChannelBarView : UIView
 
-+ (instancetype)barViewWithSelectedChannel:(Channel *)channel;
-+ (instancetype)barViewWithChannelId:(NSString *)channelId;
++ (instancetype)barViewWithChannelRef:(Firebase *)channelRef;
 
 @end
