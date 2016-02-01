@@ -46,39 +46,34 @@
     
     CGFloat statusBarHeight = CGRectGetHeight([[UIApplication sharedApplication] statusBarFrame]);
     
-    [[self.selectedChannel fetchInBackground] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask<__kindof PFObject *> * _Nonnull task) {
-        
-        self.channelBarView = [ChannelBarView barViewWithSelectedChannel:self.selectedChannel];
-        [self.view addSubview:self.channelBarView];
-        [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);
-            make.left.equalTo(self.view.mas_left);
-            make.right.equalTo(self.view.mas_right);
-            make.height.equalTo(@55);
-        }];
-        
-        self.streamCollectionVC = [ChannelStreamCollectionViewController streamCollectionVCForChannel:self.selectedChannel];
-        [self addChildViewController:self.streamCollectionVC];
-        [self.view addSubview:self.streamCollectionVC.view];
-        [self.streamCollectionVC didMoveToParentViewController:self];
-        [self.streamCollectionVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.channelBarView.mas_bottom);
-            make.left.equalTo(self.view.mas_left);
-            make.bottom.equalTo(self.view.mas_bottom);
-            make.right.equalTo(self.view.mas_right);
-        }];
-        
-        self.cameraButton = [BigCameraButton button];
-        [self.cameraButton addTarget:self action:@selector(cameraButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:self.cameraButton];
-        [self.cameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(self.view.mas_bottom).with.offset(-40);
-            make.centerX.equalTo(self.view.mas_centerX);
-            make.height.equalTo(@72);
-            make.width.equalTo(self.cameraButton.mas_height);
-        }];
-        
-        return nil;
+    self.channelBarView = [ChannelBarView barViewWithSelectedChannel:self.selectedChannel];
+    [self.view addSubview:self.channelBarView];
+    [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.height.equalTo(@55);
+    }];
+    
+    self.streamCollectionVC = [ChannelStreamCollectionViewController streamCollectionVCForChannel:self.selectedChannel];
+    [self addChildViewController:self.streamCollectionVC];
+    [self.view addSubview:self.streamCollectionVC.view];
+    [self.streamCollectionVC didMoveToParentViewController:self];
+    [self.streamCollectionVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.channelBarView.mas_bottom);
+        make.left.equalTo(self.view.mas_left);
+        make.bottom.equalTo(self.view.mas_bottom);
+        make.right.equalTo(self.view.mas_right);
+    }];
+    
+    self.cameraButton = [BigCameraButton button];
+    [self.cameraButton addTarget:self action:@selector(cameraButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.cameraButton];
+    [self.cameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view.mas_bottom).with.offset(-40);
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.height.equalTo(@72);
+        make.width.equalTo(self.cameraButton.mas_height);
     }];
 }
 

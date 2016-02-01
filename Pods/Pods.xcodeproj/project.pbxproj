@@ -4204,7 +4204,6 @@
 			productReference = 96F11D1FAA8B3E8AFBD43AAB78C012C3 /* SDWebImage.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-<<<<<<< HEAD
 		E8AB087302651BD6CF8BA28C65327F62 /* Pods-EPICday */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E1D182931E432211E337C689DA5E31EF /* Build configuration list for PBXNativeTarget "Pods-EPICday" */;
@@ -4251,8 +4250,6 @@
 			productReference = E22B6543D223A4A5DBE81A1FC8E2CB6F /* FBSDKCoreKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-=======
->>>>>>> 858fee974a7dae1b5412dd2fe188b9df90372c12
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -4261,17 +4258,6 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
-<<<<<<< HEAD
-=======
-				TargetAttributes = {
-					A9A83F63385AA43314397B8DD375464B = {
-						DevelopmentTeam = QUDK66W5DF;
-					};
-					AB05635DBF1F4B52808717A3CC721E73 = {
-						DevelopmentTeam = QUDK66W5DF;
-					};
-				};
->>>>>>> 858fee974a7dae1b5412dd2fe188b9df90372c12
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -4957,7 +4943,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 07766C72612FCF50E6EB7046A929FD43 /* FBSDKLoginKit.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -4972,12 +4957,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/FBSDKLoginKit/FBSDKLoginKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
-<<<<<<< HEAD
 				PRODUCT_NAME = FBSDKLoginKit;
-=======
-				PRODUCT_NAME = SDWebImage;
-				PROVISIONING_PROFILE = "";
->>>>>>> 858fee974a7dae1b5412dd2fe188b9df90372c12
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5098,7 +5078,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6605389299828DFE95FF782001F6D061 /* Masonry.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -5114,7 +5093,6 @@
 				MODULEMAP_FILE = "Target Support Files/Masonry/Masonry.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = Masonry;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5365,7 +5343,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6605389299828DFE95FF782001F6D061 /* Masonry.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -5381,7 +5358,6 @@
 				MODULEMAP_FILE = "Target Support Files/Masonry/Masonry.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = Masonry;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5475,7 +5451,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2B2B00A9483DF603A3DC04E3ADB57C68 /* SDWebImage.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -5491,7 +5466,6 @@
 				MODULEMAP_FILE = "Target Support Files/SDWebImage/SDWebImage.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = SDWebImage;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
