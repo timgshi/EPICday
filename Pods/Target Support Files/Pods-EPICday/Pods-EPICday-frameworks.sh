@@ -85,6 +85,9 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-EPICday/AFNetworking.framework"
+  install_framework "Pods-EPICday/AWSCognito.framework"
+  install_framework "Pods-EPICday/AWSCore.framework"
+  install_framework "Pods-EPICday/AWSS3.framework"
   install_framework "Pods-EPICday/Bolts.framework"
   install_framework "Pods-EPICday/FBSDKCoreKit.framework"
   install_framework "Pods-EPICday/FBSDKLoginKit.framework"
@@ -95,6 +98,9 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-EPICday/AFNetworking.framework"
+  install_framework "Pods-EPICday/AWSCognito.framework"
+  install_framework "Pods-EPICday/AWSCore.framework"
+  install_framework "Pods-EPICday/AWSS3.framework"
   install_framework "Pods-EPICday/Bolts.framework"
   install_framework "Pods-EPICday/FBSDKCoreKit.framework"
   install_framework "Pods-EPICday/FBSDKLoginKit.framework"
