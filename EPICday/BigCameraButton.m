@@ -82,4 +82,23 @@
     }
 }
 
+- (void)setShowsCameraIcon:(BOOL)showsCameraIcon {
+    _showsCameraIcon = showsCameraIcon;
+    self.iconImageView.hidden = !showsCameraIcon;
+}
+
+- (void)animateToStopButton {
+    [UIView animateWithDuration:0.3 animations:^{
+        self.outerCircleView.layer.cornerRadius = 4;
+        self.innerCircleView.layer.cornerRadius = 4;
+    }];
+}
+
+- (void)animateToRecordButton {
+    [UIView animateWithDuration:0.3 animations:^{
+        self.outerCircleView.layer.cornerRadius = CGRectGetHeight(self.outerCircleView.frame) / 2;
+        self.innerCircleView.layer.cornerRadius = CGRectGetHeight(self.innerCircleView.frame) / 2;
+    }];
+}
+
 @end

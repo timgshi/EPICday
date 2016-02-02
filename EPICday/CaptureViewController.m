@@ -8,14 +8,19 @@
 
 #import "CaptureViewController.h"
 
+#import "BigCameraButton.h"
 #import "ChannelBarView.h"
 #import "Photo.h"
 #import "Post.h"
 #import "CapturePreviewView.h"
+#import "UIColor+EPIC.h"
+#import "UIFont+EPIC.h"
 
 #import <Bolts/Bolts.h>
 #import <Masonry/Masonry.h>
 #import <ImageIO/ImageIO.h>
+#import <Firebase/Firebase.h>
+
 @import AVFoundation;
 @import Photos;
 
@@ -32,7 +37,11 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 
 @property (nonatomic, strong) ChannelBarView *channelBarView;
 
-@property (nonatomic, weak) CapturePreviewView *previewView;
+@property (nonatomic, strong) CapturePreviewView *previewView;
+
+@property (nonatomic, strong) UIView *cameraControlContainerView;
+@property (nonatomic, strong) BigCameraButton *cameraButton;
+@property (nonatomic, strong) UIButton *switchCameraButton, *stillImageButton, *videoButton;
 
 // Session management.
 @property (nonatomic) AVCaptureSession *session;
@@ -56,6 +65,60 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 {
     [super viewDidLoad];
     
+    CGFloat statusBarHeight = CGRectGetHeight([[UIApplication sharedApplication] statusBarFrame]);
+    
+    self.view.backgroundColor = [UIColor epicDarkGrayColor];
+    
+    self.channelBarView = [ChannelBarView barViewWithChannelRef:self.selectedChannelRef];
+    [self.view addSubview:self.channelBarView];
+    [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.height.equalTo(@55);
+    }];
+    
+    self.cameraControlContainerView = [UIView new];
+    self.cameraControlContainerView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.cameraControlContainerView];
+    [self.cameraControlContainerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.bottom.equalTo(self.view.mas_bottom);
+        make.height.equalTo(@80);
+    }];
+    self.cameraButton = [BigCameraButton button];
+    [self.cameraButton addTarget:self action:@selector(cameraButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.cameraButton];
+    [self.cameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view.mas_bottom).with.offset(-10);
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.height.equalTo(@50);
+        make.width.equalTo(self.cameraButton.mas_height);
+    }];
+    self.switchCameraButton = [self cameraControlButtonWithTitle:@"switch camera" andAction:nil];
+    [self.cameraControlContainerView addSubview:self.switchCameraButton];
+    self.stillImageButton = [self cameraControlButtonWithTitle:@"photo" andAction:nil];
+    [self.cameraControlContainerView addSubview:self.stillImageButton];
+    self.videoButton = [self cameraControlButtonWithTitle:@"video" andAction:nil];
+    [self.cameraControlContainerView addSubview:self.videoButton];
+    [self.stillImageButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.cameraControlContainerView.mas_top);
+        make.width.equalTo(self.cameraControlContainerView.mas_width).dividedBy(3);
+        make.centerX.equalTo(self.cameraControlContainerView.mas_centerX);
+    }];
+    [self.switchCameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.stillImageButton.mas_top);
+        make.width.equalTo(self.stillImageButton.mas_width);
+        make.right.equalTo(self.stillImageButton.mas_left);
+    }];
+    [self.videoButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.stillImageButton.mas_top);
+        make.width.equalTo(self.stillImageButton.mas_width);
+        make.left.equalTo(self.stillImageButton.mas_right);
+    }];
+    
+    
     // Disable UI. The UI is enabled if and only if the session starts running.
 //    self.cameraButton.enabled = NO;
 //    self.recordButton.enabled = NO;
@@ -65,7 +128,15 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     self.session = [[AVCaptureSession alloc] init];
     
     // Setup the preview view.
+    self.previewView = [CapturePreviewView new];
     self.previewView.session = self.session;
+    [self.view addSubview:self.previewView];
+    [self.previewView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.channelBarView.mas_bottom);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.bottom.equalTo(self.cameraControlContainerView.mas_top);
+    }];
     
     // Communicate with the session and other session objects on this queue.
     self.sessionQueue = dispatch_queue_create( "com.epicurrence.EPICday.sessionQueue", DISPATCH_QUEUE_SERIAL );
@@ -217,8 +288,8 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
             case AVCamSetupResultCameraNotAuthorized:
             {
                 dispatch_async( dispatch_get_main_queue(), ^{
-                    NSString *message = NSLocalizedString( @"AVCam doesn't have permission to use the camera, please change privacy settings", @"Alert message when the user has denied access to the camera" );
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
+                    NSString *message = NSLocalizedString( @"EPICday doesn't have permission to use the camera, please change privacy settings", @"Alert message when the user has denied access to the camera" );
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"EPICday" message:message preferredStyle:UIAlertControllerStyleAlert];
                     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
                     [alertController addAction:cancelAction];
                     // Provide quick access to Settings.
@@ -234,7 +305,7 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
             {
                 dispatch_async( dispatch_get_main_queue(), ^{
                     NSString *message = NSLocalizedString( @"Unable to capture media", @"Alert message when something goes wrong during capture session configuration" );
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"EPICday" message:message preferredStyle:UIAlertControllerStyleAlert];
                     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
                     [alertController addAction:cancelAction];
                     [self presentViewController:alertController animated:YES completion:nil];
@@ -255,6 +326,18 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     } );
     
     [super viewDidDisappear:animated];
+}
+
+- (UIButton *)cameraControlButtonWithTitle:(NSString *)title andAction:(SEL)action {
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    [button setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.3] forState:UIControlStateNormal];
+    button.titleLabel.font = [UIFont epicLightFontOfSize:14];
+    button.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    return button;
 }
 
 #pragma mark Orientation
