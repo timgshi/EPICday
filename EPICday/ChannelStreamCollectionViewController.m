@@ -9,6 +9,7 @@
 #import "ChannelStreamCollectionViewController.h"
 
 #import <Bolts/Bolts.h>
+#import <Firebase/Firebase.h>
 
 #import "PhotoCollectionViewCell.h"
 #import "Post.h"
@@ -18,18 +19,18 @@
 
 @interface ChannelStreamCollectionViewController () <UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) Channel *channel;
+@property (nonatomic, strong) Firebase *channelRef;
 @property (nonatomic, strong) NSArray *posts;
 
 @end
 
 @implementation ChannelStreamCollectionViewController
 
-+ (instancetype)streamCollectionVCForChannel:(Channel *)channel {
++ (instancetype)streamCollectionVCForChannelRef:(Firebase *)channelRef {
     UICollectionViewFlowLayout *flowLayout = [UICollectionViewFlowLayout new];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     ChannelStreamCollectionViewController *streamVC = [[self alloc] initWithCollectionViewLayout:flowLayout];
-    streamVC.channel = channel;
+    streamVC.channelRef = channelRef;
     return streamVC;
 }
 
@@ -42,11 +43,29 @@
     [PhotoCollectionViewCell registerWithCollectionView:self.collectionView];
     [PostCollectionViewHeader registerWithCollectionView:self.collectionView];
     
-    [[self.channel getRecentPostsAndPhotos] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask * _Nonnull task) {
-        self.posts = task.result;
-        [self.collectionView reloadData];
-        return nil;
+//    [[self.channel getRecentPostsAndPhotos] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask * _Nonnull task) {
+//        self.posts = task.result;
+//        [self.collectionView reloadData];
+//        return nil;
+//    }];
+    
+    // get posts
+    // get photos
+    
+//    [self.channelRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+//        
+//        [[[[self.channelRef parent] childByAppendingPath:@"posts"] queryEqualToValue:@[@"-K9EdQebc4oeTwFpPde2"]] observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+//            NSLog(@"%@", snapshot);
+//        }];
+//    }];
+    
+    [[[[[[self.channelRef parent] parent] childByAppendingPath:@"posts"] queryOrderedByChild:@"channel"] queryEqualToValue:self.channelRef.key] observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        NSLog(@"%@", snapshot);
     }];
+    
+//    [self.channelRef observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+//        
+//    }];
 }
 
 #pragma mark <UICollectionViewDataSource>

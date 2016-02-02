@@ -6,15 +6,22 @@
 //  Copyright © 2016 Epicurrence. All rights reserved.
 //
 
-#import <Parse/Parse.h>
-
 #import "Channel.h"
 
-@interface Post : PFObject <PFSubclassing>
+@class FDataSnapshot;
+@class Firebase;
 
-@property (nonatomic, strong) Channel *channel;
-@property (nonatomic, strong) PFUser *user;
+@interface Post : NSObject
+
+@property (nonatomic, copy) NSString *key;
+@property (nonatomic, copy) NSString *channelId;
+@property (nonatomic, strong) NSDate *timestamp;
 
 @property (nonatomic, strong) NSMutableArray *photos;
+
+@property (nonatomic, strong) Firebase *ref;
+
++ (NSArray *)postsFromSnapshot:(FDataSnapshot *)snapshot;
++ (instancetype)postFromRef:(Firebase *)ref;
 
 @end

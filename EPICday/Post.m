@@ -8,40 +8,31 @@
 
 #import "Post.h"
 
-#import <Parse/PFObject+Subclass.h>
+#import <Firebase/Firebase.h>
 
 @implementation Post
 
-@dynamic channel;
-@dynamic user;
-
 @synthesize photos = _photos;
 
-+ (void)load {
-    [self registerSubclass];
++ (NSArray *)postsFromSnapshot:(FDataSnapshot *)snapshot {
+    NSDictionary *snapshotPosts = snapshot.value;
+    NSMutableArray *posts = @[].mutableCopy;
+    [snapshotPosts enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *postDict, BOOL * _Nonnull stop) {
+        Post *post = [self postFromRef:[snapshot.ref childByAppendingPath:key]];
+        [posts addObject:post];
+    }];
+    return posts;
 }
 
-+ (NSString *)parseClassName {
-    return @"Post";
-}
-
-- (NSMutableArray *)photos {
-    if (!_photos) {
-        _photos = @[].mutableCopy;
-    }
-    return _photos;
-}
-
-- (NSUInteger)hash {
-    return self.objectId.hash;
-}
-
-- (BOOL)isEqual:(id)object {
-    if ([object isKindOfClass:[self class]]) {
-        Post *p2 = (Post *)object;
-        return [self.objectId isEqualToString:p2.objectId];
-    }
-    return NO;
++ (instancetype)postFromRef:(Firebase *)ref {
+    Post *post = [self new];
+    post.ref = ref;
+    [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        post.channelId = snapshot.value[@"channel"];
+        post.timestamp = [NSDate dateWithTimeIntervalSince1970:[snapshot.value[@"timestamp"] doubleValue]];
+        
+    }];
+    return post;
 }
 
 @end
