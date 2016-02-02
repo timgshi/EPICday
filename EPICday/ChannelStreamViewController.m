@@ -25,13 +25,11 @@
 
 @interface ChannelStreamViewController ()
 
-@property (nonatomic, strong) Channel *selectedChannel;
-
 @property (nonatomic, strong) ChannelStreamCollectionViewController *streamCollectionVC;
 @property (nonatomic, strong) ChannelBarView *channelBarView;
 @property (nonatomic, strong) BigCameraButton *cameraButton;
 
-@property (nonatomic, strong) Firebase *baseRef;
+@property (nonatomic, strong) Firebase *baseRef, *selectedChannelRef;
 
 @end
 
@@ -48,9 +46,9 @@
     
     NSString *channelId = @"-K9BFMuy_74cIqk9RUz9";
     self.baseRef = [[Firebase alloc] initWithUrl:@"https://incandescent-inferno-9043.firebaseio.com/"];
+    self.selectedChannelRef = [self.baseRef childByAppendingPath:[NSString stringWithFormat:@"channels/%@", channelId]];
     
-    
-    self.channelBarView = [ChannelBarView barViewWithChannelRef:[self.baseRef childByAppendingPath:[NSString stringWithFormat:@"channels/%@", channelId]]];
+    self.channelBarView = [ChannelBarView barViewWithChannelRef:self.selectedChannelRef];
     [self.view addSubview:self.channelBarView];
     [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);
@@ -59,37 +57,27 @@
         make.height.equalTo(@55);
     }];
     
-    self.selectedChannel = [Channel objectWithoutDataWithObjectId:@"amqf4a9kPl"];
-    
     self.view.backgroundColor = [UIColor epicDarkGrayColor];
     
+    self.streamCollectionVC = [ChannelStreamCollectionViewController streamCollectionVCForChannelRef:self.selectedChannelRef];
+    [self addChildViewController:self.streamCollectionVC];
+    [self.view addSubview:self.streamCollectionVC.view];
+    [self.streamCollectionVC didMoveToParentViewController:self];
+    [self.streamCollectionVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.channelBarView.mas_bottom);
+        make.left.equalTo(self.view.mas_left);
+        make.bottom.equalTo(self.view.mas_bottom);
+        make.right.equalTo(self.view.mas_right);
+    }];
     
-    [[self.selectedChannel fetchInBackground] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask<__kindof PFObject *> * _Nonnull task) {
-        
-        
-        
-        self.streamCollectionVC = [ChannelStreamCollectionViewController streamCollectionVCForChannel:self.selectedChannel];
-        [self addChildViewController:self.streamCollectionVC];
-        [self.view addSubview:self.streamCollectionVC.view];
-        [self.streamCollectionVC didMoveToParentViewController:self];
-        [self.streamCollectionVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.channelBarView.mas_bottom);
-            make.left.equalTo(self.view.mas_left);
-            make.bottom.equalTo(self.view.mas_bottom);
-            make.right.equalTo(self.view.mas_right);
-        }];
-        
-        self.cameraButton = [BigCameraButton button];
-        [self.cameraButton addTarget:self action:@selector(cameraButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:self.cameraButton];
-        [self.cameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(self.view.mas_bottom).with.offset(-40);
-            make.centerX.equalTo(self.view.mas_centerX);
-            make.height.equalTo(@72);
-            make.width.equalTo(self.cameraButton.mas_height);
-        }];
-        
-        return nil;
+    self.cameraButton = [BigCameraButton button];
+    [self.cameraButton addTarget:self action:@selector(cameraButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.cameraButton];
+    [self.cameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view.mas_bottom).with.offset(-40);
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.height.equalTo(@72);
+        make.width.equalTo(self.cameraButton.mas_height);
     }];
 }
 
