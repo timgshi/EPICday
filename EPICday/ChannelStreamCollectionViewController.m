@@ -40,6 +40,7 @@
     self.view.backgroundColor = [UIColor epicDarkGrayColor];
     self.collectionView.backgroundColor = [UIColor epicDarkGrayColor];
     self.collectionView.alwaysBounceVertical = YES;
+    self.collectionView.contentInset = UIEdgeInsetsMake(55, 0, 90, 0);
     
     [PhotoCollectionViewCell registerWithCollectionView:self.collectionView];
     [PostCollectionViewHeader registerWithCollectionView:self.collectionView];

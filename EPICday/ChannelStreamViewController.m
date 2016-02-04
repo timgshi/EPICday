@@ -56,10 +56,10 @@
     self.channelBarView = [ChannelBarView barViewWithChannel:self.selectedChannel];
     [self.view addSubview:self.channelBarView];
     [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);
+        make.top.equalTo(self.view.mas_top);
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(@55);
+        make.height.equalTo(@(55 + statusBarHeight));
     }];
     
     self.view.backgroundColor = [UIColor epicDarkGrayColor];
@@ -70,10 +70,10 @@
         return nil;
     }];
     [self addChildViewController:self.streamCollectionVC];
-    [self.view addSubview:self.streamCollectionVC.view];
+    [self.view insertSubview:self.streamCollectionVC.view belowSubview:self.channelBarView];
     [self.streamCollectionVC didMoveToParentViewController:self];
     [self.streamCollectionVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.channelBarView.mas_bottom);
+        make.top.equalTo(self.view.mas_top);
         make.left.equalTo(self.view.mas_left);
         make.bottom.equalTo(self.view.mas_bottom);
         make.right.equalTo(self.view.mas_right);

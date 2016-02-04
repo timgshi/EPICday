@@ -45,7 +45,7 @@
 
 - (void)createViews {
     
-    self.backgroundColor = [UIColor epicDarkGrayColor];
+    self.backgroundColor = [[UIColor epicDarkGrayColor] colorWithAlphaComponent:0.7];
     
     self.avatarImageView = [UIImageView new];
     self.avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -92,9 +92,11 @@
         const CGFloat kMargin = 15;
         const CGFloat kVerticalMargin = 10;
         
+        CGFloat statusBarHeight = CGRectGetHeight([[UIApplication sharedApplication] statusBarFrame]);
+        
         [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.mas_left).with.offset(kMargin);
-            make.top.equalTo(self.mas_top).with.offset(kVerticalMargin);
+            make.top.equalTo(self.mas_top).with.offset(kVerticalMargin + statusBarHeight);
             make.bottom.equalTo(self.mas_bottom).with.offset(-kVerticalMargin);
             make.width.equalTo(self.avatarImageView.mas_height);
         }];

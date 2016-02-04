@@ -56,11 +56,28 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 @property (nonatomic, getter=isSessionRunning) BOOL sessionRunning;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 
-@property (nonatomic, strong) Post *currentPost;
+@property (nonatomic, strong) Firebase *currentPostRef;
 
 @end
 
 @implementation CaptureViewController
+
+- (Firebase *)currentPostRef {
+    if (!_currentPostRef) {
+        _currentPostRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"posts"] childByAutoId];
+        [_currentPostRef setValue:@{
+                                    @"channel": self.selectedChannel.ref.key,
+                                    @"timestamp": @([[NSDate date] timeIntervalSince1970]),
+                                    @"user": self.selectedChannel.ref.authData.uid
+                                    }];
+        [self.selectedChannel.ref updateChildValues:@{[NSString stringWithFormat:@"posts/%@", _currentPostRef.key]: @YES}];
+    }
+    return _currentPostRef;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
 
 - (void)viewDidLoad
 {
@@ -73,10 +90,10 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     self.channelBarView = [ChannelBarView barViewWithChannel:self.selectedChannel];
     [self.view addSubview:self.channelBarView];
     [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);
+        make.top.equalTo(self.view.mas_top).with.offset(0);
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(@55);
+        make.height.equalTo(@(55 + statusBarHeight));
     }];
     
     self.cameraControlContainerView = [UIView new];
@@ -669,16 +686,16 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
         connection.videoOrientation = previewLayer.connection.videoOrientation;
         
         // Flash set to Auto for Still Capture.
-        [[self class] setFlashMode:AVCaptureFlashModeAuto forDevice:self.videoDeviceInput.device];
+        [[self class] setFlashMode:AVCaptureFlashModeOff forDevice:self.videoDeviceInput.device];
         
         // Capture a still image.
         [self.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
             if ( imageDataSampleBuffer ) {
                 // The sample buffer is not retained. Create image data before saving the still image to the photo library asynchronously.
-//                CFDictionaryRef exifAttachments = CMGetAttachment(imageDataSampleBuffer, kCGImagePropertyExifDictionary, NULL);
-//                NSDictionary *exifAttachmentsDict = CFBridgingRelease(exifAttachments);
+                CFDictionaryRef exifAttachments = CMGetAttachment(imageDataSampleBuffer, kCGImagePropertyExifDictionary, NULL);
+                NSDictionary *exifAttachmentsDict = (__bridge NSDictionary *)exifAttachments;
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
-                [self uploadPhotoFromData:imageData exifAttachments:nil];
+                [self uploadPhotoFromData:imageData withExifAttachments:exifAttachmentsDict];
 //                [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
 //                    if ( status == PHAuthorizationStatusAuthorized ) {
 //                        // To preserve the metadata, we create an asset from the JPEG NSData representation.
@@ -868,7 +885,7 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 
 #pragma mark - Photo Uploading
 
-- (void)uploadPhotoFromData:(NSData *)imageData exifAttachments:(NSDictionary *)exifAttachments {
+- (void)uploadPhotoFromData:(NSData *)imageData withExifAttachments:(NSDictionary *)exifAttachments {
     Firebase *photoRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"photos"] childByAutoId];
     AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
     uploadRequest.bucket = @"epicday";
@@ -876,7 +893,6 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     uploadRequest.key = key;
     NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
     NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:photoRef.key] URLByAppendingPathExtension:@"jpg"];
-//    imageData = [@"test" dataUsingEncoding:NSUTF8StringEncoding];
     [imageData writeToURL:fileURL atomically:YES];
     uploadRequest.body = fileURL;
     uploadRequest.contentType = @"image/jpeg";
@@ -900,11 +916,19 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
         }
         
         if (task.result) {
+            NSDictionary *dimensions = @{
+                                         @"width": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelYDimension],
+                                         @"height": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelXDimension]
+                                         };
             [photoRef setValue:@{
                                  @"imageUrl": [NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@", uploadRequest.bucket, uploadRequest.key],
                                  @"channel": self.selectedChannel.ref.key,
-                                 @"timestamp": @([[NSDate date] timeIntervalSince1970])
+                                 @"timestamp": @([[NSDate date] timeIntervalSince1970]),
+                                 @"post": self.currentPostRef.key,
+                                 @"user": self.selectedChannel.ref.authData.uid,
+                                 @"dimensions": dimensions
                                  }];
+            [self.currentPostRef updateChildValues:@{[NSString stringWithFormat:@"photos/%@", photoRef.key]: @YES}];
             // The file uploaded successfully.
         }
         return nil;

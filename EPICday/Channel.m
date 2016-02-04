@@ -38,15 +38,18 @@ NSString * const EPICChannelDidUpdatePostsNotification = @"EPICChannelDidUpdateP
             Post *post = [Post postFromRef:postRef inChannel:channel withInitialLoadTaskSource:postTaskSource];
             [channel.posts addObject:post];
         }];
-        [channel.posts sortUsingComparator:^NSComparisonResult(Post *p1, Post *p2) {
-            return [p1.timestamp compare:p2.timestamp];
-        }];
         if (taskSource && !taskSource.task.completed) {
             [[BFTask taskForCompletionOfAllTasks:postsInitialLoadTasks] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+                [channel.posts sortUsingComparator:^NSComparisonResult(Post *p1, Post *p2) {
+                    return [p2.timestamp compare:p1.timestamp];
+                }];
                 [taskSource trySetResult:@YES];
                 return nil;
             }];
         } else {
+            [channel.posts sortUsingComparator:^NSComparisonResult(Post *p1, Post *p2) {
+                return [p2.timestamp compare:p1.timestamp];
+            }];
             [[NSNotificationCenter defaultCenter] postNotificationName:EPICChannelDidUpdatePostsNotification
                                                                 object:self];
         }

@@ -38,15 +38,18 @@ NSString * const EPICPostDidUpdatePhotosNotification = @"EPICPostDidUpdatePhotos
             Photo *photo = [Photo photoFromRef:photoRef inPost:post withInitialLoadTaskSource:photoTaskSource];
             [post.photos addObject:photo];
         }];
-        [post.photos sortUsingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
-            return [p1.timestamp compare:p2.timestamp];
-        }];
         if (taskSource && !taskSource.task.completed) {
             [[BFTask taskForCompletionOfAllTasks:photosInitialLoadTasks] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+                [post.photos sortUsingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
+                    return [p2.timestamp compare:p1.timestamp];
+                }];
                 [taskSource trySetResult:@YES];
                 return nil;
             }];
         } else {
+            [post.photos sortUsingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
+                return [p2.timestamp compare:p1.timestamp];
+            }];
             [[NSNotificationCenter defaultCenter] postNotificationName:EPICPostDidUpdatePhotosNotification
                                                                 object:self];
         }
