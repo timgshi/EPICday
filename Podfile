@@ -11,5 +11,6 @@ target 'EPICday' do
   pod 'Firebase'
   pod 'AWSS3', '~> 2.3'
   pod 'AWSCognito', '~> 2.3'
+  pod 'ReactiveCocoa', '~> 4.0'
 end
 

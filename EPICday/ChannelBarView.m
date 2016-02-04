@@ -11,6 +11,7 @@
 #import <Masonry/Masonry.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Firebase/Firebase.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 #import "UIColor+EPIC.h"
 #import "UIFont+EPIC.h"
@@ -31,15 +32,9 @@
 
 @implementation ChannelBarView
 
-+ (instancetype)barViewWithSelectedChannel:(Channel *)channel {
++ (instancetype)barViewWithChannel:(Channel *)channel {
     ChannelBarView *barView = [self new];
     barView.selectedChannel = channel;
-    return barView;
-}
-
-+ (instancetype)barViewWithChannelRef:(Firebase *)channelRef {
-    ChannelBarView *barView = [self new];
-    barView.selectedChannelRef = channelRef;
     return barView;
 }
 
@@ -70,6 +65,14 @@
     self.memberCountLabel.font = [UIFont epicLightFontOfSize:12];
     self.memberCountLabel.textColor = [UIColor epicLightGrayColor];
     [self addSubview:self.memberCountLabel];
+}
+
+- (void)setSelectedChannel:(Channel *)selectedChannel {
+    _selectedChannel = selectedChannel;
+    RAC(self.channelNameLabel, text) = [selectedChannel rac_valuesForKeyPath:@"name" observer:self];
+    [RACObserve(selectedChannel, avatarUrl) subscribeNext:^(NSURL *avatarUrl) {
+        [self.avatarImageView sd_setImageWithURL:avatarUrl];
+    }];
 }
 
 - (void)setSelectedChannelRef:(Firebase *)selectedChannelRef {

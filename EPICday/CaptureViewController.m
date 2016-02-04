@@ -69,7 +69,7 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     
     self.view.backgroundColor = [UIColor epicDarkGrayColor];
     
-    self.channelBarView = [ChannelBarView barViewWithChannelRef:self.selectedChannelRef];
+//    self.channelBarView = [ChannelBarView barViewWithChannelRef:self.selectedChannelRef];
     [self.view addSubview:self.channelBarView];
     [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);
@@ -845,30 +845,30 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 
 #pragma mark - Photo Uploading
 
-- (void)uploadPhotoFromData:(NSData *)imageData exifAttachments:(NSDictionary *)exifAttachments {
-    [[self createCurrentPostIfNecessary] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-        Photo *photo = [Photo object];
-        PFFile *imageFile = [PFFile fileWithData:imageData contentType:@"image/jpeg"];
-        photo.image = imageFile;
-        photo.post = self.currentPost;
-        photo.channel = self.selectedChannel;
-        photo.originalTimestamp = exifAttachments[(__bridge NSString *)kCGImagePropertyExifDateTimeOriginal];
-        photo.user = [PFUser currentUser];
-        photo.dimensions = @{@"width": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelXDimension],
-                             @"height": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelYDimension]};
-        return [photo saveInBackground];
-    }];
-}
-
-- (BFTask *)createCurrentPostIfNecessary {
-    if (!self.currentPost) {
-        self.currentPost = [Post object];
-        self.currentPost.channel = self.selectedChannel;
-        self.currentPost.user = [PFUser currentUser];
-        return [self.currentPost saveInBackground];
-    } else {
-        return [BFTask taskWithResult:self.currentPost];
-    }
-}
+//- (void)uploadPhotoFromData:(NSData *)imageData exifAttachments:(NSDictionary *)exifAttachments {
+//    [[self createCurrentPostIfNecessary] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+//        Photo *photo = [Photo object];
+//        PFFile *imageFile = [PFFile fileWithData:imageData contentType:@"image/jpeg"];
+//        photo.image = imageFile;
+//        photo.post = self.currentPost;
+//        photo.channel = self.selectedChannel;
+//        photo.originalTimestamp = exifAttachments[(__bridge NSString *)kCGImagePropertyExifDateTimeOriginal];
+//        photo.user = [PFUser currentUser];
+//        photo.dimensions = @{@"width": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelXDimension],
+//                             @"height": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelYDimension]};
+//        return [photo saveInBackground];
+//    }];
+//}
+//
+//- (BFTask *)createCurrentPostIfNecessary {
+//    if (!self.currentPost) {
+//        self.currentPost = [Post object];
+//        self.currentPost.channel = self.selectedChannel;
+//        self.currentPost.user = [PFUser currentUser];
+//        return [self.currentPost saveInBackground];
+//    } else {
+//        return [BFTask taskWithResult:self.currentPost];
+//    }
+//}
 
 @end

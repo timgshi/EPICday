@@ -30,7 +30,7 @@
     Post *post = [self new];
     post.ref = ref;
     [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        post.channelId = snapshot.value[@"channel"];
+//        post.channelId = snapshot.value[@"channel"];
         post.timestamp = [NSDate dateWithTimeIntervalSince1970:[snapshot.value[@"timestamp"] doubleValue]];
         NSDictionary *snapshotPhotos = snapshot.value[@"photos"];
         [snapshotPhotos enumerateKeysAndObjectsUsingBlock:^(NSString *key, id  _Nonnull obj, BOOL * _Nonnull stop) {

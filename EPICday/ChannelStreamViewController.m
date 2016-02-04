@@ -30,6 +30,7 @@
 @property (nonatomic, strong) BigCameraButton *cameraButton;
 
 @property (nonatomic, strong) Firebase *baseRef, *selectedChannelRef;
+@property (nonatomic, strong) Channel *selectedChannel;
 
 @end
 
@@ -47,8 +48,9 @@
     NSString *channelId = @"-K9BFMuy_74cIqk9RUz9";
     self.baseRef = [[Firebase alloc] initWithUrl:@"https://incandescent-inferno-9043.firebaseio.com/"];
     self.selectedChannelRef = [self.baseRef childByAppendingPath:[NSString stringWithFormat:@"channels/%@", channelId]];
+    self.selectedChannel = [Channel channelFromRef:self.selectedChannelRef];
     
-    self.channelBarView = [ChannelBarView barViewWithChannelRef:self.selectedChannelRef];
+    self.channelBarView = [ChannelBarView barViewWithChannel:self.selectedChannel];
     [self.view addSubview:self.channelBarView];
     [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);

@@ -109,21 +109,21 @@
         [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
         [dateFormatter setDateStyle:NSDateFormatterNoStyle];
     });
-    BFTask *task = nil;
-    if (!post.user.isDataAvailable) {
-        task = [post.user fetchInBackground];
-    } else {
-        task = [BFTask taskWithResult:post.user];
-    }
-    [task continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask * _Nonnull task) {
-        if (post.user[@"profilePhotoUrl"]) {
-            NSURL *avatarUrl = [NSURL URLWithString:post.user[@"profilePhotoUrl"]];
-            [self.avatarImageView sd_setImageWithURL:avatarUrl];
-        }
-        self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", post.user[@"first_name"], post.user[@"last_name"]];
-        self.timeLabel.text = [dateFormatter stringFromDate:post.createdAt];
-        return nil;
-    }];
+//    BFTask *task = nil;
+//    if (!post.user.isDataAvailable) {
+//        task = [post.user fetchInBackground];
+//    } else {
+//        task = [BFTask taskWithResult:post.user];
+//    }
+//    [task continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask * _Nonnull task) {
+//        if (post.user[@"profilePhotoUrl"]) {
+//            NSURL *avatarUrl = [NSURL URLWithString:post.user[@"profilePhotoUrl"]];
+//            [self.avatarImageView sd_setImageWithURL:avatarUrl];
+//        }
+//        self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", post.user[@"first_name"], post.user[@"last_name"]];
+//        self.timeLabel.text = [dateFormatter stringFromDate:post.createdAt];
+//        return nil;
+//    }];
 }
 
 @end
