@@ -57,6 +57,16 @@ NSString * const EPICPostDidUpdatePhotosNotification = @"EPICPostDidUpdatePhotos
     return post;
 }
 
+//+ (BFTask *)postFromRef:(Firebase *)ref inChannel:(Channel *)channel {
+//    BFTaskCompletionSource *taskSource = [BFTaskCompletionSource taskCompletionSource];
+//    Post *post = [self new];
+//    post.ref = ref;
+//    [ref observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+//        
+//    }];
+//    return taskSource.task;
+//}
+
 - (NSMutableOrderedSet *)photos {
     if (!_photos) {
         _photos = [NSMutableOrderedSet orderedSet];

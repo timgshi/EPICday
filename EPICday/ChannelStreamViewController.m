@@ -50,6 +50,7 @@
     NSString *channelId = @"-K9BFMuy_74cIqk9RUz9";
     self.baseRef = [[Firebase alloc] initWithUrl:@"https://incandescent-inferno-9043.firebaseio.com/"];
     self.selectedChannelRef = [self.baseRef childByAppendingPath:[NSString stringWithFormat:@"channels/%@", channelId]];
+    [self.selectedChannelRef updateChildValues:@{[NSString stringWithFormat:@"members/%@", self.selectedChannelRef.authData.uid]: @YES}];
     BFTaskCompletionSource *channelInitialLoadTaskSource = [BFTaskCompletionSource taskCompletionSource];
     self.selectedChannel = [Channel channelFromRef:self.selectedChannelRef withInitialLoadTaskSource:channelInitialLoadTaskSource];
     
