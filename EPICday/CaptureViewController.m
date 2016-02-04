@@ -43,6 +43,8 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 @property (nonatomic, strong) UIView *cameraControlContainerView;
 @property (nonatomic, strong) BigCameraButton *cameraButton;
 @property (nonatomic, strong) UIButton *switchCameraButton, *stillImageButton, *videoButton;
+@property (nonatomic, strong) UIButton *backButton;
+@property (nonatomic, strong) UILabel *photoCountLabel;
 
 // Session management.
 @property (nonatomic) AVCaptureSession *session;
@@ -57,6 +59,7 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 
 @property (nonatomic, strong) Firebase *currentPostRef;
+@property (nonatomic) NSInteger photoCount;
 
 @end
 
@@ -138,6 +141,32 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
         make.left.equalTo(self.stillImageButton.mas_right);
     }];
     
+    self.stillImageButton.hidden = YES;
+    self.switchCameraButton.hidden = YES;
+    self.videoButton.hidden = YES;
+    
+    self.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.backButton setImage:[UIImage imageNamed:@"ic_arrow_back_white"] forState:UIControlStateNormal];
+    [self.backButton addTarget:self
+                        action:@selector(backButtonPressed)
+              forControlEvents:UIControlEventTouchUpInside];
+    [self.cameraControlContainerView addSubview:self.backButton];
+    [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.cameraButton.mas_centerY);
+        make.left.equalTo(self.cameraControlContainerView.mas_left).with.offset(15);
+    }];
+    
+    self.photoCountLabel = [UILabel new];
+    self.photoCount = 0;
+    self.photoCountLabel.text = [@(self.photoCount) stringValue];
+    self.photoCountLabel.textColor = [UIColor whiteColor];
+    self.photoCountLabel.font = [UIFont epicBoldFontOfSize:32];
+    self.photoCountLabel.textAlignment = NSTextAlignmentRight;
+    [self.cameraControlContainerView addSubview:self.photoCountLabel];
+    [self.photoCountLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.cameraButton.mas_centerY);
+        make.right.equalTo(self.cameraControlContainerView.mas_right).with.offset(-15);
+    }];
     
     // Disable UI. The UI is enabled if and only if the session starts running.
 //    self.cameraButton.enabled = NO;
@@ -146,6 +175,7 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     
     // Create the AVCaptureSession.
     self.session = [[AVCaptureSession alloc] init];
+    self.session.sessionPreset = AVCaptureSessionPresetPhoto;
     
     // Setup the preview view.
     self.previewView = [CapturePreviewView new];
@@ -538,6 +568,10 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 
 #pragma mark Actions
 
+- (void)backButtonPressed {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (IBAction)resumeInterruptedSession:(id)sender
 {
     dispatch_async( self.sessionQueue, ^{
@@ -663,21 +697,6 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 
 - (void)snapStillImage
 {
-    
-//    AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
-//    uploadRequest.bucket = @"epicday";
-//    NSString *key = [NSString stringWithFormat:@"photos/%@.jpg", @"test"];
-//    uploadRequest.key = key;
-//    NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
-//    NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:@"test"] URLByAppendingPathExtension:@"jpg"];
-//    NSData *imageData = [@"test" dataUsingEncoding:NSUTF8StringEncoding];
-//    [imageData writeToURL:fileURL atomically:NO];
-//    uploadRequest.body = fileURL;
-//    uploadRequest.contentType = @"image/jpeg";
-//    uploadRequest.ACL = AWSS3ObjectCannedACLPublicRead;
-//    [[[AWSS3TransferManager defaultS3TransferManager] upload:uploadRequest] continueWithBlock:^id _Nullable(AWSTask * _Nonnull task) {
-//        return nil;
-//    }];
     dispatch_async( self.sessionQueue, ^{
         AVCaptureConnection *connection = [self.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
         AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.previewView.layer;
@@ -696,46 +715,46 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
                 NSDictionary *exifAttachmentsDict = (__bridge NSDictionary *)exifAttachments;
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 [self uploadPhotoFromData:imageData withExifAttachments:exifAttachmentsDict];
-//                [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
-//                    if ( status == PHAuthorizationStatusAuthorized ) {
-//                        // To preserve the metadata, we create an asset from the JPEG NSData representation.
-//                        // Note that creating an asset from a UIImage discards the metadata.
-//                        // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
-//                        // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
-//                        if ( [PHAssetCreationRequest class] ) {
-//                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-//                                [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:imageData options:nil];
-//                            } completionHandler:^( BOOL success, NSError *error ) {
-//                                if ( ! success ) {
-//                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
-//                                }
-//                            }];
-//                        }
-//                        else {
-//                            NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
-//                            NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
-//                            NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
-//                            
-//                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-//                                NSError *error = nil;
-//                                [imageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
-//                                if ( error ) {
-//                                    NSLog( @"Error occured while writing image data to a temporary file: %@", error );
-//                                }
-//                                else {
-//                                    [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
-//                                }
-//                            } completionHandler:^( BOOL success, NSError *error ) {
-//                                if ( ! success ) {
-//                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
-//                                }
-//                                
-//                                // Delete the temporary file.
-//                                [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
-//                            }];
-//                        }
-//                    }
-//                }];
+                [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+                    if ( status == PHAuthorizationStatusAuthorized ) {
+                        // To preserve the metadata, we create an asset from the JPEG NSData representation.
+                        // Note that creating an asset from a UIImage discards the metadata.
+                        // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
+                        // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
+                        if ( [PHAssetCreationRequest class] ) {
+                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:imageData options:nil];
+                            } completionHandler:^( BOOL success, NSError *error ) {
+                                if ( ! success ) {
+                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
+                                }
+                            }];
+                        }
+                        else {
+                            NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
+                            NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
+                            NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
+                            
+                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                NSError *error = nil;
+                                [imageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
+                                if ( error ) {
+                                    NSLog( @"Error occured while writing image data to a temporary file: %@", error );
+                                }
+                                else {
+                                    [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
+                                }
+                            } completionHandler:^( BOOL success, NSError *error ) {
+                                if ( ! success ) {
+                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
+                                }
+                                
+                                // Delete the temporary file.
+                                [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+                            }];
+                        }
+                    }
+                }];
             }
             else {
                 NSLog( @"Could not capture still image: %@", error );
@@ -886,6 +905,8 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 #pragma mark - Photo Uploading
 
 - (void)uploadPhotoFromData:(NSData *)imageData withExifAttachments:(NSDictionary *)exifAttachments {
+    self.photoCount++;
+    self.photoCountLabel.text = [@(self.photoCount) stringValue];
     Firebase *photoRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"photos"] childByAutoId];
     AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
     uploadRequest.bucket = @"epicday";
