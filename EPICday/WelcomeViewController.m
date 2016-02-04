@@ -52,7 +52,7 @@
                            NSDictionary *newUser = @{
                                                      @"provider": authData.provider,
                                                      @"provider_id": authData.providerData[@"id"],
-                                                     @"displayName": authData.providerData[@"displayName"],
+                                                     @"display_name": authData.providerData[@"displayName"],
                                                      @"first_name": authData.providerData[@"cachedUserProfile"][@"first_name"],
                                                      @"last_name": authData.providerData[@"cachedUserProfile"][@"last_name"],
                                                      @"email": authData.providerData[@"email"],

@@ -25,6 +25,8 @@ extern NSString * const EPICPostDidUpdatePhotosNotification;
 
 @property (nonatomic, strong) Channel *channel;
 
+@property (nonatomic, strong) Firebase *userRef;
+
 + (instancetype)postFromRef:(Firebase *)ref inChannel:(Channel *)channel withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource;
 
 @end

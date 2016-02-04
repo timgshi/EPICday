@@ -10,9 +10,11 @@
 
 #import "UIColor+EPIC.h"
 #import "UIFont+EPIC.h"
+#import "User.h"
 
 #import <Bolts/Bolts.h>
 #import <Masonry/Masonry.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @interface PostCollectionViewHeader ()
@@ -57,6 +59,7 @@
     self.avatarImageView = [UIImageView new];
     self.avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
     self.avatarImageView.layer.cornerRadius = 5;
+    self.avatarImageView.layer.masksToBounds = YES;
     self.avatarImageView.backgroundColor = [UIColor blackColor];
     [self addSubview:self.avatarImageView];
     
@@ -109,8 +112,18 @@
         [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
         [dateFormatter setDateStyle:NSDateFormatterNoStyle];
     });
-    self.nameLabel.text = @"test user";
-    self.timeLabel.text = @"test time";
+    [[[RACObserve(post, timestamp) takeUntil:self.rac_prepareForReuseSignal] map:^id(NSDate *timestamp) {
+        return [dateFormatter stringFromDate:timestamp];
+    }] subscribeNext:^(NSString *timestampString) {
+        self.timeLabel.text = timestampString;
+    }];
+    User *user = [User userFromRef:post.userRef];
+    [[RACObserve(user, displayName) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSString *displayName) {
+        self.nameLabel.text = displayName;
+    }];
+    [[RACObserve(user, avatarUrl) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSURL *avatarUrl) {
+        [self.avatarImageView sd_setImageWithURL:avatarUrl];
+    }];
 //    BFTask *task = nil;
 //    if (!post.user.isDataAvailable) {
 //        task = [post.user fetchInBackground];

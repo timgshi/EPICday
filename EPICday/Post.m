@@ -25,6 +25,7 @@ NSString * const EPICPostDidUpdatePhotosNotification = @"EPICPostDidUpdatePhotos
     [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         post.channel = channel;
         post.timestamp = [NSDate dateWithTimeIntervalSince1970:[snapshot.value[@"timestamp"] doubleValue]];
+        post.userRef = [[[ref root] childByAppendingPath:@"users"] childByAppendingPath:snapshot.value[@"user"]];
         NSDictionary *snapshotPhotos = snapshot.value[@"photos"];
         NSMutableArray *photosInitialLoadTasks = @[].mutableCopy;
         [snapshotPhotos enumerateKeysAndObjectsUsingBlock:^(NSString *key, id  _Nonnull obj, BOOL * _Nonnull stop) {
