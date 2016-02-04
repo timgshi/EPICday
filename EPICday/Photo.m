@@ -8,11 +8,12 @@
 
 #import "Photo.h"
 
+#import <Bolts/Bolts.h>
 #import <Firebase/Firebase.h>
 
 @implementation Photo
 
-+ (instancetype)photoFromRef:(Firebase *)ref inPost:(Post *)post {
++ (instancetype)photoFromRef:(Firebase *)ref inPost:(Post *)post withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource {
     Photo *photo = [self new];
     photo.ref = ref;
     [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
@@ -22,6 +23,7 @@
         photo.timestamp = [NSDate dateWithTimeIntervalSince1970:[valuesDict[@"timestamp"] doubleValue]];
         photo.dimensions = valuesDict[@"dimensions"];
         photo.imageUrl = [NSURL URLWithString:valuesDict[@"imageUrl"]];
+        [taskSource trySetResult:@YES];
     }];
     return photo;
 }

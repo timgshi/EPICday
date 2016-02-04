@@ -10,6 +10,7 @@
 
 #import <Bolts/Bolts.h>
 #import <Firebase/Firebase.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 #import "PhotoCollectionViewCell.h"
 #import "Post.h"
@@ -19,18 +20,17 @@
 
 @interface ChannelStreamCollectionViewController () <UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) Firebase *channelRef;
-@property (nonatomic, strong) NSArray *posts;
+@property (nonatomic, strong) Channel *channel;
 
 @end
 
 @implementation ChannelStreamCollectionViewController
 
-+ (instancetype)streamCollectionVCForChannelRef:(Firebase *)channelRef {
++ (instancetype)streamCollectionVCForChannel:(Channel *)channel {
     UICollectionViewFlowLayout *flowLayout = [UICollectionViewFlowLayout new];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     ChannelStreamCollectionViewController *streamVC = [[self alloc] initWithCollectionViewLayout:flowLayout];
-    streamVC.channelRef = channelRef;
+    streamVC.channel = channel;
     return streamVC;
 }
 
@@ -43,45 +43,38 @@
     [PhotoCollectionViewCell registerWithCollectionView:self.collectionView];
     [PostCollectionViewHeader registerWithCollectionView:self.collectionView];
     
-//    [[self.channel getRecentPostsAndPhotos] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask * _Nonnull task) {
-//        self.posts = task.result;
-//        [self.collectionView reloadData];
-//        return nil;
-//    }];
-    
-    // get posts
-    // get photos
-    
-//    [self.channelRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-//        
-//        [[[[self.channelRef parent] childByAppendingPath:@"posts"] queryEqualToValue:@[@"-K9EdQebc4oeTwFpPde2"]] observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-//            NSLog(@"%@", snapshot);
-//        }];
-//    }];
-    
-    [[[[[[self.channelRef parent] parent] childByAppendingPath:@"posts"] queryOrderedByChild:@"channel"] queryEqualToValue:self.channelRef.key] observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        NSLog(@"%@", snapshot);
+    [[NSNotificationCenter defaultCenter] addObserverForName:EPICChannelDidUpdatePostsNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification * _Nonnull note) {
+                                                      [self.collectionView reloadData];
     }];
-    
-//    [self.channelRef observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-//        
-//    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:EPICPostDidUpdatePhotosNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification * _Nonnull note) {
+                                                      [self.collectionView reloadData];
+                                                  }];
 }
 
 #pragma mark <UICollectionViewDataSource>
 
+- (Post *)postForSection:(NSInteger)section {
+    return self.channel.posts[section];
+}
+
 - (Photo *)photoAtIndexPath:(NSIndexPath *)indexPath {
-    return [self.posts[indexPath.section] photos][indexPath.item];
+    Post *post = self.channel.posts[indexPath.section];
+    return post.photos[indexPath.item];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return self.posts.count;
+    return self.channel.posts.count;
 }
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    Post *post = self.posts[section];
-    return post.photos.count;
+    return [self postForSection:section].photos.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -92,9 +85,12 @@
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    PostCollectionViewHeader *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[PostCollectionViewHeader defaultIdentifier] forIndexPath:indexPath];
-    header.post = self.posts[indexPath.section];
-    return header;
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        PostCollectionViewHeader *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[PostCollectionViewHeader defaultIdentifier] forIndexPath:indexPath];
+        header.post = [self postForSection:indexPath.section];
+        return header;
+    }
+    return nil;
 }
 
 #pragma mark UICollectionViewDelegateFlowLayout

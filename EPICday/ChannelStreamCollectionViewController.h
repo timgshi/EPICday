@@ -10,12 +10,10 @@
 
 #import "Channel.h"
 
-@class Firebase;
-
 @interface ChannelStreamCollectionViewController : UICollectionViewController
 
-@property (nonatomic, readonly) Firebase *channelRef;
+@property (nonatomic, readonly) Channel *channel;
 
-+ (instancetype)streamCollectionVCForChannelRef:(Firebase *)channelRef;
++ (instancetype)streamCollectionVCForChannel:(Channel *)channel;
 
 @end

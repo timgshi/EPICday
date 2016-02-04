@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+extern NSString * const EPICChannelDidUpdatePostsNotification;
+
+@class BFTaskCompletionSource;
 @class Firebase;
 
 @interface Channel : NSObject
@@ -19,6 +22,6 @@
 
 @property (nonatomic, strong) Firebase *ref;
 
-+ (instancetype)channelFromRef:(Firebase *)ref;
++ (instancetype)channelFromRef:(Firebase *)ref withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource;
 
 @end

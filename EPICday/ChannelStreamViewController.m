@@ -48,7 +48,8 @@
     NSString *channelId = @"-K9BFMuy_74cIqk9RUz9";
     self.baseRef = [[Firebase alloc] initWithUrl:@"https://incandescent-inferno-9043.firebaseio.com/"];
     self.selectedChannelRef = [self.baseRef childByAppendingPath:[NSString stringWithFormat:@"channels/%@", channelId]];
-    self.selectedChannel = [Channel channelFromRef:self.selectedChannelRef];
+    BFTaskCompletionSource *channelInitialLoadTaskSource = [BFTaskCompletionSource taskCompletionSource];
+    self.selectedChannel = [Channel channelFromRef:self.selectedChannelRef withInitialLoadTaskSource:channelInitialLoadTaskSource];
     
     self.channelBarView = [ChannelBarView barViewWithChannel:self.selectedChannel];
     [self.view addSubview:self.channelBarView];
@@ -61,7 +62,11 @@
     
     self.view.backgroundColor = [UIColor epicDarkGrayColor];
     
-    self.streamCollectionVC = [ChannelStreamCollectionViewController streamCollectionVCForChannelRef:self.selectedChannelRef];
+    self.streamCollectionVC = [ChannelStreamCollectionViewController streamCollectionVCForChannel:self.selectedChannel];
+    [channelInitialLoadTaskSource.task continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+        [self.streamCollectionVC.collectionView reloadData];
+        return nil;
+    }];
     [self addChildViewController:self.streamCollectionVC];
     [self.view addSubview:self.streamCollectionVC.view];
     [self.streamCollectionVC didMoveToParentViewController:self];

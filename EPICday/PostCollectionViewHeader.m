@@ -109,6 +109,8 @@
         [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
         [dateFormatter setDateStyle:NSDateFormatterNoStyle];
     });
+    self.nameLabel.text = @"test user";
+    self.timeLabel.text = @"test time";
 //    BFTask *task = nil;
 //    if (!post.user.isDataAvailable) {
 //        task = [post.user fetchInBackground];

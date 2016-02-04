@@ -11,6 +11,7 @@
 #import "Channel.h"
 #import "Post.h"
 
+@class BFTaskCompletionSource;
 @class Firebase;
 
 @interface Photo : NSObject
@@ -29,6 +30,6 @@
 
 @property (nonatomic, strong) Firebase *ref;
 
-+ (instancetype)photoFromRef:(Firebase *)ref inPost:(Post *)post;
++ (instancetype)photoFromRef:(Firebase *)ref inPost:(Post *)post withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource;
 
 @end

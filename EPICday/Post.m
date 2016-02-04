@@ -10,27 +10,45 @@
 
 #import "Photo.h"
 
+#import <Bolts/Bolts.h>
 #import <Firebase/Firebase.h>
 
 @implementation Post
 
+NSString * const EPICPostDidUpdatePhotosNotification = @"EPICPostDidUpdatePhotosNotification";
+
 @synthesize photos = _photos;
 
-+ (instancetype)postFromRef:(Firebase *)ref inChannel:(Channel *)channel {
++ (instancetype)postFromRef:(Firebase *)ref inChannel:(Channel *)channel withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource {
     Post *post = [self new];
     post.ref = ref;
     [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         post.channel = channel;
         post.timestamp = [NSDate dateWithTimeIntervalSince1970:[snapshot.value[@"timestamp"] doubleValue]];
         NSDictionary *snapshotPhotos = snapshot.value[@"photos"];
+        NSMutableArray *photosInitialLoadTasks = @[].mutableCopy;
         [snapshotPhotos enumerateKeysAndObjectsUsingBlock:^(NSString *key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            BFTaskCompletionSource *photoTaskSource = nil;
+            if (taskSource && !taskSource.task.completed) {
+                photoTaskSource = [BFTaskCompletionSource taskCompletionSource];
+                [photosInitialLoadTasks addObject:photoTaskSource.task];
+            }
             Firebase *photoRef = [[[ref root] childByAppendingPath:@"photos"] childByAppendingPath:key];
-            Photo *photo = [Photo photoFromRef:photoRef inPost:post];
+            Photo *photo = [Photo photoFromRef:photoRef inPost:post withInitialLoadTaskSource:photoTaskSource];
             [post.photos addObject:photo];
         }];
         [post.photos sortUsingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
             return [p1.timestamp compare:p2.timestamp];
         }];
+        if (taskSource && !taskSource.task.completed) {
+            [[BFTask taskForCompletionOfAllTasks:photosInitialLoadTasks] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+                [taskSource trySetResult:@YES];
+                return nil;
+            }];
+        } else {
+            [[NSNotificationCenter defaultCenter] postNotificationName:EPICPostDidUpdatePhotosNotification
+                                                                object:self];
+        }
     }];
     return post;
 }
