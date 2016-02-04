@@ -70,6 +70,14 @@
     [RACObserve(selectedChannel, avatarUrl) subscribeNext:^(NSURL *avatarUrl) {
         [self.avatarImageView sd_setImageWithURL:avatarUrl];
     }];
+    RAC(self.memberCountLabel, text) = [[RACObserve(selectedChannel, membersDict) takeUntil:self.rac_willDeallocSignal] map:^id(NSDictionary *membersDict) {
+        NSInteger othersCount = MAX(0, membersDict.count - 1);
+        NSString *text =  [NSString stringWithFormat:@"w/ %ld other", (long)othersCount];
+        if (othersCount != 1) {
+            text = [text stringByAppendingString:@"s"];
+        }
+        return text;
+    }];
 }
 
 - (void)updateConstraints {
