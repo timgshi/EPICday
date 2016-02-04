@@ -16,21 +16,11 @@
 
 @synthesize photos = _photos;
 
-+ (NSArray *)postsFromSnapshot:(FDataSnapshot *)snapshot {
-    NSDictionary *snapshotPosts = snapshot.value;
-    NSMutableArray *posts = @[].mutableCopy;
-    [snapshotPosts enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *postDict, BOOL * _Nonnull stop) {
-        Post *post = [self postFromRef:[snapshot.ref childByAppendingPath:key]];
-        [posts addObject:post];
-    }];
-    return posts;
-}
-
-+ (instancetype)postFromRef:(Firebase *)ref {
++ (instancetype)postFromRef:(Firebase *)ref inChannel:(Channel *)channel {
     Post *post = [self new];
     post.ref = ref;
     [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-//        post.channelId = snapshot.value[@"channel"];
+        post.channel = channel;
         post.timestamp = [NSDate dateWithTimeIntervalSince1970:[snapshot.value[@"timestamp"] doubleValue]];
         NSDictionary *snapshotPhotos = snapshot.value[@"photos"];
         [snapshotPhotos enumerateKeysAndObjectsUsingBlock:^(NSString *key, id  _Nonnull obj, BOOL * _Nonnull stop) {

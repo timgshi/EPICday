@@ -22,7 +22,6 @@
 
 @property (nonatomic, strong) Channel *channel;
 
-+ (NSArray *)postsFromSnapshot:(FDataSnapshot *)snapshot;
-+ (instancetype)postFromRef:(Firebase *)ref;
++ (instancetype)postFromRef:(Firebase *)ref inChannel:(Channel *)channel;
 
 @end

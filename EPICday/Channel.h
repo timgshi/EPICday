@@ -15,6 +15,7 @@
 @property (nonatomic, readonly) NSString *objectId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSURL *avatarUrl;
+@property (nonatomic, strong) NSMutableOrderedSet *posts;
 
 @property (nonatomic, strong) Firebase *ref;
 

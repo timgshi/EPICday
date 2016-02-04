@@ -22,8 +22,24 @@
         NSDictionary *valuesDict = (NSDictionary *)snapshot.value;
         channel.name = valuesDict[@"name"];
         channel.avatarUrl = [NSURL URLWithString:valuesDict[@"avatarUrl"]];
+        NSDictionary *snapshotPosts = snapshot.value[@"posts"];
+        [snapshotPosts enumerateKeysAndObjectsUsingBlock:^(NSString *key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            Firebase *postRef = [[[ref root] childByAppendingPath:@"posts"] childByAppendingPath:key];
+            Post *post = [Post postFromRef:postRef inChannel:channel];
+            [channel.posts addObject:post];
+        }];
+        [channel.posts sortUsingComparator:^NSComparisonResult(Post *p1, Post *p2) {
+            return [p1.timestamp compare:p2.timestamp];
+        }];
     }];
     return channel;
+}
+
+- (NSMutableOrderedSet *)posts {
+    if (!_posts) {
+        _posts = [NSMutableOrderedSet orderedSet];
+    }
+    return _posts;
 }
 
 - (NSString *)objectId {
