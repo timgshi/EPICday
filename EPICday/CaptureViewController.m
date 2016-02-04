@@ -20,6 +20,7 @@
 #import <Masonry/Masonry.h>
 #import <ImageIO/ImageIO.h>
 #import <Firebase/Firebase.h>
+#import <AWSS3/AWSS3.h>
 
 @import AVFoundation;
 @import Photos;
@@ -69,7 +70,7 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     
     self.view.backgroundColor = [UIColor epicDarkGrayColor];
     
-//    self.channelBarView = [ChannelBarView barViewWithChannelRef:self.selectedChannelRef];
+    self.channelBarView = [ChannelBarView barViewWithChannel:self.selectedChannel];
     [self.view addSubview:self.channelBarView];
     [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).with.offset(statusBarHeight);
@@ -85,15 +86,17 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.bottom.equalTo(self.view.mas_bottom);
-        make.height.equalTo(@80);
+        make.height.equalTo(@120);
     }];
     self.cameraButton = [BigCameraButton button];
-    [self.cameraButton addTarget:self action:@selector(cameraButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.cameraButton];
+    [self.cameraButton addTarget:self
+                          action:@selector(snapStillImage)
+                forControlEvents:UIControlEventTouchUpInside];
+    [self.cameraControlContainerView addSubview:self.cameraButton];
     [self.cameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view.mas_bottom).with.offset(-10);
+        make.bottom.equalTo(self.cameraControlContainerView.mas_bottom).with.offset(-10);
         make.centerX.equalTo(self.view.mas_centerX);
-        make.height.equalTo(@50);
+        make.height.equalTo(@72);
         make.width.equalTo(self.cameraButton.mas_height);
     }];
     self.switchCameraButton = [self cameraControlButtonWithTitle:@"switch camera" andAction:nil];
@@ -129,6 +132,8 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     
     // Setup the preview view.
     self.previewView = [CapturePreviewView new];
+    AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.previewView.layer;
+    previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     self.previewView.session = self.session;
     [self.view addSubview:self.previewView];
     [self.previewView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -220,6 +225,7 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
                 
                 AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.previewView.layer;
                 previewLayer.connection.videoOrientation = initialVideoOrientation;
+                previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
             } );
         }
         else {
@@ -314,6 +320,7 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
             }
         }
     } );
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -637,8 +644,23 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     } );
 }
 
-- (IBAction)snapStillImage:(id)sender
+- (void)snapStillImage
 {
+    
+//    AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
+//    uploadRequest.bucket = @"epicday";
+//    NSString *key = [NSString stringWithFormat:@"photos/%@.jpg", @"test"];
+//    uploadRequest.key = key;
+//    NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
+//    NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:@"test"] URLByAppendingPathExtension:@"jpg"];
+//    NSData *imageData = [@"test" dataUsingEncoding:NSUTF8StringEncoding];
+//    [imageData writeToURL:fileURL atomically:NO];
+//    uploadRequest.body = fileURL;
+//    uploadRequest.contentType = @"image/jpeg";
+//    uploadRequest.ACL = AWSS3ObjectCannedACLPublicRead;
+//    [[[AWSS3TransferManager defaultS3TransferManager] upload:uploadRequest] continueWithBlock:^id _Nullable(AWSTask * _Nonnull task) {
+//        return nil;
+//    }];
     dispatch_async( self.sessionQueue, ^{
         AVCaptureConnection *connection = [self.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
         AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.previewView.layer;
@@ -653,49 +675,50 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
         [self.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
             if ( imageDataSampleBuffer ) {
                 // The sample buffer is not retained. Create image data before saving the still image to the photo library asynchronously.
-                CFDictionaryRef exifAttachments = CMGetAttachment(imageDataSampleBuffer, kCGImagePropertyExifDictionary, NULL);
-                NSDictionary *exifAttachmentsDict = CFBridgingRelease(exifAttachments);
+//                CFDictionaryRef exifAttachments = CMGetAttachment(imageDataSampleBuffer, kCGImagePropertyExifDictionary, NULL);
+//                NSDictionary *exifAttachmentsDict = CFBridgingRelease(exifAttachments);
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
-                [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
-                    if ( status == PHAuthorizationStatusAuthorized ) {
-                        // To preserve the metadata, we create an asset from the JPEG NSData representation.
-                        // Note that creating an asset from a UIImage discards the metadata.
-                        // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
-                        // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
-                        if ( [PHAssetCreationRequest class] ) {
-                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                                [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:imageData options:nil];
-                            } completionHandler:^( BOOL success, NSError *error ) {
-                                if ( ! success ) {
-                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
-                                }
-                            }];
-                        }
-                        else {
-                            NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
-                            NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
-                            NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
-                            
-                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                                NSError *error = nil;
-                                [imageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
-                                if ( error ) {
-                                    NSLog( @"Error occured while writing image data to a temporary file: %@", error );
-                                }
-                                else {
-                                    [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
-                                }
-                            } completionHandler:^( BOOL success, NSError *error ) {
-                                if ( ! success ) {
-                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
-                                }
-                                
-                                // Delete the temporary file.
-                                [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
-                            }];
-                        }
-                    }
-                }];
+                [self uploadPhotoFromData:imageData exifAttachments:nil];
+//                [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+//                    if ( status == PHAuthorizationStatusAuthorized ) {
+//                        // To preserve the metadata, we create an asset from the JPEG NSData representation.
+//                        // Note that creating an asset from a UIImage discards the metadata.
+//                        // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
+//                        // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
+//                        if ( [PHAssetCreationRequest class] ) {
+//                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+//                                [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:imageData options:nil];
+//                            } completionHandler:^( BOOL success, NSError *error ) {
+//                                if ( ! success ) {
+//                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
+//                                }
+//                            }];
+//                        }
+//                        else {
+//                            NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
+//                            NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
+//                            NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
+//                            
+//                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+//                                NSError *error = nil;
+//                                [imageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
+//                                if ( error ) {
+//                                    NSLog( @"Error occured while writing image data to a temporary file: %@", error );
+//                                }
+//                                else {
+//                                    [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
+//                                }
+//                            } completionHandler:^( BOOL success, NSError *error ) {
+//                                if ( ! success ) {
+//                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
+//                                }
+//                                
+//                                // Delete the temporary file.
+//                                [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+//                            }];
+//                        }
+//                    }
+//                }];
             }
             else {
                 NSLog( @"Could not capture still image: %@", error );
@@ -844,6 +867,50 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 }
 
 #pragma mark - Photo Uploading
+
+- (void)uploadPhotoFromData:(NSData *)imageData exifAttachments:(NSDictionary *)exifAttachments {
+    Firebase *photoRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"photos"] childByAutoId];
+    AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
+    uploadRequest.bucket = @"epicday";
+    NSString *key = [NSString stringWithFormat:@"photos/%@.jpg", photoRef.key];
+    uploadRequest.key = key;
+    NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
+    NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:photoRef.key] URLByAppendingPathExtension:@"jpg"];
+//    imageData = [@"test" dataUsingEncoding:NSUTF8StringEncoding];
+    [imageData writeToURL:fileURL atomically:YES];
+    uploadRequest.body = fileURL;
+    uploadRequest.contentType = @"image/jpeg";
+    uploadRequest.ACL = AWSS3ObjectCannedACLPublicRead;
+    [[[AWSS3TransferManager defaultS3TransferManager] upload:uploadRequest] continueWithBlock:^id _Nullable(AWSTask * _Nonnull task) {
+        if (task.error) {
+            if ([task.error.domain isEqualToString:AWSS3TransferManagerErrorDomain]) {
+                switch (task.error.code) {
+                    case AWSS3TransferManagerErrorCancelled:
+                    case AWSS3TransferManagerErrorPaused:
+                        break;
+                        
+                    default:
+                        NSLog(@"Error: %@", task.error);
+                        break;
+                }
+            } else {
+                // Unknown error.
+                NSLog(@"Error: %@", task.error);
+            }
+        }
+        
+        if (task.result) {
+            [photoRef setValue:@{
+                                 @"imageUrl": [NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@", uploadRequest.bucket, uploadRequest.key],
+                                 @"channel": self.selectedChannel.ref.key,
+                                 @"timestamp": @([[NSDate date] timeIntervalSince1970])
+                                 }];
+            // The file uploaded successfully.
+        }
+        return nil;
+    }];
+    
+}
 
 //- (void)uploadPhotoFromData:(NSData *)imageData exifAttachments:(NSDictionary *)exifAttachments {
 //    [[self createCurrentPostIfNecessary] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {

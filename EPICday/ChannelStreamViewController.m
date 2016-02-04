@@ -23,6 +23,8 @@
 #import "ChannelStreamCollectionViewController.h"
 #import "UIColor+EPIC.h"
 
+#import <AWSS3/AWSS3.h>
+
 @interface ChannelStreamViewController ()
 
 @property (nonatomic, strong) ChannelStreamCollectionViewController *streamCollectionVC;
@@ -81,15 +83,17 @@
     [self.cameraButton addTarget:self action:@selector(cameraButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.cameraButton];
     [self.cameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view.mas_bottom).with.offset(-40);
+        make.bottom.equalTo(self.view.mas_bottom).with.offset(-10);
         make.centerX.equalTo(self.view.mas_centerX);
         make.height.equalTo(@72);
         make.width.equalTo(self.cameraButton.mas_height);
     }];
+    
 }
 
 - (void)cameraButtonPressed {
     CaptureViewController *captureVC = [CaptureViewController new];
+    captureVC.selectedChannel = self.selectedChannel;
     [self.navigationController pushViewController:captureVC animated:YES];
 }
 

@@ -14,6 +14,6 @@
 
 @interface CaptureViewController : UIViewController
 
-@property (nonatomic, strong) Firebase *selectedChannelRef;
+@property (nonatomic, strong) Channel *selectedChannel;
 
 @end
