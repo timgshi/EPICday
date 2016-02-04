@@ -10,7 +10,6 @@
 
 #import <Masonry/Masonry.h>
 #import <SDWebImage/UIImageView+WebCache.h>
-#import <Firebase/Firebase.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
 #import "UIColor+EPIC.h"
@@ -19,8 +18,6 @@
 @interface ChannelBarView ()
 
 @property (nonatomic, strong) Channel *selectedChannel;
-@property (nonatomic, strong) Firebase *selectedChannelRef;
-@property (nonatomic) FirebaseHandle selectedChannelHandle;
 
 @property (nonatomic) BOOL hasInstalledViewConstraints;
 
@@ -75,16 +72,6 @@
     }];
 }
 
-- (void)setSelectedChannelRef:(Firebase *)selectedChannelRef {
-    if (self.selectedChannelRef) {
-        [self.selectedChannelRef removeObserverWithHandle:self.selectedChannelHandle];
-    }
-    _selectedChannelRef = selectedChannelRef;
-    self.selectedChannelHandle = [self.selectedChannelRef observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        [self updateUIWithSnapshot:snapshot];
-    }];
-}
-
 - (void)updateConstraints {
     [self installViewConstraintsIfNecessary];
     [super updateConstraints];
@@ -112,19 +99,6 @@
             make.bottom.equalTo(self.avatarImageView.mas_bottom);
         }];
     }
-}
-
-- (void)updateUIWithSnapshot:(FDataSnapshot *)snapshot {
-    self.channelNameLabel.text = snapshot.value[@"name"];
-    NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:snapshot.value[@"avatar"]]];
-    UIImage *avatarImage = [UIImage imageWithData:imgData];
-    self.avatarImageView.image = avatarImage;
-    NSInteger memberCount = [snapshot.value[@"members"] allKeys].count - 1;
-    NSString *memberCountText = [NSString stringWithFormat:@"w/ %lu other", memberCount];
-    if (memberCount != 1) {
-        memberCountText = [memberCountText stringByAppendingString:@"s"];
-    }
-    self.memberCountLabel.text = memberCountText;
 }
 
 @end
