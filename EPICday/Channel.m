@@ -11,53 +11,35 @@
 #import "Photo.h"
 #import "Post.h"
 
-#import <Parse/PFObject+Subclass.h>
+#import <Firebase/Firebase.h>
 
 @implementation Channel
 
-@dynamic name;
-@dynamic members;
-@dynamic avatar;
-
-+ (void)load {
-    [self registerSubclass];
-}
-
-+ (NSString *)parseClassName {
-    return @"Channel";
-}
-
-- (BFTask *)getRecentPostsAndPhotos {
-    PFQuery *postQuery = [Post query];
-    [postQuery whereKey:@"channel" equalTo:self];
-    [postQuery orderByDescending:@"createdAt"];
-    PFQuery *photoQuery = [Photo query];
-    [photoQuery includeKey:@"post"];
-    [photoQuery whereKey:@"post" matchesQuery:postQuery];
-    return [[photoQuery findObjectsInBackground] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-        NSArray *photos = task.result;
-        NSMutableOrderedSet *postsSet = [NSMutableOrderedSet orderedSet];
-        NSMutableDictionary *postsDict = @{}.mutableCopy;
-        for (Photo *photo in photos) {
-            [postsSet addObject:photo.post];
-            NSMutableArray *postPhotoArray = postsDict[photo.post.objectId];
-            if (!postPhotoArray) {
-                postPhotoArray = @[].mutableCopy;
-            }
-            [postPhotoArray addObject:photo];
-            postsDict[photo.post.objectId] = postPhotoArray;
-        }
-        for (Post *post in postsSet) {
-            post.photos = postsDict[post.objectId];
-            [post.photos sortUsingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
-                return [p1.originalTimestamp compare:p2.originalTimestamp];
-            }];
-        }
-        NSArray *postsArray = [postsSet sortedArrayUsingComparator:^NSComparisonResult(Post *p1, Post *p2) {
-            return [p1.createdAt compare:p2.createdAt];
-        }];
-        return [BFTask taskWithResult:postsArray];
++ (instancetype)channelFromRef:(Firebase *)ref {
+    Channel *channel = [self new];
+    channel.ref = ref;
+    [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        NSDictionary *valuesDict = (NSDictionary *)snapshot.value;
+        channel.name = valuesDict[@"name"];
+        channel.avatarUrl = [NSURL URLWithString:valuesDict[@"avatarUrl"]];
     }];
+    return channel;
+}
+
+- (NSString *)objectId {
+    return self.ref.key;
+}
+
+- (NSUInteger)hash {
+    return [self.objectId hash];
+}
+
+- (BOOL)isEqual:(id)object {
+    if ([object isKindOfClass:[self class]]) {
+        Channel *c2 = (Channel *)object;
+        return [c2.objectId isEqualToString:self.objectId];
+    }
+    return NO;
 }
 
 @end

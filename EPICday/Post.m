@@ -8,6 +8,8 @@
 
 #import "Post.h"
 
+#import "Photo.h"
+
 #import <Firebase/Firebase.h>
 
 @implementation Post
@@ -30,9 +32,40 @@
     [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         post.channelId = snapshot.value[@"channel"];
         post.timestamp = [NSDate dateWithTimeIntervalSince1970:[snapshot.value[@"timestamp"] doubleValue]];
-        
+        NSDictionary *snapshotPhotos = snapshot.value[@"photos"];
+        [snapshotPhotos enumerateKeysAndObjectsUsingBlock:^(NSString *key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            Firebase *photoRef = [[[ref root] childByAppendingPath:@"photos"] childByAppendingPath:key];
+            Photo *photo = [Photo photoFromRef:photoRef inPost:post];
+            [post.photos addObject:photo];
+        }];
+        [post.photos sortUsingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
+            return [p1.timestamp compare:p2.timestamp];
+        }];
     }];
     return post;
+}
+
+- (NSMutableOrderedSet *)photos {
+    if (!_photos) {
+        _photos = [NSMutableOrderedSet orderedSet];
+    }
+    return _photos;
+}
+
+- (NSString *)objectId {
+    return self.ref.key;
+}
+
+- (NSUInteger)hash {
+    return [self.objectId hash];
+}
+
+- (BOOL)isEqual:(id)object {
+    if ([object isKindOfClass:[self class]]) {
+        Post *p2 = (Post *)object;
+        return [p2.objectId isEqualToString:self.objectId];
+    }
+    return NO;
 }
 
 @end

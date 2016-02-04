@@ -13,13 +13,14 @@
 
 @interface Post : NSObject
 
-@property (nonatomic, copy) NSString *key;
-@property (nonatomic, copy) NSString *channelId;
+@property (nonatomic, readonly) NSString *objectId;
 @property (nonatomic, strong) NSDate *timestamp;
 
-@property (nonatomic, strong) NSMutableArray *photos;
+@property (nonatomic, strong) NSMutableOrderedSet *photos;
 
 @property (nonatomic, strong) Firebase *ref;
+
+@property (nonatomic, strong) Channel *channel;
 
 + (NSArray *)postsFromSnapshot:(FDataSnapshot *)snapshot;
 + (instancetype)postFromRef:(Firebase *)ref;
