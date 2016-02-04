@@ -47,14 +47,21 @@
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification * _Nonnull note) {
-                                                      [self.collectionView reloadData];
+                                                      [self debounce:@selector(reloadData) target:self.collectionView delay:1.0];
     }];
     [[NSNotificationCenter defaultCenter] addObserverForName:EPICPostDidUpdatePhotosNotification
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification * _Nonnull note) {
-                                                      [self.collectionView reloadData];
+                                                      [self debounce:@selector(reloadData) target:self.collectionView delay:1.0];
                                                   }];
+}
+
+- (void)debounce:(SEL)action target:(id)target delay:(NSTimeInterval)delay
+{
+    __weak typeof(target) weakTarget = target;
+    [NSObject cancelPreviousPerformRequestsWithTarget:weakTarget selector:action object:nil];
+    [weakTarget performSelector:action withObject:nil afterDelay:delay];
 }
 
 #pragma mark <UICollectionViewDataSource>
