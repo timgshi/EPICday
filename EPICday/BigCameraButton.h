@@ -10,6 +10,10 @@
 
 @interface BigCameraButton : UIButton
 
+@property (nonatomic) BOOL showsCameraIcon;
+
 + (instancetype)button;
+- (void)animateToStopButton;
+- (void)animateToRecordButton;
 
 @end

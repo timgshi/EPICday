@@ -10,6 +10,7 @@
 
 #import <Masonry/Masonry.h>
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 #import "UIColor+EPIC.h"
 #import "UIFont+EPIC.h"
@@ -28,7 +29,7 @@
 
 @implementation ChannelBarView
 
-+ (instancetype)barViewWithSelectedChannel:(Channel *)channel {
++ (instancetype)barViewWithChannel:(Channel *)channel {
     ChannelBarView *barView = [self new];
     barView.selectedChannel = channel;
     return barView;
@@ -44,7 +45,7 @@
 
 - (void)createViews {
     
-    self.backgroundColor = [UIColor epicDarkGrayColor];
+    self.backgroundColor = [[UIColor epicDarkGrayColor] colorWithAlphaComponent:0.7];
     
     self.avatarImageView = [UIImageView new];
     self.avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -65,7 +66,18 @@
 
 - (void)setSelectedChannel:(Channel *)selectedChannel {
     _selectedChannel = selectedChannel;
-    [self updateUIWithChannel:selectedChannel];
+    RAC(self.channelNameLabel, text) = [selectedChannel rac_valuesForKeyPath:@"name" observer:self];
+    [RACObserve(selectedChannel, avatarUrl) subscribeNext:^(NSURL *avatarUrl) {
+        [self.avatarImageView sd_setImageWithURL:avatarUrl];
+    }];
+    RAC(self.memberCountLabel, text) = [[RACObserve(selectedChannel, membersDict) takeUntil:self.rac_willDeallocSignal] map:^id(NSDictionary *membersDict) {
+        NSInteger othersCount = MAX(0, membersDict.count - 1);
+        NSString *text =  [NSString stringWithFormat:@"w/ %ld other", (long)othersCount];
+        if (othersCount != 1) {
+            text = [text stringByAppendingString:@"s"];
+        }
+        return text;
+    }];
 }
 
 - (void)updateConstraints {
@@ -80,9 +92,11 @@
         const CGFloat kMargin = 15;
         const CGFloat kVerticalMargin = 10;
         
+        CGFloat statusBarHeight = CGRectGetHeight([[UIApplication sharedApplication] statusBarFrame]);
+        
         [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.mas_left).with.offset(kMargin);
-            make.top.equalTo(self.mas_top).with.offset(kVerticalMargin);
+            make.top.equalTo(self.mas_top).with.offset(kVerticalMargin + statusBarHeight);
             make.bottom.equalTo(self.mas_bottom).with.offset(-kVerticalMargin);
             make.width.equalTo(self.avatarImageView.mas_height);
         }];
@@ -95,18 +109,6 @@
             make.bottom.equalTo(self.avatarImageView.mas_bottom);
         }];
     }
-}
-
-- (void)updateUIWithChannel:(Channel *)channel {
-    NSURL *avatarUrl = [NSURL URLWithString:channel.avatar.url];
-    [self.avatarImageView sd_setImageWithURL:avatarUrl];
-    self.channelNameLabel.text = channel.name;
-    NSInteger memberCount = channel.members.count - 1;
-    NSString *memberCountText = [NSString stringWithFormat:@"w/ %lu other", memberCount];
-    if (memberCount != 1) {
-        memberCountText = [memberCountText stringByAppendingString:@"s"];
-    }
-    self.memberCountLabel.text = memberCountText;
 }
 
 @end

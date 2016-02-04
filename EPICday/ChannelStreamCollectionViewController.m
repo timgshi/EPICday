@@ -9,6 +9,8 @@
 #import "ChannelStreamCollectionViewController.h"
 
 #import <Bolts/Bolts.h>
+#import <Firebase/Firebase.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 #import "PhotoCollectionViewCell.h"
 #import "Post.h"
@@ -19,7 +21,6 @@
 @interface ChannelStreamCollectionViewController () <UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) Channel *channel;
-@property (nonatomic, strong) NSArray *posts;
 
 @end
 
@@ -38,31 +39,50 @@
     
     self.view.backgroundColor = [UIColor epicDarkGrayColor];
     self.collectionView.backgroundColor = [UIColor epicDarkGrayColor];
+    self.collectionView.alwaysBounceVertical = YES;
+    self.collectionView.contentInset = UIEdgeInsetsMake(55, 0, 90, 0);
     
     [PhotoCollectionViewCell registerWithCollectionView:self.collectionView];
     [PostCollectionViewHeader registerWithCollectionView:self.collectionView];
     
-    [[self.channel getRecentPostsAndPhotos] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask * _Nonnull task) {
-        self.posts = task.result;
-        [self.collectionView reloadData];
-        return nil;
+    [[NSNotificationCenter defaultCenter] addObserverForName:EPICChannelDidUpdatePostsNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification * _Nonnull note) {
+                                                      [self debounce:@selector(reloadData) target:self.collectionView delay:1.0];
     }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:EPICPostDidUpdatePhotosNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification * _Nonnull note) {
+                                                      [self debounce:@selector(reloadData) target:self.collectionView delay:1.0];
+                                                  }];
+}
+
+- (void)debounce:(SEL)action target:(id)target delay:(NSTimeInterval)delay {
+    __weak typeof(target) weakTarget = target;
+    [NSObject cancelPreviousPerformRequestsWithTarget:weakTarget selector:action object:nil];
+    [weakTarget performSelector:action withObject:nil afterDelay:delay];
 }
 
 #pragma mark <UICollectionViewDataSource>
 
+- (Post *)postForSection:(NSInteger)section {
+    return self.channel.posts[section];
+}
+
 - (Photo *)photoAtIndexPath:(NSIndexPath *)indexPath {
-    return [self.posts[indexPath.section] photos][indexPath.item];
+    Post *post = self.channel.posts[indexPath.section];
+    return post.photos[indexPath.item];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return self.posts.count;
+    return self.channel.posts.count;
 }
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    Post *post = self.posts[section];
-    return post.photos.count;
+    return [self postForSection:section].photos.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -73,9 +93,12 @@
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    PostCollectionViewHeader *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[PostCollectionViewHeader defaultIdentifier] forIndexPath:indexPath];
-    header.post = self.posts[indexPath.section];
-    return header;
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        PostCollectionViewHeader *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[PostCollectionViewHeader defaultIdentifier] forIndexPath:indexPath];
+        header.post = [self postForSection:indexPath.section];
+        return header;
+    }
+    return nil;
 }
 
 #pragma mark UICollectionViewDelegateFlowLayout

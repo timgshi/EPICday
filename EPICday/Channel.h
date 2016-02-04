@@ -7,14 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Parse/Parse.h>
 
-@interface Channel : PFObject <PFSubclassing>
+extern NSString * const EPICChannelDidUpdatePostsNotification;
 
+@class BFTaskCompletionSource;
+@class Firebase;
+
+@interface Channel : NSObject
+
+@property (nonatomic, readonly) NSString *objectId;
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic, strong) NSArray *members;
-@property (nonatomic, strong) PFFile *avatar;
+@property (nonatomic, strong) NSURL *avatarUrl;
+@property (nonatomic, strong) NSMutableOrderedSet *posts;
+@property (nonatomic, strong) NSDictionary *membersDict;
 
-- (BFTask *)getRecentPostsAndPhotos;
+@property (nonatomic, strong) Firebase *ref;
+
++ (instancetype)channelFromRef:(Firebase *)ref withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource;
 
 @end

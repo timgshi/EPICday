@@ -10,9 +10,11 @@
 
 #import "UIColor+EPIC.h"
 #import "UIFont+EPIC.h"
+#import "User.h"
 
 #import <Bolts/Bolts.h>
 #import <Masonry/Masonry.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @interface PostCollectionViewHeader ()
@@ -57,6 +59,7 @@
     self.avatarImageView = [UIImageView new];
     self.avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
     self.avatarImageView.layer.cornerRadius = 5;
+    self.avatarImageView.layer.masksToBounds = YES;
     self.avatarImageView.backgroundColor = [UIColor blackColor];
     [self addSubview:self.avatarImageView];
     
@@ -109,21 +112,33 @@
         [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
         [dateFormatter setDateStyle:NSDateFormatterNoStyle];
     });
-    BFTask *task = nil;
-    if (!post.user.isDataAvailable) {
-        task = [post.user fetchInBackground];
-    } else {
-        task = [BFTask taskWithResult:post.user];
-    }
-    [task continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask * _Nonnull task) {
-        if (post.user[@"profilePhotoUrl"]) {
-            NSURL *avatarUrl = [NSURL URLWithString:post.user[@"profilePhotoUrl"]];
-            [self.avatarImageView sd_setImageWithURL:avatarUrl];
-        }
-        self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", post.user[@"first_name"], post.user[@"last_name"]];
-        self.timeLabel.text = [dateFormatter stringFromDate:post.createdAt];
-        return nil;
+    [[[RACObserve(post, timestamp) takeUntil:self.rac_prepareForReuseSignal] map:^id(NSDate *timestamp) {
+        return [dateFormatter stringFromDate:timestamp];
+    }] subscribeNext:^(NSString *timestampString) {
+        self.timeLabel.text = timestampString;
     }];
+    User *user = [User userFromRef:post.userRef];
+    [[RACObserve(user, displayName) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSString *displayName) {
+        self.nameLabel.text = displayName;
+    }];
+    [[RACObserve(user, avatarUrl) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSURL *avatarUrl) {
+        [self.avatarImageView sd_setImageWithURL:avatarUrl];
+    }];
+//    BFTask *task = nil;
+//    if (!post.user.isDataAvailable) {
+//        task = [post.user fetchInBackground];
+//    } else {
+//        task = [BFTask taskWithResult:post.user];
+//    }
+//    [task continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id _Nullable(BFTask * _Nonnull task) {
+//        if (post.user[@"profilePhotoUrl"]) {
+//            NSURL *avatarUrl = [NSURL URLWithString:post.user[@"profilePhotoUrl"]];
+//            [self.avatarImageView sd_setImageWithURL:avatarUrl];
+//        }
+//        self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", post.user[@"first_name"], post.user[@"last_name"]];
+//        self.timeLabel.text = [dateFormatter stringFromDate:post.createdAt];
+//        return nil;
+//    }];
 }
 
 @end

@@ -49,8 +49,7 @@
 
 - (void)setPhoto:(Photo *)photo {
     _photo = photo;
-    NSURL *url = [NSURL URLWithString:photo.image.url];
-    [self.imageView sd_setImageWithURL:url];
+    [self.imageView sd_setImageWithURL:photo.imageUrl];
 }
 
 @end

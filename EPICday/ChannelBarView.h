@@ -12,6 +12,6 @@
 
 @interface ChannelBarView : UIView
 
-+ (instancetype)barViewWithSelectedChannel:(Channel *)channel;
++ (instancetype)barViewWithChannel:(Channel *)channel;
 
 @end

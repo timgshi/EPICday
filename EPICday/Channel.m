@@ -11,53 +11,73 @@
 #import "Photo.h"
 #import "Post.h"
 
-#import <Parse/PFObject+Subclass.h>
+#import <Bolts/Bolts.h>
+#import <Firebase/Firebase.h>
 
 @implementation Channel
 
-@dynamic name;
-@dynamic members;
-@dynamic avatar;
+NSString * const EPICChannelDidUpdatePostsNotification = @"EPICChannelDidUpdatePostsNotification";
 
-+ (void)load {
-    [self registerSubclass];
-}
-
-+ (NSString *)parseClassName {
-    return @"Channel";
-}
-
-- (BFTask *)getRecentPostsAndPhotos {
-    PFQuery *postQuery = [Post query];
-    [postQuery whereKey:@"channel" equalTo:self];
-    [postQuery orderByDescending:@"createdAt"];
-    PFQuery *photoQuery = [Photo query];
-    [photoQuery includeKey:@"post"];
-    [photoQuery whereKey:@"post" matchesQuery:postQuery];
-    return [[photoQuery findObjectsInBackground] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-        NSArray *photos = task.result;
-        NSMutableOrderedSet *postsSet = [NSMutableOrderedSet orderedSet];
-        NSMutableDictionary *postsDict = @{}.mutableCopy;
-        for (Photo *photo in photos) {
-            [postsSet addObject:photo.post];
-            NSMutableArray *postPhotoArray = postsDict[photo.post.objectId];
-            if (!postPhotoArray) {
-                postPhotoArray = @[].mutableCopy;
++ (instancetype)channelFromRef:(Firebase *)ref withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource {
+    Channel *channel = [self new];
+    channel.ref = ref;
+    [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        NSDictionary *valuesDict = (NSDictionary *)snapshot.value;
+        channel.name = valuesDict[@"name"];
+        channel.avatarUrl = [NSURL URLWithString:valuesDict[@"avatarUrl"]];
+        channel.membersDict = valuesDict[@"members"];
+        NSMutableArray *postsInitialLoadTasks = @[].mutableCopy;
+        NSDictionary *snapshotPosts = snapshot.value[@"posts"];
+        [snapshotPosts enumerateKeysAndObjectsUsingBlock:^(NSString *key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            BFTaskCompletionSource *postTaskSource = nil;
+            if (taskSource && !taskSource.task.completed) {
+                postTaskSource = [BFTaskCompletionSource taskCompletionSource];
+                [postsInitialLoadTasks addObject:postTaskSource.task];
             }
-            [postPhotoArray addObject:photo];
-            postsDict[photo.post.objectId] = postPhotoArray;
-        }
-        for (Post *post in postsSet) {
-            post.photos = postsDict[post.objectId];
-            [post.photos sortUsingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
-                return [p1.originalTimestamp compare:p2.originalTimestamp];
-            }];
-        }
-        NSArray *postsArray = [postsSet sortedArrayUsingComparator:^NSComparisonResult(Post *p1, Post *p2) {
-            return [p1.createdAt compare:p2.createdAt];
+            Firebase *postRef = [[[ref root] childByAppendingPath:@"posts"] childByAppendingPath:key];
+            Post *post = [Post postFromRef:postRef inChannel:channel withInitialLoadTaskSource:postTaskSource];
+            [channel.posts addObject:post];
         }];
-        return [BFTask taskWithResult:postsArray];
+        if (taskSource && !taskSource.task.completed) {
+            [[BFTask taskForCompletionOfAllTasks:postsInitialLoadTasks] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+                [channel.posts sortUsingComparator:^NSComparisonResult(Post *p1, Post *p2) {
+                    return [p2.timestamp compare:p1.timestamp];
+                }];
+                [taskSource trySetResult:@YES];
+                return nil;
+            }];
+        } else {
+            [channel.posts sortUsingComparator:^NSComparisonResult(Post *p1, Post *p2) {
+                return [p2.timestamp compare:p1.timestamp];
+            }];
+            [[NSNotificationCenter defaultCenter] postNotificationName:EPICChannelDidUpdatePostsNotification
+                                                                object:self];
+        }
     }];
+    return channel;
+}
+
+- (NSMutableOrderedSet *)posts {
+    if (!_posts) {
+        _posts = [NSMutableOrderedSet orderedSet];
+    }
+    return _posts;
+}
+
+- (NSString *)objectId {
+    return self.ref.key;
+}
+
+- (NSUInteger)hash {
+    return [self.objectId hash];
+}
+
+- (BOOL)isEqual:(id)object {
+    if ([object isKindOfClass:[self class]]) {
+        Channel *c2 = (Channel *)object;
+        return [c2.objectId isEqualToString:self.objectId];
+    }
+    return NO;
 }
 
 @end

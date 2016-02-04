@@ -8,14 +8,20 @@
 
 #import "CaptureViewController.h"
 
+#import "BigCameraButton.h"
 #import "ChannelBarView.h"
 #import "Photo.h"
 #import "Post.h"
 #import "CapturePreviewView.h"
+#import "UIColor+EPIC.h"
+#import "UIFont+EPIC.h"
 
 #import <Bolts/Bolts.h>
 #import <Masonry/Masonry.h>
 #import <ImageIO/ImageIO.h>
+#import <Firebase/Firebase.h>
+#import <AWSS3/AWSS3.h>
+
 @import AVFoundation;
 @import Photos;
 
@@ -32,7 +38,13 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 
 @property (nonatomic, strong) ChannelBarView *channelBarView;
 
-@property (nonatomic, weak) CapturePreviewView *previewView;
+@property (nonatomic, strong) CapturePreviewView *previewView;
+
+@property (nonatomic, strong) UIView *cameraControlContainerView;
+@property (nonatomic, strong) BigCameraButton *cameraButton;
+@property (nonatomic, strong) UIButton *switchCameraButton, *stillImageButton, *videoButton;
+@property (nonatomic, strong) UIButton *backButton;
+@property (nonatomic, strong) UILabel *photoCountLabel;
 
 // Session management.
 @property (nonatomic) AVCaptureSession *session;
@@ -46,15 +58,115 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 @property (nonatomic, getter=isSessionRunning) BOOL sessionRunning;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 
-@property (nonatomic, strong) Post *currentPost;
+@property (nonatomic, strong) Firebase *currentPostRef;
+@property (nonatomic) NSInteger photoCount;
 
 @end
 
 @implementation CaptureViewController
 
+- (Firebase *)currentPostRef {
+    if (!_currentPostRef) {
+        _currentPostRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"posts"] childByAutoId];
+        [_currentPostRef setValue:@{
+                                    @"channel": self.selectedChannel.ref.key,
+                                    @"timestamp": @([[NSDate date] timeIntervalSince1970]),
+                                    @"user": self.selectedChannel.ref.authData.uid
+                                    }];
+        [self.selectedChannel.ref updateChildValues:@{[NSString stringWithFormat:@"posts/%@", _currentPostRef.key]: @YES}];
+    }
+    return _currentPostRef;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    CGFloat statusBarHeight = CGRectGetHeight([[UIApplication sharedApplication] statusBarFrame]);
+    
+    self.view.backgroundColor = [UIColor epicDarkGrayColor];
+    
+    self.channelBarView = [ChannelBarView barViewWithChannel:self.selectedChannel];
+    [self.view addSubview:self.channelBarView];
+    [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view.mas_top).with.offset(0);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.height.equalTo(@(55 + statusBarHeight));
+    }];
+    
+    self.cameraControlContainerView = [UIView new];
+    self.cameraControlContainerView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.cameraControlContainerView];
+    [self.cameraControlContainerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.bottom.equalTo(self.view.mas_bottom);
+        make.height.equalTo(@120);
+    }];
+    self.cameraButton = [BigCameraButton button];
+    [self.cameraButton addTarget:self
+                          action:@selector(snapStillImage)
+                forControlEvents:UIControlEventTouchUpInside];
+    [self.cameraControlContainerView addSubview:self.cameraButton];
+    [self.cameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.cameraControlContainerView.mas_bottom).with.offset(-10);
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.height.equalTo(@72);
+        make.width.equalTo(self.cameraButton.mas_height);
+    }];
+    self.switchCameraButton = [self cameraControlButtonWithTitle:@"switch camera" andAction:nil];
+    [self.cameraControlContainerView addSubview:self.switchCameraButton];
+    self.stillImageButton = [self cameraControlButtonWithTitle:@"photo" andAction:nil];
+    [self.cameraControlContainerView addSubview:self.stillImageButton];
+    self.videoButton = [self cameraControlButtonWithTitle:@"video" andAction:nil];
+    [self.cameraControlContainerView addSubview:self.videoButton];
+    [self.stillImageButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.cameraControlContainerView.mas_top);
+        make.width.equalTo(self.cameraControlContainerView.mas_width).dividedBy(3);
+        make.centerX.equalTo(self.cameraControlContainerView.mas_centerX);
+    }];
+    [self.switchCameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.stillImageButton.mas_top);
+        make.width.equalTo(self.stillImageButton.mas_width);
+        make.right.equalTo(self.stillImageButton.mas_left);
+    }];
+    [self.videoButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.stillImageButton.mas_top);
+        make.width.equalTo(self.stillImageButton.mas_width);
+        make.left.equalTo(self.stillImageButton.mas_right);
+    }];
+    
+    self.stillImageButton.hidden = YES;
+    self.switchCameraButton.hidden = YES;
+    self.videoButton.hidden = YES;
+    
+    self.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.backButton setImage:[UIImage imageNamed:@"ic_arrow_back_white"] forState:UIControlStateNormal];
+    [self.backButton addTarget:self
+                        action:@selector(backButtonPressed)
+              forControlEvents:UIControlEventTouchUpInside];
+    [self.cameraControlContainerView addSubview:self.backButton];
+    [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.cameraButton.mas_centerY);
+        make.left.equalTo(self.cameraControlContainerView.mas_left).with.offset(15);
+    }];
+    
+    self.photoCountLabel = [UILabel new];
+    self.photoCount = 0;
+    self.photoCountLabel.text = [@(self.photoCount) stringValue];
+    self.photoCountLabel.textColor = [UIColor whiteColor];
+    self.photoCountLabel.font = [UIFont epicBoldFontOfSize:32];
+    self.photoCountLabel.textAlignment = NSTextAlignmentRight;
+    [self.cameraControlContainerView addSubview:self.photoCountLabel];
+    [self.photoCountLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.cameraButton.mas_centerY);
+        make.right.equalTo(self.cameraControlContainerView.mas_right).with.offset(-15);
+    }];
     
     // Disable UI. The UI is enabled if and only if the session starts running.
 //    self.cameraButton.enabled = NO;
@@ -63,9 +175,20 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     
     // Create the AVCaptureSession.
     self.session = [[AVCaptureSession alloc] init];
+    self.session.sessionPreset = AVCaptureSessionPresetPhoto;
     
     // Setup the preview view.
+    self.previewView = [CapturePreviewView new];
+    AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.previewView.layer;
+    previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     self.previewView.session = self.session;
+    [self.view addSubview:self.previewView];
+    [self.previewView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.channelBarView.mas_bottom);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.bottom.equalTo(self.cameraControlContainerView.mas_top);
+    }];
     
     // Communicate with the session and other session objects on this queue.
     self.sessionQueue = dispatch_queue_create( "com.epicurrence.EPICday.sessionQueue", DISPATCH_QUEUE_SERIAL );
@@ -149,6 +272,7 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
                 
                 AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.previewView.layer;
                 previewLayer.connection.videoOrientation = initialVideoOrientation;
+                previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
             } );
         }
         else {
@@ -217,8 +341,8 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
             case AVCamSetupResultCameraNotAuthorized:
             {
                 dispatch_async( dispatch_get_main_queue(), ^{
-                    NSString *message = NSLocalizedString( @"AVCam doesn't have permission to use the camera, please change privacy settings", @"Alert message when the user has denied access to the camera" );
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
+                    NSString *message = NSLocalizedString( @"EPICday doesn't have permission to use the camera, please change privacy settings", @"Alert message when the user has denied access to the camera" );
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"EPICday" message:message preferredStyle:UIAlertControllerStyleAlert];
                     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
                     [alertController addAction:cancelAction];
                     // Provide quick access to Settings.
@@ -234,7 +358,7 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
             {
                 dispatch_async( dispatch_get_main_queue(), ^{
                     NSString *message = NSLocalizedString( @"Unable to capture media", @"Alert message when something goes wrong during capture session configuration" );
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"EPICday" message:message preferredStyle:UIAlertControllerStyleAlert];
                     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
                     [alertController addAction:cancelAction];
                     [self presentViewController:alertController animated:YES completion:nil];
@@ -243,6 +367,7 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
             }
         }
     } );
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -255,6 +380,18 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     } );
     
     [super viewDidDisappear:animated];
+}
+
+- (UIButton *)cameraControlButtonWithTitle:(NSString *)title andAction:(SEL)action {
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    [button setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.3] forState:UIControlStateNormal];
+    button.titleLabel.font = [UIFont epicLightFontOfSize:14];
+    button.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    return button;
 }
 
 #pragma mark Orientation
@@ -431,6 +568,10 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 
 #pragma mark Actions
 
+- (void)backButtonPressed {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (IBAction)resumeInterruptedSession:(id)sender
 {
     dispatch_async( self.sessionQueue, ^{
@@ -554,7 +695,7 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     } );
 }
 
-- (IBAction)snapStillImage:(id)sender
+- (void)snapStillImage
 {
     dispatch_async( self.sessionQueue, ^{
         AVCaptureConnection *connection = [self.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
@@ -564,15 +705,16 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
         connection.videoOrientation = previewLayer.connection.videoOrientation;
         
         // Flash set to Auto for Still Capture.
-        [[self class] setFlashMode:AVCaptureFlashModeAuto forDevice:self.videoDeviceInput.device];
+        [[self class] setFlashMode:AVCaptureFlashModeOff forDevice:self.videoDeviceInput.device];
         
         // Capture a still image.
         [self.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
             if ( imageDataSampleBuffer ) {
                 // The sample buffer is not retained. Create image data before saving the still image to the photo library asynchronously.
                 CFDictionaryRef exifAttachments = CMGetAttachment(imageDataSampleBuffer, kCGImagePropertyExifDictionary, NULL);
-                NSDictionary *exifAttachmentsDict = CFBridgingRelease(exifAttachments);
+                NSDictionary *exifAttachmentsDict = (__bridge NSDictionary *)exifAttachments;
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+                [self uploadPhotoFromData:imageData withExifAttachments:exifAttachmentsDict];
                 [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
                     if ( status == PHAuthorizationStatusAuthorized ) {
                         // To preserve the metadata, we create an asset from the JPEG NSData representation.
@@ -762,30 +904,83 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
 
 #pragma mark - Photo Uploading
 
-- (void)uploadPhotoFromData:(NSData *)imageData exifAttachments:(NSDictionary *)exifAttachments {
-    [[self createCurrentPostIfNecessary] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-        Photo *photo = [Photo object];
-        PFFile *imageFile = [PFFile fileWithData:imageData contentType:@"image/jpeg"];
-        photo.image = imageFile;
-        photo.post = self.currentPost;
-        photo.channel = self.selectedChannel;
-        photo.originalTimestamp = exifAttachments[(__bridge NSString *)kCGImagePropertyExifDateTimeOriginal];
-        photo.user = [PFUser currentUser];
-        photo.dimensions = @{@"width": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelXDimension],
-                             @"height": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelYDimension]};
-        return [photo saveInBackground];
+- (void)uploadPhotoFromData:(NSData *)imageData withExifAttachments:(NSDictionary *)exifAttachments {
+    self.photoCount++;
+    self.photoCountLabel.text = [@(self.photoCount) stringValue];
+    Firebase *photoRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"photos"] childByAutoId];
+    AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
+    uploadRequest.bucket = @"epicday";
+    NSString *key = [NSString stringWithFormat:@"photos/%@.jpg", photoRef.key];
+    uploadRequest.key = key;
+    NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
+    NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:photoRef.key] URLByAppendingPathExtension:@"jpg"];
+    [imageData writeToURL:fileURL atomically:YES];
+    uploadRequest.body = fileURL;
+    uploadRequest.contentType = @"image/jpeg";
+    uploadRequest.ACL = AWSS3ObjectCannedACLPublicRead;
+    [[[AWSS3TransferManager defaultS3TransferManager] upload:uploadRequest] continueWithBlock:^id _Nullable(AWSTask * _Nonnull task) {
+        if (task.error) {
+            if ([task.error.domain isEqualToString:AWSS3TransferManagerErrorDomain]) {
+                switch (task.error.code) {
+                    case AWSS3TransferManagerErrorCancelled:
+                    case AWSS3TransferManagerErrorPaused:
+                        break;
+                        
+                    default:
+                        NSLog(@"Error: %@", task.error);
+                        break;
+                }
+            } else {
+                // Unknown error.
+                NSLog(@"Error: %@", task.error);
+            }
+        }
+        
+        if (task.result) {
+            NSDictionary *dimensions = @{
+                                         @"width": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelYDimension],
+                                         @"height": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelXDimension]
+                                         };
+            [photoRef setValue:@{
+                                 @"imageUrl": [NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@", uploadRequest.bucket, uploadRequest.key],
+                                 @"channel": self.selectedChannel.ref.key,
+                                 @"timestamp": @([[NSDate date] timeIntervalSince1970]),
+                                 @"post": self.currentPostRef.key,
+                                 @"user": self.selectedChannel.ref.authData.uid,
+                                 @"dimensions": dimensions
+                                 }];
+            [self.currentPostRef updateChildValues:@{[NSString stringWithFormat:@"photos/%@", photoRef.key]: @YES}];
+            // The file uploaded successfully.
+        }
+        return nil;
     }];
+    
 }
 
-- (BFTask *)createCurrentPostIfNecessary {
-    if (!self.currentPost) {
-        self.currentPost = [Post object];
-        self.currentPost.channel = self.selectedChannel;
-        self.currentPost.user = [PFUser currentUser];
-        return [self.currentPost saveInBackground];
-    } else {
-        return [BFTask taskWithResult:self.currentPost];
-    }
-}
+//- (void)uploadPhotoFromData:(NSData *)imageData exifAttachments:(NSDictionary *)exifAttachments {
+//    [[self createCurrentPostIfNecessary] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+//        Photo *photo = [Photo object];
+//        PFFile *imageFile = [PFFile fileWithData:imageData contentType:@"image/jpeg"];
+//        photo.image = imageFile;
+//        photo.post = self.currentPost;
+//        photo.channel = self.selectedChannel;
+//        photo.originalTimestamp = exifAttachments[(__bridge NSString *)kCGImagePropertyExifDateTimeOriginal];
+//        photo.user = [PFUser currentUser];
+//        photo.dimensions = @{@"width": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelXDimension],
+//                             @"height": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelYDimension]};
+//        return [photo saveInBackground];
+//    }];
+//}
+//
+//- (BFTask *)createCurrentPostIfNecessary {
+//    if (!self.currentPost) {
+//        self.currentPost = [Post object];
+//        self.currentPost.channel = self.selectedChannel;
+//        self.currentPost.user = [PFUser currentUser];
+//        return [self.currentPost saveInBackground];
+//    } else {
+//        return [BFTask taskWithResult:self.currentPost];
+//    }
+//}
 
 @end

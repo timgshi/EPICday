@@ -10,6 +10,8 @@
 
 #import "Channel.h"
 
+@class Firebase;
+
 @interface CaptureViewController : UIViewController
 
 @property (nonatomic, strong) Channel *selectedChannel;

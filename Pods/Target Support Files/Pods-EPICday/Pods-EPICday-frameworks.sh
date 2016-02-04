@@ -91,9 +91,12 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-EPICday/Bolts.framework"
   install_framework "Pods-EPICday/FBSDKCoreKit.framework"
   install_framework "Pods-EPICday/FBSDKLoginKit.framework"
+  install_framework "Pods-EPICday/Firebase.framework"
   install_framework "Pods-EPICday/Masonry.framework"
   install_framework "Pods-EPICday/Parse.framework"
   install_framework "Pods-EPICday/ParseFacebookUtilsV4.framework"
+  install_framework "Pods-EPICday/ReactiveCocoa.framework"
+  install_framework "Pods-EPICday/Result.framework"
   install_framework "Pods-EPICday/SDWebImage.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
@@ -104,8 +107,11 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-EPICday/Bolts.framework"
   install_framework "Pods-EPICday/FBSDKCoreKit.framework"
   install_framework "Pods-EPICday/FBSDKLoginKit.framework"
+  install_framework "Pods-EPICday/Firebase.framework"
   install_framework "Pods-EPICday/Masonry.framework"
   install_framework "Pods-EPICday/Parse.framework"
   install_framework "Pods-EPICday/ParseFacebookUtilsV4.framework"
+  install_framework "Pods-EPICday/ReactiveCocoa.framework"
+  install_framework "Pods-EPICday/Result.framework"
   install_framework "Pods-EPICday/SDWebImage.framework"
 fi

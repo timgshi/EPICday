@@ -29,6 +29,7 @@ PODS:
     - Bolts (~> 1.5)
   - FBSDKLoginKit (4.9.1):
     - FBSDKCoreKit
+  - Firebase (2.5.0)
   - Masonry (0.6.4)
   - Parse (1.12.0):
     - Bolts/Tasks (~> 1.5)
@@ -38,6 +39,18 @@ PODS:
     - FBSDKLoginKit (~> 4.9.0-beta)
     - FBSDKTVOSKit (~> 4.9.0-beta)
     - Parse (~> 1.11)
+  - ReactiveCocoa (4.0.0):
+    - ReactiveCocoa/UI (= 4.0.0)
+    - Result (~> 1.0.1)
+  - ReactiveCocoa/Core (4.0.0):
+    - ReactiveCocoa/no-arc
+    - Result (~> 1.0.1)
+  - ReactiveCocoa/no-arc (4.0.0):
+    - Result (~> 1.0.1)
+  - ReactiveCocoa/UI (4.0.0):
+    - ReactiveCocoa/Core
+    - Result (~> 1.0.1)
+  - Result (1.0.1)
   - SDWebImage (3.7.5):
     - SDWebImage/Core (= 3.7.5)
   - SDWebImage/Core (3.7.5)
@@ -47,9 +60,11 @@ DEPENDENCIES:
   - AWSCognito (~> 2.3)
   - AWSS3 (~> 2.3)
   - FBSDKCoreKit (~> 4.9)
+  - Firebase
   - Masonry (~> 0.6)
   - Parse (~> 1.12)
   - ParseFacebookUtilsV4 (~> 1.11)
+  - ReactiveCocoa (~> 4.0)
   - SDWebImage (~> 3.7)
 
 SPEC CHECKSUMS:
@@ -60,9 +75,12 @@ SPEC CHECKSUMS:
   Bolts: f52a250053bb517ca874523c3913776359ab3def
   FBSDKCoreKit: aee20b6d9855f15b618d4fddd1a5ad45f5a4a59d
   FBSDKLoginKit: ec22dc49bd372b064e93d6773df4ffefb3a552a2
+  Firebase: 744617c0733b45198f9486ebd5cac64ec2d10d79
   Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
   Parse: de2c52a9a1421b91ae7594ab8ce191afd184f19b
   ParseFacebookUtilsV4: 216e03bd560404eed09a4875c75f0c1cdf758070
+  ReactiveCocoa: 69be555be30674b07a86b60a91b855063841acc0
+  Result: caef80340451e1f07492fa1e89117f83613bce24
   SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
 
 COCOAPODS: 0.39.0
