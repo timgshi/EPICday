@@ -57,8 +57,7 @@
                                                   }];
 }
 
-- (void)debounce:(SEL)action target:(id)target delay:(NSTimeInterval)delay
-{
+- (void)debounce:(SEL)action target:(id)target delay:(NSTimeInterval)delay {
     __weak typeof(target) weakTarget = target;
     [NSObject cancelPreviousPerformRequestsWithTarget:weakTarget selector:action object:nil];
     [weakTarget performSelector:action withObject:nil afterDelay:delay];
