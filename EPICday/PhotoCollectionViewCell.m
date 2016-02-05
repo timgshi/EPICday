@@ -11,6 +11,8 @@
 #import <Masonry/Masonry.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
+#import "UIColor+EPIC.h"
+
 @interface PhotoCollectionViewCell ()
 
 @property (nonatomic, strong) UIImageView *imageView;
@@ -31,6 +33,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        self.contentView.backgroundColor = [UIColor epicGrayColor];
     }
     return self;
 }
@@ -39,6 +42,7 @@
     if (!_imageView) {
         _imageView = [[UIImageView alloc] initWithFrame:self.contentView.bounds];
         _imageView.contentMode = UIViewContentModeScaleAspectFit;
+        _imageView.backgroundColor = [UIColor epicGrayColor];
         [self.contentView addSubview:_imageView];
         [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self.contentView);
