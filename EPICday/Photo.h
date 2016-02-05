@@ -11,6 +11,7 @@
 #import "Channel.h"
 #import "Post.h"
 
+@class BFTask;
 @class BFTaskCompletionSource;
 @class Firebase;
 
@@ -31,5 +32,6 @@
 @property (nonatomic, strong) Firebase *ref;
 
 + (instancetype)photoFromRef:(Firebase *)ref inPost:(Post *)post withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource;
++ (BFTask *)photoFromRef:(Firebase *)ref inPost:(Post *)post;
 
 @end

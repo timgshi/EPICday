@@ -18,6 +18,7 @@
 		22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BAE1C585B350031BBC0 /* UIFont+EPIC.m */; };
 		22254BB21C5894A10031BBC0 /* PostCollectionViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BB11C5894A10031BBC0 /* PostCollectionViewHeader.m */; };
 		22254BB51C58A20C0031BBC0 /* BigCameraButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BB41C58A20C0031BBC0 /* BigCameraButton.m */; };
+		2244EDE11C643C860026BE70 /* ChannelStreamDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2244EDE01C643C860026BE70 /* ChannelStreamDataSource.m */; };
 		22485EDC1C5AEFEE0091F736 /* CapturePreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 22485EDB1C5AEFEE0091F736 /* CapturePreviewView.m */; };
 		229532351C63280900C6124F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 229532341C63280900C6124F /* User.m */; };
 		22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22F15EAC1C59D71600B07F63 /* CaptureViewController.m */; };
@@ -71,6 +72,8 @@
 		22254BB11C5894A10031BBC0 /* PostCollectionViewHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostCollectionViewHeader.m; sourceTree = "<group>"; };
 		22254BB31C58A20C0031BBC0 /* BigCameraButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigCameraButton.h; sourceTree = "<group>"; };
 		22254BB41C58A20C0031BBC0 /* BigCameraButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigCameraButton.m; sourceTree = "<group>"; };
+		2244EDDF1C643C860026BE70 /* ChannelStreamDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelStreamDataSource.h; sourceTree = "<group>"; };
+		2244EDE01C643C860026BE70 /* ChannelStreamDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelStreamDataSource.m; sourceTree = "<group>"; };
 		22485EDA1C5AEFEE0091F736 /* CapturePreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturePreviewView.h; sourceTree = "<group>"; };
 		22485EDB1C5AEFEE0091F736 /* CapturePreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapturePreviewView.m; sourceTree = "<group>"; };
 		229532331C63280900C6124F /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -172,6 +175,8 @@
 				22254BA81C584E820031BBC0 /* ChannelBarView.m */,
 				221D7ECE1C56E3780090A542 /* ChannelStreamCollectionViewController.h */,
 				221D7ECF1C56E3780090A542 /* ChannelStreamCollectionViewController.m */,
+				2244EDDF1C643C860026BE70 /* ChannelStreamDataSource.h */,
+				2244EDE01C643C860026BE70 /* ChannelStreamDataSource.m */,
 				221D7ED11C56E3A30090A542 /* PhotoCollectionViewCell.h */,
 				221D7ED21C56E3A30090A542 /* PhotoCollectionViewCell.m */,
 				22254BB01C5894A10031BBC0 /* PostCollectionViewHeader.h */,
@@ -434,6 +439,7 @@
 				4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */,
 				22254BB51C58A20C0031BBC0 /* BigCameraButton.m in Sources */,
 				22254BB21C5894A10031BBC0 /* PostCollectionViewHeader.m in Sources */,
+				2244EDE11C643C860026BE70 /* ChannelStreamDataSource.m in Sources */,
 				221D7EC71C56E0540090A542 /* Channel.m in Sources */,
 				4B7D3A031C543E1A00E170FB /* main.m in Sources */,
 				221D7ECD1C56E0680090A542 /* Post.m in Sources */,

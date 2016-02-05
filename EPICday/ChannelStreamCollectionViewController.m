@@ -18,9 +18,12 @@
 #import "Photo.h"
 #import "UIColor+EPIC.h"
 
+#import "ChannelStreamDataSource.h"
+
 @interface ChannelStreamCollectionViewController () <UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) Channel *channel;
+@property (nonatomic, strong) ChannelStreamDataSource *dataSource;
 
 @end
 
@@ -42,21 +45,30 @@
     self.collectionView.alwaysBounceVertical = YES;
     self.collectionView.contentInset = UIEdgeInsetsMake(55, 0, 90, 0);
     
-    [PhotoCollectionViewCell registerWithCollectionView:self.collectionView];
-    [PostCollectionViewHeader registerWithCollectionView:self.collectionView];
+//    [PhotoCollectionViewCell registerWithCollectionView:self.collectionView];
+//    [PostCollectionViewHeader registerWithCollectionView:self.collectionView];
+//    
+//    [[NSNotificationCenter defaultCenter] addObserverForName:EPICChannelDidUpdatePostsNotification
+//                                                      object:nil
+//                                                       queue:[NSOperationQueue mainQueue]
+//                                                  usingBlock:^(NSNotification * _Nonnull note) {
+//                                                      [self debounce:@selector(reloadData) target:self.collectionView delay:1.0];
+//    }];
+//    [[NSNotificationCenter defaultCenter] addObserverForName:EPICPostDidUpdatePhotosNotification
+//                                                      object:nil
+//                                                       queue:[NSOperationQueue mainQueue]
+//                                                  usingBlock:^(NSNotification * _Nonnull note) {
+//                                                      [self debounce:@selector(reloadData) target:self.collectionView delay:1.0];
+//                                                  }];
     
-    [[NSNotificationCenter defaultCenter] addObserverForName:EPICChannelDidUpdatePostsNotification
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification * _Nonnull note) {
-                                                      [self debounce:@selector(reloadData) target:self.collectionView delay:1.0];
-    }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:EPICPostDidUpdatePhotosNotification
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification * _Nonnull note) {
-                                                      [self debounce:@selector(reloadData) target:self.collectionView delay:1.0];
-                                                  }];
+    self.dataSource = [ChannelStreamDataSource dataSourceWithChannel:self.channel
+                                                    inCollectionView:self.collectionView
+                                                       withCellClass:[PhotoCollectionViewCell class]
+                                                  andReuseIdentifier:[PhotoCollectionViewCell defaultIdentifier]];
+    self.dataSource.populateCell = ^(UICollectionViewCell *cell, Photo *photo) {
+        PhotoCollectionViewCell *photoCell = (PhotoCollectionViewCell *)cell;
+        photoCell.photo = photo;
+    };
 }
 
 - (void)debounce:(SEL)action target:(id)target delay:(NSTimeInterval)delay {
@@ -76,37 +88,31 @@
     return post.photos[indexPath.item];
 }
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return self.channel.posts.count;
-}
+//- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+//    return self.channel.posts.count;
+//}
+//
+//
+//- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+//    return [self postForSection:section].photos.count;
+//}
+//
+//- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+//    PhotoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PhotoCollectionViewCell defaultIdentifier]
+//                                                                              forIndexPath:indexPath];
+//    cell.photo = [self photoAtIndexPath:indexPath];
+//    return cell;
+//}
+//
 
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self postForSection:section].photos.count;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    PhotoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PhotoCollectionViewCell defaultIdentifier]
-                                                                              forIndexPath:indexPath];
-    cell.photo = [self photoAtIndexPath:indexPath];
-    return cell;
-}
-
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-        PostCollectionViewHeader *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[PostCollectionViewHeader defaultIdentifier] forIndexPath:indexPath];
-        header.post = [self postForSection:indexPath.section];
-        return header;
-    }
-    return nil;
-}
 
 #pragma mark UICollectionViewDelegateFlowLayout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    Photo *photo = [self photoAtIndexPath:indexPath];
+//    Photo *photo = [self photoAtIndexPath:indexPath];
+    Photo *photo = [self.dataSource photoAtIndexPath:indexPath];
     CGFloat width = (CGRectGetWidth(self.collectionView.frame) / 2) - 20;
     CGFloat ratio = width / photo.size.width;
     CGFloat height = photo.size.height * ratio;

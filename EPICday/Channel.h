@@ -20,6 +20,7 @@ extern NSString * const EPICChannelDidUpdatePostsNotification;
 @property (nonatomic, strong) NSURL *avatarUrl;
 @property (nonatomic, strong) NSMutableOrderedSet *posts;
 @property (nonatomic, strong) NSDictionary *membersDict;
+@property (nonatomic, strong) NSDictionary *postsDict;
 
 @property (nonatomic, strong) Firebase *ref;
 

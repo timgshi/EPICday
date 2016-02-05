@@ -28,6 +28,23 @@
     return photo;
 }
 
++ (BFTask *)photoFromRef:(Firebase *)ref inPost:(Post *)post {
+    BFTaskCompletionSource *taskSource = [BFTaskCompletionSource taskCompletionSource];
+    Photo *photo = [self new];
+    photo.ref = ref;
+    [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        NSDictionary *valuesDict = (NSDictionary *)snapshot.value;
+        photo.post = post;
+        photo.channel = post.channel;
+        photo.post = post;
+        photo.timestamp = [NSDate dateWithTimeIntervalSince1970:[valuesDict[@"timestamp"] doubleValue]];
+        photo.dimensions = valuesDict[@"dimensions"];
+        photo.imageUrl = [NSURL URLWithString:valuesDict[@"imageUrl"]];
+        [taskSource trySetResult:photo];
+    }];
+    return taskSource.task;
+}
+
 - (NSString *)objectId {
     return self.ref.key;
 }

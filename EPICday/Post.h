@@ -10,6 +10,7 @@
 
 extern NSString * const EPICPostDidUpdatePhotosNotification;
 
+@class BFTask;
 @class BFTaskCompletionSource;
 @class FDataSnapshot;
 @class Firebase;
@@ -28,5 +29,6 @@ extern NSString * const EPICPostDidUpdatePhotosNotification;
 @property (nonatomic, strong) Firebase *userRef;
 
 + (instancetype)postFromRef:(Firebase *)ref inChannel:(Channel *)channel withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource;
++ (BFTask *)postFromRef:(Firebase *)ref inChannel:(Channel *)channel;
 
 @end
