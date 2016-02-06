@@ -23,6 +23,8 @@
 #import "ChannelStreamCollectionViewController.h"
 #import "UIColor+EPIC.h"
 
+#import "FilteredCaptureViewController.h"
+
 #import <AWSS3/AWSS3.h>
 
 @interface ChannelStreamViewController ()
@@ -93,7 +95,7 @@
 }
 
 - (void)cameraButtonPressed {
-    CaptureViewController *captureVC = [CaptureViewController new];
+    FilteredCaptureViewController *captureVC = [FilteredCaptureViewController new];
     captureVC.selectedChannel = self.selectedChannel;
     [self.navigationController pushViewController:captureVC animated:YES];
 }
