@@ -22,6 +22,7 @@
 #import "ChannelBarView.h"
 #import "ChannelStreamCollectionViewController.h"
 #import "UIColor+EPIC.h"
+#import "UIFont+EPIC.h"
 
 #import "FilteredCaptureViewController.h"
 
@@ -36,9 +37,17 @@
 @property (nonatomic, strong) Firebase *baseRef, *selectedChannelRef;
 @property (nonatomic, strong) Channel *selectedChannel;
 
+@property (nonatomic, strong) UIView *notificationView;
+@property (nonatomic, strong) UILabel *notificationViewLabel;
+@property (nonatomic, strong) MASConstraint *notificationViewBottomConstraint;
+
 @end
 
 @implementation ChannelStreamViewController
+
+NSString * const EPICShowChannelStreamNotificationViewNotification = @"EPICShowChannelStreamNotificationViewNotification";
+NSString * const EPICHideChannelStreamNotificationViewNotification = @"EPICHideChannelStreamNotificationViewNotification";
+NSString * const EPICShowChannelStreamNotificationViewTextKey = @"EPICShowChannelStreamNotificationViewTextKey";
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
@@ -100,12 +109,74 @@
         make.width.equalTo(self.cameraButton.mas_height);
     }];
     
+    self.notificationView = [UIView new];
+    self.notificationView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.notificationView];
+    UIView *notificationBorderView = [UIView new];
+    notificationBorderView.backgroundColor = [UIColor epicDarkGrayColor];
+    [self.notificationView addSubview:notificationBorderView];
+    
+    self.notificationViewLabel = [UILabel new];
+    self.notificationViewLabel.textAlignment = NSTextAlignmentLeft;
+    self.notificationViewLabel.textColor = [UIColor epicDarkGrayColor];
+    self.notificationViewLabel.font = [UIFont epicDefaultFontOfSize:22];
+    [self.notificationView addSubview:self.notificationViewLabel];
+    
+    self.notificationViewLabel.text = @"Hold to save photo";
+    
+    [self.notificationView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.height.equalTo(self.channelBarView.mas_height);
+        make.bottom.equalTo(self.view.mas_top);
+    }];
+    [notificationBorderView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.notificationView.mas_left);
+        make.right.equalTo(self.notificationView.mas_right);
+        make.top.equalTo(self.notificationView.mas_top);
+        make.height.equalTo(@(statusBarHeight));
+    }];
+    [self.notificationViewLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.notificationView.mas_left).with.offset(15);
+        make.right.equalTo(self.notificationView.mas_right).with.offset(-15);
+        make.top.equalTo(notificationBorderView.mas_bottom);
+        make.bottom.equalTo(self.notificationView.mas_bottom);
+    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showNotificationView:) name:EPICShowChannelStreamNotificationViewNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideNotificationView:) name:EPICHideChannelStreamNotificationViewNotification object:nil];
+    
 }
 
 - (void)cameraButtonPressed {
     FilteredCaptureViewController *captureVC = [FilteredCaptureViewController new];
     captureVC.selectedChannel = self.selectedChannel;
     [self.navigationController pushViewController:captureVC animated:YES];
+}
+
+- (void)showNotificationView:(NSNotification *)notification {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                             selector:@selector(hideNotificationView:)
+                                               object:nil];
+    self.notificationViewLabel.text = notification.userInfo[EPICShowChannelStreamNotificationViewTextKey];
+    [self.view layoutIfNeeded];
+    [self.notificationView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view.mas_top).with.offset(CGRectGetHeight(self.notificationView.frame));
+    }];
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.view layoutIfNeeded];
+    }];
+    [self performSelector:@selector(hideNotificationView:) withObject:nil afterDelay:3];
+}
+
+- (void)hideNotificationView:(NSNotification *)notification {
+    [self.view layoutIfNeeded];
+    [self.notificationView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view.mas_top).with.offset(0);
+    }];
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.view layoutIfNeeded];
+    }];
 }
 
 @end

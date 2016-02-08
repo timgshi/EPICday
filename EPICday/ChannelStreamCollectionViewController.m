@@ -8,15 +8,20 @@
 
 #import "ChannelStreamCollectionViewController.h"
 
+#import "ChannelStreamViewController.h"
+
 #import <Bolts/Bolts.h>
 #import <Firebase/Firebase.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
+#import <SDWebImage/SDWebImageManager.h>
 
 #import "PhotoCollectionViewCell.h"
 #import "Post.h"
 #import "PostCollectionViewHeader.h"
 #import "Photo.h"
 #import "UIColor+EPIC.h"
+
+@import Photos;
 
 #import "ChannelStreamDataSource.h"
 
@@ -65,9 +70,24 @@
                                                     inCollectionView:self.collectionView
                                                        withCellClass:[PhotoCollectionViewCell class]
                                                   andReuseIdentifier:[PhotoCollectionViewCell defaultIdentifier]];
+    __weak typeof(self) weakSelf = self;
     self.dataSource.populateCell = ^(UICollectionViewCell *cell, Photo *photo) {
         PhotoCollectionViewCell *photoCell = (PhotoCollectionViewCell *)cell;
         photoCell.photo = photo;
+        photoCell.cellDidTapBlock = ^(PhotoCollectionViewCell *blockCell) {
+            NSDictionary *userInfo = @{EPICShowChannelStreamNotificationViewTextKey: @"Long press to save photo"};
+            [[NSNotificationCenter defaultCenter] postNotificationName:EPICShowChannelStreamNotificationViewNotification
+                                                                object:blockCell.photo
+                                                              userInfo:userInfo];
+        };
+        photoCell.cellDidLongPressBlock = ^(PhotoCollectionViewCell *blockCell) {
+            __strong typeof(self) strongSelf = weakSelf;
+            NSDictionary *userInfo = @{EPICShowChannelStreamNotificationViewTextKey: @"Photo saved!"};
+            [[NSNotificationCenter defaultCenter] postNotificationName:EPICShowChannelStreamNotificationViewNotification
+                                                                object:blockCell.photo
+                                                              userInfo:userInfo];
+            [strongSelf savePhotoToLibrary:blockCell.photo];
+        };
     };
 }
 
@@ -75,6 +95,53 @@
     __weak typeof(target) weakTarget = target;
     [NSObject cancelPreviousPerformRequestsWithTarget:weakTarget selector:action object:nil];
     [weakTarget performSelector:action withObject:nil afterDelay:delay];
+}
+
+- (void)savePhotoToLibrary:(Photo *)photo {
+    [[SDWebImageManager sharedManager] downloadImageWithURL:photo.imageUrl options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
+        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+            if ( status == PHAuthorizationStatusAuthorized ) {
+                // To preserve the metadata, we create an asset from the JPEG NSData representation.
+                // Note that creating an asset from a UIImage discards the metadata.
+                // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
+                // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
+                if ( [PHAssetCreationRequest class] ) {
+                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                        [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:imageData options:nil];
+                    } completionHandler:^( BOOL success, NSError *error ) {
+                        if ( ! success ) {
+                            NSLog( @"Error occurred while saving image to photo library: %@", error );
+                        }
+                    }];
+                }
+                else {
+                    NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
+                    NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
+                    NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
+                    
+                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                        NSError *error = nil;
+                        [imageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
+                        if ( error ) {
+                            NSLog( @"Error occured while writing image data to a temporary file: %@", error );
+                        }
+                        else {
+                            [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
+                        }
+                    } completionHandler:^( BOOL success, NSError *error ) {
+                        if ( ! success ) {
+                            NSLog( @"Error occurred while saving image to photo library: %@", error );
+                        }
+                        
+                        // Delete the temporary file.
+                        [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+                    }];
+                }
+            }
+        }];
+
+    }];
 }
 
 #pragma mark <UICollectionViewDataSource>

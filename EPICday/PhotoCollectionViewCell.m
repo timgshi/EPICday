@@ -16,6 +16,8 @@
 @interface PhotoCollectionViewCell ()
 
 @property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UITapGestureRecognizer *tapGr;
+@property (nonatomic, strong) UILongPressGestureRecognizer *longPressGr;
 
 @end
 
@@ -34,8 +36,19 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.contentView.backgroundColor = [UIColor epicGrayColor];
+        self.longPressGr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+        self.longPressGr.minimumPressDuration = 0.5;
+        [self.contentView addGestureRecognizer:self.longPressGr];
+        self.tapGr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+        [self.tapGr requireGestureRecognizerToFail:self.longPressGr];
+        [self.contentView addGestureRecognizer:self.tapGr];
     }
     return self;
+}
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    self.cellDidLongPressBlock = nil;
 }
 
 - (UIImageView *)imageView {
@@ -57,6 +70,18 @@
         [self.imageView sd_setImageWithURL:photo.imageUrl placeholderImage:photo.thumbnail];
     } else {
         [self.imageView sd_setImageWithURL:photo.imageUrl];
+    }
+}
+
+- (void)handleTap:(UITapGestureRecognizer *)tapGr {
+    if (tapGr.state == UIGestureRecognizerStateEnded && self.cellDidTapBlock) {
+        self.cellDidTapBlock(self);
+    }
+}
+
+- (void)handleLongPress:(UILongPressGestureRecognizer *)pressGr {
+    if (pressGr.state == UIGestureRecognizerStateBegan && self.cellDidLongPressBlock) {
+        self.cellDidLongPressBlock(self);
     }
 }
 
