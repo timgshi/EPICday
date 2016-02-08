@@ -22,10 +22,13 @@
 #import "ChannelStreamCollectionViewController.h"
 #import "UIColor+EPIC.h"
 #import "UIFont+EPIC.h"
+#import "PhotoCollectionViewCell.h"
+#import "Photo.h"
 
 #import "FilteredCaptureViewController.h"
 
 #import <AWSS3/AWSS3.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface ChannelStreamViewController ()
 
@@ -40,6 +43,10 @@
 @property (nonatomic, strong) UILabel *notificationViewLabel;
 @property (nonatomic, strong) MASConstraint *notificationViewBottomConstraint;
 
+@property (nonatomic, strong) UIImageView *fullScreenImageView;
+@property (nonatomic, strong) UIPanGestureRecognizer *fullScreenImagePanGR;
+@property (nonatomic) CGRect originalThumbFrame;
+
 @end
 
 @implementation ChannelStreamViewController
@@ -47,6 +54,7 @@
 NSString * const EPICShowChannelStreamNotificationViewNotification = @"EPICShowChannelStreamNotificationViewNotification";
 NSString * const EPICHideChannelStreamNotificationViewNotification = @"EPICHideChannelStreamNotificationViewNotification";
 NSString * const EPICShowChannelStreamNotificationViewTextKey = @"EPICShowChannelStreamNotificationViewTextKey";
+NSString * const EPICShowFullScreenImageFromCellNotification = @"EPICShowFullScreenImageFromCellNotification";
 
 static NSString * const EPIC_epicurrence_test_channel_id = @"-K9BFMuy_74cIqk9RUz9";
 static NSString * const EPIC_epicurrence_channel_id = @"-KA-1sbul1bQREXo6_sa";
@@ -148,6 +156,19 @@ static NSString * const EPIC_epicurrence_channel_id = @"-KA-1sbul1bQREXo6_sa";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showNotificationView:) name:EPICShowChannelStreamNotificationViewNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideNotificationView:) name:EPICHideChannelStreamNotificationViewNotification object:nil];
     
+    self.fullScreenImageView = [UIImageView new];
+    self.fullScreenImageView.backgroundColor = [UIColor clearColor];
+    self.fullScreenImageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.fullScreenImageView.hidden = YES;
+    self.fullScreenImageView.userInteractionEnabled = YES;
+    [self.view addSubview:self.fullScreenImageView];
+    self.fullScreenImagePanGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleFullScreenImageDrag:)];
+    self.fullScreenImagePanGR.enabled = NO;
+    [self.fullScreenImageView addGestureRecognizer:self.fullScreenImagePanGR];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showFullScreenImageViewFromNotification:)
+                                                 name:EPICShowFullScreenImageFromCellNotification object:nil];
 }
 
 - (void)cameraButtonPressed {
@@ -179,6 +200,54 @@ static NSString * const EPIC_epicurrence_channel_id = @"-KA-1sbul1bQREXo6_sa";
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     }];
+}
+
+- (void)showFullScreenImageViewFromNotification:(NSNotification *)notification {
+    PhotoCollectionViewCell *cell = notification.object;
+    [self.fullScreenImageView sd_setImageWithURL:cell.photo.imageUrl
+                                placeholderImage:cell.photo.thumbnail];
+    CGRect convertedFrame = [self.streamCollectionVC.collectionView convertRect:cell.frame toView:self.view];
+    self.originalThumbFrame = convertedFrame;
+    self.fullScreenImageView.frame = convertedFrame;
+    self.fullScreenImageView.hidden = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.fullScreenImageView.frame = self.view.bounds;
+        self.fullScreenImageView.backgroundColor = [UIColor blackColor];
+        self.fullScreenImagePanGR.enabled = YES;
+    }];
+}
+
+- (void)hideFullScreenImageView {
+    self.fullScreenImagePanGR.enabled = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.fullScreenImageView.frame = self.originalThumbFrame;
+        self.fullScreenImageView.backgroundColor = [UIColor clearColor];
+    } completion:^(BOOL finished) {
+        self.fullScreenImageView.hidden = YES;
+        self.fullScreenImageView.image = nil;
+        self.originalThumbFrame = CGRectZero;
+    }];
+}
+
+- (void)handleFullScreenImageDrag:(UIPanGestureRecognizer *)panGR {
+    CGPoint translation = [panGR translationInView:self.view];
+    if (panGR.state == UIGestureRecognizerStateBegan || panGR.state == UIGestureRecognizerStateChanged) {
+        CGAffineTransform transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.8, 0.8);
+        transform = CGAffineTransformTranslate(transform, translation.x, translation.y);
+        self.fullScreenImageView.transform = transform;
+//        CATransform3D transform = CATransform3DIdentity;
+//        transform = CATransform3DScale(transform, 0.8, 0.8, 1.01);
+//        transform = CATransform3DTranslate(transform, translation.x, translation.y, 0);
+//        self.fullScreenImageView.layer.transform = transform;
+    } else if (panGR.state == UIGestureRecognizerStateEnded) {
+        CGFloat maxTranslation = MAX(translation.x, translation.y);
+        if (maxTranslation >= 50) {
+            [self hideFullScreenImageView];
+        } else {
+            self.fullScreenImageView.transform = CGAffineTransformIdentity;
+//            self.fullScreenImageView.layer.transform = CATransform3DIdentity;
+        }
+    }
 }
 
 @end

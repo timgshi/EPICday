@@ -76,8 +76,8 @@
         photoCell.photo = photo;
         photoCell.cellDidTapBlock = ^(PhotoCollectionViewCell *blockCell) {
             NSDictionary *userInfo = @{EPICShowChannelStreamNotificationViewTextKey: @"Long press to save photo"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:EPICShowChannelStreamNotificationViewNotification
-                                                                object:blockCell.photo
+            [[NSNotificationCenter defaultCenter] postNotificationName:EPICShowFullScreenImageFromCellNotification
+                                                                object:blockCell
                                                               userInfo:userInfo];
         };
         photoCell.cellDidLongPressBlock = ^(PhotoCollectionViewCell *blockCell) {
