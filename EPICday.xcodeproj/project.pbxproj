@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		091A9C8DEFE5DE4DBEADCA9A /* Pods_EPICday.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A094ED59DDEBB334E8CBE3DC /* Pods_EPICday.framework */; };
+		22083C081C69426D002C947A /* FuturaBTBook.otf in Resources */ = {isa = PBXBuildFile; fileRef = 22083C071C69426D002C947A /* FuturaBTBook.otf */; };
+		22083C0A1C6942CF002C947A /* FuturaBTHeavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 22083C091C6942CF002C947A /* FuturaBTHeavy.otf */; };
 		221D7EC71C56E0540090A542 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7EC61C56E0540090A542 /* Channel.m */; };
 		221D7ECA1C56E05F0090A542 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7EC91C56E05F0090A542 /* Photo.m */; };
 		221D7ECD1C56E0680090A542 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7ECC1C56E0680090A542 /* Post.m */; };
@@ -54,6 +56,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		22083C071C69426D002C947A /* FuturaBTBook.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FuturaBTBook.otf; sourceTree = "<group>"; };
+		22083C091C6942CF002C947A /* FuturaBTHeavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FuturaBTHeavy.otf; sourceTree = "<group>"; };
 		221D7EC51C56E0540090A542 /* Channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Channel.h; sourceTree = "<group>"; };
 		221D7EC61C56E0540090A542 /* Channel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Channel.m; sourceTree = "<group>"; };
 		221D7EC81C56E05F0090A542 /* Photo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photo.h; sourceTree = "<group>"; };
@@ -145,10 +149,20 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		22083C061C693F33002C947A /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				22083C071C69426D002C947A /* FuturaBTBook.otf */,
+				22083C091C6942CF002C947A /* FuturaBTHeavy.otf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		227A2E7B1C658BEE00777ACE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				227A2E791C658BD600777ACE /* Castillero.acv */,
+				22083C061C693F33002C947A /* Fonts */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -368,6 +382,8 @@
 			files = (
 				227A2E7A1C658BDB00777ACE /* Castillero.acv in Resources */,
 				4B7D3A111C543E1A00E170FB /* LaunchScreen.storyboard in Resources */,
+				22083C0A1C6942CF002C947A /* FuturaBTHeavy.otf in Resources */,
+				22083C081C69426D002C947A /* FuturaBTBook.otf in Resources */,
 				4B7D3A0E1C543E1A00E170FB /* Assets.xcassets in Resources */,
 				4B7D3A0C1C543E1A00E170FB /* Main.storyboard in Resources */,
 			);
