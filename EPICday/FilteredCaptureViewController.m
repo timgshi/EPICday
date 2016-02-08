@@ -266,60 +266,62 @@
 - (void)uploadPhotoFromData:(NSData *)imageData withExifAttachments:(NSDictionary *)exifAttachments {
     self.photoCount++;
     self.photoCountLabel.text = [@(self.photoCount) stringValue];
-    Firebase *photoRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"photos"] childByAutoId];
-    NSDictionary *dimensions = @{
-                                 @"width": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelYDimension],
-                                 @"height": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelXDimension]
-                                 };
-    [photoRef setValue:@{
-                         @"channel": self.selectedChannel.ref.key,
-                         @"timestamp": @([[NSDate date] timeIntervalSince1970]),
-                         @"post": self.currentPostRef.key,
-                         @"user": self.selectedChannel.ref.authData.uid,
-                         @"dimensions": dimensions
-                         }];
-    [[self getThumbnailImageDataFromData:imageData withSize:CGSizeMake([dimensions[@"width"] floatValue], [dimensions[@"height"] floatValue])] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-        NSData *thumbnailData = task.result;
-        NSString *thumbnailString = [thumbnailData base64EncodedStringWithOptions:0];
-        [photoRef updateChildValues:@{@"thumbnailBase64": thumbnailString}];
-        return nil;
-    }];
-    AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
-    uploadRequest.bucket = @"epicday";
-    NSString *key = [NSString stringWithFormat:@"photos/%@.jpg", photoRef.key];
-    uploadRequest.key = key;
-    NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
-    NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:photoRef.key] URLByAppendingPathExtension:@"jpg"];
-    [imageData writeToURL:fileURL atomically:YES];
-    uploadRequest.body = fileURL;
-    uploadRequest.contentType = @"image/jpeg";
-    uploadRequest.ACL = AWSS3ObjectCannedACLPublicRead;
-    [[[AWSS3TransferManager defaultS3TransferManager] upload:uploadRequest] continueWithBlock:^id _Nullable(AWSTask * _Nonnull task) {
-        if (task.error) {
-            if ([task.error.domain isEqualToString:AWSS3TransferManagerErrorDomain]) {
-                switch (task.error.code) {
-                    case AWSS3TransferManagerErrorCancelled:
-                    case AWSS3TransferManagerErrorPaused:
-                        break;
-                        
-                    default:
-                        NSLog(@"Error: %@", task.error);
-                        break;
+    [[BFTask taskWithResult:@YES] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+        Firebase *photoRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"photos"] childByAutoId];
+        NSDictionary *dimensions = @{
+                                     @"width": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelYDimension],
+                                     @"height": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelXDimension]
+                                     };
+        [photoRef setValue:@{
+                             @"channel": self.selectedChannel.ref.key,
+                             @"timestamp": @([[NSDate date] timeIntervalSince1970]),
+                             @"post": self.currentPostRef.key,
+                             @"user": self.selectedChannel.ref.authData.uid,
+                             @"dimensions": dimensions
+                             }];
+        [[self getThumbnailImageDataFromData:imageData withSize:CGSizeMake([dimensions[@"width"] floatValue], [dimensions[@"height"] floatValue])] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+            NSData *thumbnailData = task.result;
+            NSString *thumbnailString = [thumbnailData base64EncodedStringWithOptions:0];
+            [photoRef updateChildValues:@{@"thumbnailBase64": thumbnailString}];
+            return nil;
+        }];
+        AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
+        uploadRequest.bucket = @"epicday";
+        NSString *key = [NSString stringWithFormat:@"photos/%@.jpg", photoRef.key];
+        uploadRequest.key = key;
+        NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
+        NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:photoRef.key] URLByAppendingPathExtension:@"jpg"];
+        [imageData writeToURL:fileURL atomically:YES];
+        uploadRequest.body = fileURL;
+        uploadRequest.contentType = @"image/jpeg";
+        uploadRequest.ACL = AWSS3ObjectCannedACLPublicRead;
+        [[[AWSS3TransferManager defaultS3TransferManager] upload:uploadRequest] continueWithBlock:^id _Nullable(AWSTask * _Nonnull task) {
+            if (task.error) {
+                if ([task.error.domain isEqualToString:AWSS3TransferManagerErrorDomain]) {
+                    switch (task.error.code) {
+                        case AWSS3TransferManagerErrorCancelled:
+                        case AWSS3TransferManagerErrorPaused:
+                            break;
+                            
+                        default:
+                            NSLog(@"Error: %@", task.error);
+                            break;
+                    }
+                } else {
+                    // Unknown error.
+                    NSLog(@"Error: %@", task.error);
                 }
-            } else {
-                // Unknown error.
-                NSLog(@"Error: %@", task.error);
             }
-        }
-        
-        if (task.result) {
-            [photoRef updateChildValues:@{@"imageUrl": [NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@", uploadRequest.bucket, uploadRequest.key]}];
-            [self.currentPostRef updateChildValues:@{[NSString stringWithFormat:@"photos/%@", photoRef.key]: @YES}];
-            // The file uploaded successfully.
-        }
+            
+            if (task.result) {
+                [photoRef updateChildValues:@{@"imageUrl": [NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@", uploadRequest.bucket, uploadRequest.key]}];
+                [self.currentPostRef updateChildValues:@{[NSString stringWithFormat:@"photos/%@", photoRef.key]: @YES}];
+                // The file uploaded successfully.
+            }
+            return nil;
+        }];
         return nil;
     }];
-    
 }
 
 - (void)saveImageDataToLibrary:(NSData *)imageData {
