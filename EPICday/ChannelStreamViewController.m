@@ -66,7 +66,7 @@ NSString * const EPICShowChannelStreamNotificationViewTextKey = @"EPICShowChanne
     
     CGFloat statusBarHeight = CGRectGetHeight([[UIApplication sharedApplication] statusBarFrame]);
     
-    NSString *channelId = @"-K9BFMuy_74cIqk9RUz9";
+    NSString *channelId = @"-KA-1sbul1bQREXo6_sa";
     self.baseRef = [[Firebase alloc] initWithUrl:@"https://incandescent-inferno-9043.firebaseio.com/"];
     self.selectedChannelRef = [self.baseRef childByAppendingPath:[NSString stringWithFormat:@"channels/%@", channelId]];
     [self.selectedChannelRef updateChildValues:@{[NSString stringWithFormat:@"members/%@", self.selectedChannelRef.authData.uid]: @YES}];
