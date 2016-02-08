@@ -64,7 +64,6 @@ DEPENDENCIES:
   - Firebase
   - GPUImage (~> 0.1)
   - Masonry (~> 0.6)
-  - Parse (~> 1.12)
   - ParseFacebookUtilsV4 (~> 1.11)
   - ReactiveCocoa (~> 4.0)
   - SDWebImage (~> 3.7)

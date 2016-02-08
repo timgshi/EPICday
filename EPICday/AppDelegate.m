@@ -9,11 +9,10 @@
 #import "AppDelegate.h"
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <Parse/Parse.h>
-#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 #import <AWSCore/AWSCore.h>
 #import <AWSCognito/AWSCognito.h>
+#import <Firebase/Firebase.h>
 
 @interface AppDelegate ()
 
@@ -21,14 +20,8 @@
 
 @implementation AppDelegate
 
-static NSString * const kParseAppId = @"rJDwVv590kVJtyU4IY92aeHmTPqGurXxch4AJuMt";
-static NSString * const kParseClientKey = @"S3yi7Ny8cFasV10YGZsROlbPO2tz5WAYIvGPEE6z";
-
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [Parse setApplicationId:kParseAppId
-                  clientKey:kParseClientKey];
-    [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
+    [Firebase defaultConfig].persistenceEnabled = YES;
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
     AWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProvider alloc]

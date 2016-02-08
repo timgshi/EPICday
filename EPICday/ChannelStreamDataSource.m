@@ -13,6 +13,7 @@
 #import "Post.h"
 #import "PostCollectionViewHeader.h"
 
+#import <Bolts/Bolts.h>
 #import <Firebase/Firebase.h>
 
 @interface ChannelStreamDataSource ()

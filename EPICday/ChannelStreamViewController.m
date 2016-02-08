@@ -10,7 +10,6 @@
 
 #import <Bolts/Bolts.h>
 #import <SDWebImage/UIImageView+WebCache.h>
-#import <Parse/Parse.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <Masonry/Masonry.h>
 
@@ -49,6 +48,9 @@ NSString * const EPICShowChannelStreamNotificationViewNotification = @"EPICShowC
 NSString * const EPICHideChannelStreamNotificationViewNotification = @"EPICHideChannelStreamNotificationViewNotification";
 NSString * const EPICShowChannelStreamNotificationViewTextKey = @"EPICShowChannelStreamNotificationViewTextKey";
 
+static NSString * const EPIC_epicurrence_test_channel_id = @"-K9BFMuy_74cIqk9RUz9";
+static NSString * const EPIC_epicurrence_channel_id = @"-KA-1sbul1bQREXo6_sa";
+
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }
@@ -66,7 +68,7 @@ NSString * const EPICShowChannelStreamNotificationViewTextKey = @"EPICShowChanne
     
     CGFloat statusBarHeight = CGRectGetHeight([[UIApplication sharedApplication] statusBarFrame]);
     
-    NSString *channelId = @"-KA-1sbul1bQREXo6_sa";
+    NSString *channelId = EPIC_epicurrence_test_channel_id;
     self.baseRef = [[Firebase alloc] initWithUrl:@"https://incandescent-inferno-9043.firebaseio.com/"];
     self.selectedChannelRef = [self.baseRef childByAppendingPath:[NSString stringWithFormat:@"channels/%@", channelId]];
     [self.selectedChannelRef updateChildValues:@{[NSString stringWithFormat:@"members/%@", self.selectedChannelRef.authData.uid]: @YES}];

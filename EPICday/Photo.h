@@ -6,8 +6,6 @@
 //  Copyright © 2016 Epicurrence. All rights reserved.
 //
 
-#import <Parse/Parse.h>
-
 #import "Channel.h"
 #import "Post.h"
 
