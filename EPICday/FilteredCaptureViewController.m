@@ -174,6 +174,20 @@
 
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceOrientationDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [self handleDeviceOrientationChange];
+    }];
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (UIButton *)cameraControlButtonWithTitle:(NSString *)title andAction:(SEL)action {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:title forState:UIControlStateNormal];
@@ -188,16 +202,48 @@
 
 #pragma mark - Rotations
 
-- (BOOL)shouldAutorotate
-{
-    // Disable autorotation of the interface when recording is in progress.
-//    return ! self.movieFileOutput.isRecording;
-    return YES;
-}
-
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskAll;
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (void)handleDeviceOrientationChange {
+    UIInterfaceOrientation orient = UIInterfaceOrientationPortrait;
+    GPUImageRotationMode inputRotationMode = kGPUImageNoRotation;
+    switch ([[UIDevice currentDevice] orientation])
+    {
+        case UIDeviceOrientationLandscapeLeft:
+            orient = UIInterfaceOrientationLandscapeRight;
+            inputRotationMode = kGPUImageRotateRight;
+            break;
+            
+        case UIDeviceOrientationLandscapeRight:
+            orient = UIInterfaceOrientationLandscapeLeft;
+            inputRotationMode = kGPUImageRotateLeft;
+            break;
+            
+        case UIDeviceOrientationPortrait:
+            orient = UIInterfaceOrientationPortrait;
+            inputRotationMode = kGPUImageNoRotation;
+            break;
+            
+        case UIDeviceOrientationPortraitUpsideDown:
+            orient = UIInterfaceOrientationPortraitUpsideDown;
+            inputRotationMode = kGPUImageRotate180;
+            break;
+            
+        case UIDeviceOrientationFaceUp:
+        case UIDeviceOrientationFaceDown:
+        case UIDeviceOrientationUnknown:
+            orient = self.captureCamera.outputImageOrientation;
+            break;
+    }
+    self.captureCamera.outputImageOrientation = orient;
+    [self.capturePreviewView setInputRotation:inputRotationMode atIndex:0];
 }
 
 #pragma mark Actions

@@ -44,6 +44,14 @@
     return UIStatusBarStyleLightContent;
 }
 
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
