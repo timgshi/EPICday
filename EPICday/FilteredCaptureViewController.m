@@ -22,6 +22,8 @@
 #import <Firebase/Firebase.h>
 #import <AWSS3/AWSS3.h>
 
+@import Photos;
+
 @interface FilteredCaptureViewController ()
 
 @property (nonatomic, strong) ChannelBarView *channelBarView;
@@ -257,6 +259,7 @@
     [self.captureCamera capturePhotoAsJPEGProcessedUpToFilter:self.captureFilter withOrientation:UIImageOrientationUp withCompletionHandler:^(NSData *processedJPEG, NSError *error) {
         NSDictionary *metadata = self.captureCamera.currentCaptureMetadata;
         [self uploadPhotoFromData:processedJPEG withExifAttachments:metadata];
+        [self saveImageDataToLibrary:processedJPEG];
     }];
 }
 
@@ -317,6 +320,50 @@
 //        return nil;
 //    }];
     
+}
+
+- (void)saveImageDataToLibrary:(NSData *)imageData {
+    [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+        if ( status == PHAuthorizationStatusAuthorized ) {
+            // To preserve the metadata, we create an asset from the JPEG NSData representation.
+            // Note that creating an asset from a UIImage discards the metadata.
+            // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
+            // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
+            if ( [PHAssetCreationRequest class] ) {
+                [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                    [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:imageData options:nil];
+                } completionHandler:^( BOOL success, NSError *error ) {
+                    if ( ! success ) {
+                        NSLog( @"Error occurred while saving image to photo library: %@", error );
+                    }
+                }];
+            }
+            else {
+                NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
+                NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
+                NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
+                
+                [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                    NSError *error = nil;
+                    [imageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
+                    if ( error ) {
+                        NSLog( @"Error occured while writing image data to a temporary file: %@", error );
+                    }
+                    else {
+                        [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
+                    }
+                } completionHandler:^( BOOL success, NSError *error ) {
+                    if ( ! success ) {
+                        NSLog( @"Error occurred while saving image to photo library: %@", error );
+                    }
+                    
+                    // Delete the temporary file.
+                    [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+                }];
+            }
+        }
+    }];
+
 }
 
 - (BFTask *)getThumbnailImageDataFromData:(NSData *)imageData withSize:(CGSize)size {
