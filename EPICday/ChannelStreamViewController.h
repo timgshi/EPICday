@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+extern NSString * const EPICShowChannelStreamNotificationViewNotification;
+extern NSString * const EPICHideChannelStreamNotificationViewNotification;
+extern NSString * const EPICShowChannelStreamNotificationViewTextKey;
+
 @interface ChannelStreamViewController : UIViewController
 
 @end

@@ -23,6 +23,14 @@
 
 @implementation WelcomeViewController
 
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     Firebase *ref = [[Firebase alloc] initWithUrl:@"https://incandescent-inferno-9043.firebaseio.com"];

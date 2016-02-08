@@ -20,6 +20,8 @@
 		22254BB51C58A20C0031BBC0 /* BigCameraButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BB41C58A20C0031BBC0 /* BigCameraButton.m */; };
 		2244EDE11C643C860026BE70 /* ChannelStreamDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2244EDE01C643C860026BE70 /* ChannelStreamDataSource.m */; };
 		22485EDC1C5AEFEE0091F736 /* CapturePreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 22485EDB1C5AEFEE0091F736 /* CapturePreviewView.m */; };
+		227A2E781C65898D00777ACE /* FilteredCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 227A2E771C65898D00777ACE /* FilteredCaptureViewController.m */; };
+		227A2E7A1C658BDB00777ACE /* Castillero.acv in Resources */ = {isa = PBXBuildFile; fileRef = 227A2E791C658BD600777ACE /* Castillero.acv */; };
 		229532351C63280900C6124F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 229532341C63280900C6124F /* User.m */; };
 		22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22F15EAC1C59D71600B07F63 /* CaptureViewController.m */; };
 		22F15EAF1C59DC8F00B07F63 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F15EAE1C59DC8F00B07F63 /* ImageIO.framework */; };
@@ -76,6 +78,9 @@
 		2244EDE01C643C860026BE70 /* ChannelStreamDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelStreamDataSource.m; sourceTree = "<group>"; };
 		22485EDA1C5AEFEE0091F736 /* CapturePreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturePreviewView.h; sourceTree = "<group>"; };
 		22485EDB1C5AEFEE0091F736 /* CapturePreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapturePreviewView.m; sourceTree = "<group>"; };
+		227A2E761C65898D00777ACE /* FilteredCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilteredCaptureViewController.h; sourceTree = "<group>"; };
+		227A2E771C65898D00777ACE /* FilteredCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilteredCaptureViewController.m; sourceTree = "<group>"; };
+		227A2E791C658BD600777ACE /* Castillero.acv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Castillero.acv; sourceTree = "<group>"; };
 		229532331C63280900C6124F /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		229532341C63280900C6124F /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		22F15EAB1C59D71600B07F63 /* CaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureViewController.h; sourceTree = "<group>"; };
@@ -140,6 +145,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		227A2E7B1C658BEE00777ACE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				227A2E791C658BD600777ACE /* Castillero.acv */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		4B7D39F51C543E1A00E170FB = {
 			isa = PBXGroup;
 			children = (
@@ -185,6 +198,8 @@
 				22254BB41C58A20C0031BBC0 /* BigCameraButton.m */,
 				22F15EAB1C59D71600B07F63 /* CaptureViewController.h */,
 				22F15EAC1C59D71600B07F63 /* CaptureViewController.m */,
+				227A2E761C65898D00777ACE /* FilteredCaptureViewController.h */,
+				227A2E771C65898D00777ACE /* FilteredCaptureViewController.m */,
 				22485EDA1C5AEFEE0091F736 /* CapturePreviewView.h */,
 				22485EDB1C5AEFEE0091F736 /* CapturePreviewView.m */,
 				221D7EC51C56E0540090A542 /* Channel.h */,
@@ -203,6 +218,7 @@
 				4B7D3A0D1C543E1A00E170FB /* Assets.xcassets */,
 				4B7D3A0F1C543E1A00E170FB /* LaunchScreen.storyboard */,
 				4B7D3A121C543E1A00E170FB /* Info.plist */,
+				227A2E7B1C658BEE00777ACE /* Resources */,
 				4B7D3A011C543E1A00E170FB /* Supporting Files */,
 			);
 			path = EPICday;
@@ -350,6 +366,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				227A2E7A1C658BDB00777ACE /* Castillero.acv in Resources */,
 				4B7D3A111C543E1A00E170FB /* LaunchScreen.storyboard in Resources */,
 				4B7D3A0E1C543E1A00E170FB /* Assets.xcassets in Resources */,
 				4B7D3A0C1C543E1A00E170FB /* Main.storyboard in Resources */,
@@ -425,6 +442,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				227A2E781C65898D00777ACE /* FilteredCaptureViewController.m in Sources */,
 				221D7ECA1C56E05F0090A542 /* Photo.m in Sources */,
 				22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */,
 				221D7ED31C56E3A30090A542 /* PhotoCollectionViewCell.m in Sources */,
