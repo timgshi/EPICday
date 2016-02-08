@@ -42,6 +42,8 @@
 @property (nonatomic, strong) GPUImageFilter *captureFilter;
 @property (nonatomic, strong) GPUImageView *capturePreviewView;
 
+@property (nonatomic, strong) dispatch_queue_t captureQueue;
+
 @end
 
 @implementation FilteredCaptureViewController
@@ -66,6 +68,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.captureQueue = dispatch_queue_create("com.EPICday.capture-queue", DISPATCH_QUEUE_CONCURRENT);
     
     CGFloat statusBarHeight = CGRectGetHeight([[UIApplication sharedApplication] statusBarFrame]);
     
@@ -266,7 +270,8 @@
 - (void)uploadPhotoFromData:(NSData *)imageData withExifAttachments:(NSDictionary *)exifAttachments {
     self.photoCount++;
     self.photoCountLabel.text = [@(self.photoCount) stringValue];
-    [[BFTask taskWithResult:@YES] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+    [[BFTask taskWithResult:@YES] continueWithExecutor:[BFExecutor executorWithDispatchQueue:self.captureQueue]
+                                             withBlock:^id _Nullable(BFTask * _Nonnull task) {
         Firebase *photoRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"photos"] childByAutoId];
         NSDictionary *dimensions = @{
                                      @"width": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelYDimension],
