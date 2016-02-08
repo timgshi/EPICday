@@ -208,12 +208,9 @@
 }
 
 - (void)snapStillImage {
-//    [self.captureCamera capturePhotoAsImageProcessedUpToFilter:self.captureFilter withCompletionHandler:^(UIImage *processedImage, NSError *error) {
-//        NSLog(@"%@", processedImage);
-//    }];
     [self.captureCamera capturePhotoAsJPEGProcessedUpToFilter:self.captureFilter withOrientation:UIImageOrientationUp withCompletionHandler:^(NSData *processedJPEG, NSError *error) {
-//        NSDictionary *metadata = self.captureCamera.currentCaptureMetadata;
-//        NSLog(@"%@", metadata);
+        NSDictionary *metadata = self.captureCamera.currentCaptureMetadata;
+        [self uploadPhotoFromData:processedJPEG withExifAttachments:metadata];
     }];
 }
 
@@ -221,6 +218,17 @@
     self.photoCount++;
     self.photoCountLabel.text = [@(self.photoCount) stringValue];
     Firebase *photoRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"photos"] childByAutoId];
+    NSDictionary *dimensions = @{
+                                 @"width": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelYDimension],
+                                 @"height": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelXDimension]
+                                 };
+    [photoRef setValue:@{
+                         @"channel": self.selectedChannel.ref.key,
+                         @"timestamp": @([[NSDate date] timeIntervalSince1970]),
+                         @"post": self.currentPostRef.key,
+                         @"user": self.selectedChannel.ref.authData.uid,
+                         @"dimensions": dimensions
+                         }];
     AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
     uploadRequest.bucket = @"epicday";
     NSString *key = [NSString stringWithFormat:@"photos/%@.jpg", photoRef.key];
@@ -250,18 +258,7 @@
         }
         
         if (task.result) {
-            NSDictionary *dimensions = @{
-                                         @"width": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelYDimension],
-                                         @"height": exifAttachments[(__bridge NSString *)kCGImagePropertyExifPixelXDimension]
-                                         };
-            [photoRef setValue:@{
-                                 @"imageUrl": [NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@", uploadRequest.bucket, uploadRequest.key],
-                                 @"channel": self.selectedChannel.ref.key,
-                                 @"timestamp": @([[NSDate date] timeIntervalSince1970]),
-                                 @"post": self.currentPostRef.key,
-                                 @"user": self.selectedChannel.ref.authData.uid,
-                                 @"dimensions": dimensions
-                                 }];
+            [photoRef updateChildValues:@{@"imageUrl": [NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@", uploadRequest.bucket, uploadRequest.key]}];
             [self.currentPostRef updateChildValues:@{[NSString stringWithFormat:@"photos/%@", photoRef.key]: @YES}];
             // The file uploaded successfully.
         }
