@@ -11,6 +11,12 @@
 #import <Bolts/Bolts.h>
 #import <Firebase/Firebase.h>
 
+@interface Photo ()
+
+@property (nonatomic, copy) NSString *thumbnailDataString;
+
+@end
+
 @implementation Photo
 
 + (instancetype)photoFromRef:(Firebase *)ref inPost:(Post *)post withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource {
@@ -40,9 +46,20 @@
         photo.timestamp = [NSDate dateWithTimeIntervalSince1970:[valuesDict[@"timestamp"] doubleValue]];
         photo.dimensions = valuesDict[@"dimensions"];
         photo.imageUrl = [NSURL URLWithString:valuesDict[@"imageUrl"]];
+        photo.thumbnailDataString = valuesDict[@"thumbnailBase64"];
         [taskSource trySetResult:photo];
     }];
     return taskSource.task;
+}
+
+- (UIImage *)thumbnail {
+    if (!_thumbnail) {
+        if (self.thumbnailDataString) {
+            NSData *thumbnailData = [[NSData alloc] initWithBase64EncodedString:self.thumbnailDataString options:0];
+            _thumbnail = [UIImage imageWithData:thumbnailData];
+        }
+    }
+    return _thumbnail;
 }
 
 - (NSString *)objectId {

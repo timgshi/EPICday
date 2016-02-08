@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSDate *timestamp;
 @property (nonatomic, strong) NSDictionary *dimensions;
 @property (nonatomic, strong) NSURL *imageUrl;
+@property (nonatomic, strong) UIImage *thumbnail;
 //@property (nonatomic, strong) PFUser *user;
 //@property (nonatomic, strong) PFGeoPoint *location;
 //@property (nonatomic, strong) NSArray *robbers;

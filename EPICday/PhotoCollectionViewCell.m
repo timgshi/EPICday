@@ -53,7 +53,11 @@
 
 - (void)setPhoto:(Photo *)photo {
     _photo = photo;
-    [self.imageView sd_setImageWithURL:photo.imageUrl];
+    if (photo.thumbnail) {
+        [self.imageView sd_setImageWithURL:photo.imageUrl placeholderImage:photo.thumbnail];
+    } else {
+        [self.imageView sd_setImageWithURL:photo.imageUrl];
+    }
 }
 
 @end
