@@ -76,7 +76,7 @@ static NSString * const EPIC_epicurrence_channel_id = @"-KA-1sbul1bQREXo6_sa";
     
     CGFloat statusBarHeight = CGRectGetHeight([[UIApplication sharedApplication] statusBarFrame]);
     
-    NSString *channelId = EPIC_epicurrence_test_channel_id;
+    NSString *channelId = EPIC_epicurrence_channel_id;
     self.baseRef = [[Firebase alloc] initWithUrl:@"https://incandescent-inferno-9043.firebaseio.com/"];
     self.selectedChannelRef = [self.baseRef childByAppendingPath:[NSString stringWithFormat:@"channels/%@", channelId]];
     [self.selectedChannelRef updateChildValues:@{[NSString stringWithFormat:@"members/%@", self.selectedChannelRef.authData.uid]: @YES}];
