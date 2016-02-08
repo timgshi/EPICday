@@ -12,6 +12,8 @@
 
 @interface ChannelBarView : UIView
 
+@property (nonatomic, readonly) UIImageView *avatarImageView;
+
 + (instancetype)barViewWithChannel:(Channel *)channel;
 
 @end

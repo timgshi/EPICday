@@ -31,8 +31,6 @@
     AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:credentialsProvider];
     
     [AWSServiceManager defaultServiceManager].defaultServiceConfiguration = configuration;
-    NSLog(@"%@", [UIFont familyNames]);
-    NSLog(@"%@", [UIFont fontNamesForFamilyName:@"Futura"]);
     return YES;
 }
 

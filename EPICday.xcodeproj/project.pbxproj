@@ -10,6 +10,11 @@
 		091A9C8DEFE5DE4DBEADCA9A /* Pods_EPICday.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A094ED59DDEBB334E8CBE3DC /* Pods_EPICday.framework */; };
 		22083C081C69426D002C947A /* FuturaBTBook.otf in Resources */ = {isa = PBXBuildFile; fileRef = 22083C071C69426D002C947A /* FuturaBTBook.otf */; };
 		22083C0A1C6942CF002C947A /* FuturaBTHeavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 22083C091C6942CF002C947A /* FuturaBTHeavy.otf */; };
+		22083C0D1C694771002C947A /* GalleryCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22083C0C1C694771002C947A /* GalleryCollectionViewController.m */; };
+		22083C121C6947D7002C947A /* NSIndexSet+Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 22083C0F1C6947D7002C947A /* NSIndexSet+Convenience.m */; };
+		22083C131C6947D7002C947A /* UICollectionView+Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 22083C111C6947D7002C947A /* UICollectionView+Convenience.m */; };
+		22083C171C6948A1002C947A /* GalleryCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 22083C161C6948A1002C947A /* GalleryCollectionViewCell.m */; };
+		22083C1A1C694CC3002C947A /* ChannelGalleryPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22083C191C694CC3002C947A /* ChannelGalleryPickerViewController.m */; };
 		221D7EC71C56E0540090A542 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7EC61C56E0540090A542 /* Channel.m */; };
 		221D7ECA1C56E05F0090A542 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7EC91C56E05F0090A542 /* Photo.m */; };
 		221D7ECD1C56E0680090A542 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7ECC1C56E0680090A542 /* Post.m */; };
@@ -58,6 +63,16 @@
 /* Begin PBXFileReference section */
 		22083C071C69426D002C947A /* FuturaBTBook.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FuturaBTBook.otf; sourceTree = "<group>"; };
 		22083C091C6942CF002C947A /* FuturaBTHeavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FuturaBTHeavy.otf; sourceTree = "<group>"; };
+		22083C0B1C694771002C947A /* GalleryCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryCollectionViewController.h; sourceTree = "<group>"; };
+		22083C0C1C694771002C947A /* GalleryCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryCollectionViewController.m; sourceTree = "<group>"; };
+		22083C0E1C6947D7002C947A /* NSIndexSet+Convenience.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+Convenience.h"; sourceTree = "<group>"; };
+		22083C0F1C6947D7002C947A /* NSIndexSet+Convenience.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+Convenience.m"; sourceTree = "<group>"; };
+		22083C101C6947D7002C947A /* UICollectionView+Convenience.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+Convenience.h"; sourceTree = "<group>"; };
+		22083C111C6947D7002C947A /* UICollectionView+Convenience.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+Convenience.m"; sourceTree = "<group>"; };
+		22083C151C6948A0002C947A /* GalleryCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryCollectionViewCell.h; sourceTree = "<group>"; };
+		22083C161C6948A1002C947A /* GalleryCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryCollectionViewCell.m; sourceTree = "<group>"; };
+		22083C181C694CC3002C947A /* ChannelGalleryPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelGalleryPickerViewController.h; sourceTree = "<group>"; };
+		22083C191C694CC3002C947A /* ChannelGalleryPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelGalleryPickerViewController.m; sourceTree = "<group>"; };
 		221D7EC51C56E0540090A542 /* Channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Channel.h; sourceTree = "<group>"; };
 		221D7EC61C56E0540090A542 /* Channel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Channel.m; sourceTree = "<group>"; };
 		221D7EC81C56E05F0090A542 /* Photo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photo.h; sourceTree = "<group>"; };
@@ -158,6 +173,17 @@
 			name = Fonts;
 			sourceTree = "<group>";
 		};
+		22083C141C6947DE002C947A /* Convenience Categories */ = {
+			isa = PBXGroup;
+			children = (
+				22083C0E1C6947D7002C947A /* NSIndexSet+Convenience.h */,
+				22083C0F1C6947D7002C947A /* NSIndexSet+Convenience.m */,
+				22083C101C6947D7002C947A /* UICollectionView+Convenience.h */,
+				22083C111C6947D7002C947A /* UICollectionView+Convenience.m */,
+			);
+			name = "Convenience Categories";
+			sourceTree = "<group>";
+		};
 		227A2E7B1C658BEE00777ACE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +234,12 @@
 				221D7ED21C56E3A30090A542 /* PhotoCollectionViewCell.m */,
 				22254BB01C5894A10031BBC0 /* PostCollectionViewHeader.h */,
 				22254BB11C5894A10031BBC0 /* PostCollectionViewHeader.m */,
+				22083C181C694CC3002C947A /* ChannelGalleryPickerViewController.h */,
+				22083C191C694CC3002C947A /* ChannelGalleryPickerViewController.m */,
+				22083C0B1C694771002C947A /* GalleryCollectionViewController.h */,
+				22083C0C1C694771002C947A /* GalleryCollectionViewController.m */,
+				22083C151C6948A0002C947A /* GalleryCollectionViewCell.h */,
+				22083C161C6948A1002C947A /* GalleryCollectionViewCell.m */,
 				22254BB31C58A20C0031BBC0 /* BigCameraButton.h */,
 				22254BB41C58A20C0031BBC0 /* BigCameraButton.m */,
 				22F15EAB1C59D71600B07F63 /* CaptureViewController.h */,
@@ -232,6 +264,7 @@
 				4B7D3A0D1C543E1A00E170FB /* Assets.xcassets */,
 				4B7D3A0F1C543E1A00E170FB /* LaunchScreen.storyboard */,
 				4B7D3A121C543E1A00E170FB /* Info.plist */,
+				22083C141C6947DE002C947A /* Convenience Categories */,
 				227A2E7B1C658BEE00777ACE /* Resources */,
 				4B7D3A011C543E1A00E170FB /* Supporting Files */,
 			);
@@ -460,14 +493,17 @@
 			files = (
 				227A2E781C65898D00777ACE /* FilteredCaptureViewController.m in Sources */,
 				221D7ECA1C56E05F0090A542 /* Photo.m in Sources */,
+				22083C131C6947D7002C947A /* UICollectionView+Convenience.m in Sources */,
 				22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */,
 				221D7ED31C56E3A30090A542 /* PhotoCollectionViewCell.m in Sources */,
 				22254BAC1C585A630031BBC0 /* UIColor+EPIC.m in Sources */,
 				229532351C63280900C6124F /* User.m in Sources */,
 				4B7D3A361C54468F00E170FB /* ChannelStreamViewController.m in Sources */,
 				221D7ED01C56E3780090A542 /* ChannelStreamCollectionViewController.m in Sources */,
+				22083C171C6948A1002C947A /* GalleryCollectionViewCell.m in Sources */,
 				22254BA91C584E820031BBC0 /* ChannelBarView.m in Sources */,
 				22485EDC1C5AEFEE0091F736 /* CapturePreviewView.m in Sources */,
+				22083C121C6947D7002C947A /* NSIndexSet+Convenience.m in Sources */,
 				4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */,
 				22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */,
 				4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */,
@@ -476,7 +512,9 @@
 				2244EDE11C643C860026BE70 /* ChannelStreamDataSource.m in Sources */,
 				221D7EC71C56E0540090A542 /* Channel.m in Sources */,
 				4B7D3A031C543E1A00E170FB /* main.m in Sources */,
+				22083C1A1C694CC3002C947A /* ChannelGalleryPickerViewController.m in Sources */,
 				221D7ECD1C56E0680090A542 /* Post.m in Sources */,
+				22083C0D1C694771002C947A /* GalleryCollectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

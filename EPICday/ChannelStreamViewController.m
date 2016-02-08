@@ -19,6 +19,7 @@
 #import "CaptureViewController.h"
 #import "Channel.h"
 #import "ChannelBarView.h"
+#import "ChannelGalleryPickerViewController.h"
 #import "ChannelStreamCollectionViewController.h"
 #import "UIColor+EPIC.h"
 #import "UIFont+EPIC.h"
@@ -46,6 +47,8 @@
 @property (nonatomic, strong) UIImageView *fullScreenImageView;
 @property (nonatomic, strong) UIPanGestureRecognizer *fullScreenImagePanGR;
 @property (nonatomic) CGRect originalThumbFrame;
+
+@property (nonatomic, strong) UIButton *addFromGalleryButton;
 
 @end
 
@@ -169,12 +172,28 @@ static NSString * const EPIC_epicurrence_channel_id = @"-KA-1sbul1bQREXo6_sa";
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(showFullScreenImageViewFromNotification:)
                                                  name:EPICShowFullScreenImageFromCellNotification object:nil];
+    
+    self.addFromGalleryButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.addFromGalleryButton setImage:[UIImage imageNamed:@"add_gallery"] forState:UIControlStateNormal];
+    [self.addFromGalleryButton addTarget:self action:@selector(galleryButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.channelBarView addSubview:self.addFromGalleryButton];
+    [self.addFromGalleryButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.channelBarView.avatarImageView.mas_centerY);
+        make.right.equalTo(self.channelBarView.mas_right).with.offset(-15);
+    }];
 }
 
 - (void)cameraButtonPressed {
     FilteredCaptureViewController *captureVC = [FilteredCaptureViewController new];
     captureVC.selectedChannel = self.selectedChannel;
     [self.navigationController pushViewController:captureVC animated:YES];
+}
+
+- (void)galleryButtonPressed {
+    ChannelGalleryPickerViewController *galleryVC = [ChannelGalleryPickerViewController new];
+    galleryVC.selectedChannel = self.selectedChannel;
+    UINavigationController *galleryNav = [[UINavigationController alloc] initWithRootViewController:galleryVC];
+    [self presentViewController:galleryNav animated:YES completion:nil];
 }
 
 - (void)showNotificationView:(NSNotification *)notification {
