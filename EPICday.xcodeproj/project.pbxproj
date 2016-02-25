@@ -30,6 +30,30 @@
 		227A2E781C65898D00777ACE /* FilteredCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 227A2E771C65898D00777ACE /* FilteredCaptureViewController.m */; };
 		227A2E7A1C658BDB00777ACE /* Castillero.acv in Resources */ = {isa = PBXBuildFile; fileRef = 227A2E791C658BD600777ACE /* Castillero.acv */; };
 		229532351C63280900C6124F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 229532341C63280900C6124F /* User.m */; };
+		22B4BBBB1C7EDD7400274E58 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBB71C7EDD7400274E58 /* IntroViewController.swift */; };
+		22B4BBBC1C7EDD7400274E58 /* IntroParallaxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBB81C7EDD7400274E58 /* IntroParallaxView.swift */; };
+		22B4BBBD1C7EDD7400274E58 /* CharPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBB91C7EDD7400274E58 /* CharPageControl.swift */; };
+		22B4BBC01C7EDDBD00274E58 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBBF1C7EDDBD00274E58 /* MotionManager.swift */; };
+		22B4BBC21C7EDEE900274E58 /* IntroParallaxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBC11C7EDEE900274E58 /* IntroParallaxView.xib */; };
+		22B4BBC51C7EE0E500274E58 /* NSDictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBC31C7EE0E500274E58 /* NSDictionaryExtension.swift */; };
+		22B4BBC61C7EE0E500274E58 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBC41C7EE0E500274E58 /* UIColorExtension.swift */; };
+		22B4BBD81C7EE12D00274E58 /* FuturaLT-CondensedLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBC71C7EE12800274E58 /* FuturaLT-CondensedLight.ttf */; };
+		22B4BBD91C7EE12D00274E58 /* FuturaLT-CondensedLightObl.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBC81C7EE12800274E58 /* FuturaLT-CondensedLightObl.ttf */; };
+		22B4BBDA1C7EE12D00274E58 /* FuturaLT-Condensed.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBC91C7EE12800274E58 /* FuturaLT-Condensed.ttf */; };
+		22B4BBDB1C7EE12D00274E58 /* FuturaLT-CondensedOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBCA1C7EE12800274E58 /* FuturaLT-CondensedOblique.ttf */; };
+		22B4BBDC1C7EE12D00274E58 /* FuturaLT-CondensedBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBCB1C7EE12800274E58 /* FuturaLT-CondensedBold.ttf */; };
+		22B4BBDD1C7EE12D00274E58 /* FuturaLT-CondensedBoldOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBCC1C7EE12800274E58 /* FuturaLT-CondensedBoldOblique.ttf */; };
+		22B4BBDE1C7EE12D00274E58 /* FuturaLT-CondensedExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBCD1C7EE12800274E58 /* FuturaLT-CondensedExtraBold.ttf */; };
+		22B4BBDF1C7EE12D00274E58 /* FuturaLT-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBCE1C7EE12800274E58 /* FuturaLT-Light.ttf */; };
+		22B4BBE01C7EE12D00274E58 /* FuturaLT-LightOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBCF1C7EE12800274E58 /* FuturaLT-LightOblique.ttf */; };
+		22B4BBE11C7EE12D00274E58 /* FuturaLT-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD01C7EE12800274E58 /* FuturaLT-Book.ttf */; };
+		22B4BBE21C7EE12D00274E58 /* FuturaLT-BookOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD11C7EE12800274E58 /* FuturaLT-BookOblique.ttf */; };
+		22B4BBE31C7EE12D00274E58 /* FuturaLT-Heavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD21C7EE12800274E58 /* FuturaLT-Heavy.ttf */; };
+		22B4BBE41C7EE12D00274E58 /* FuturaLT-HeavyOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD31C7EE12800274E58 /* FuturaLT-HeavyOblique.ttf */; };
+		22B4BBE51C7EE12D00274E58 /* FuturaLT-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD41C7EE12800274E58 /* FuturaLT-Bold.ttf */; };
+		22B4BBE61C7EE12D00274E58 /* FuturaLT-BoldOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD51C7EE12800274E58 /* FuturaLT-BoldOblique.ttf */; };
+		22B4BBE71C7EE12D00274E58 /* FuturaLT-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD61C7EE12800274E58 /* FuturaLT-ExtraBold.ttf */; };
+		22B4BBE81C7EE12D00274E58 /* FuturaLT-ExtraBoldOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD71C7EE12800274E58 /* FuturaLT-ExtraBoldOblique.ttf */; };
 		22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22F15EAC1C59D71600B07F63 /* CaptureViewController.m */; };
 		22F15EAF1C59DC8F00B07F63 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F15EAE1C59DC8F00B07F63 /* ImageIO.framework */; };
 		4B7D3A031C543E1A00E170FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A021C543E1A00E170FB /* main.m */; };
@@ -102,6 +126,31 @@
 		227A2E791C658BD600777ACE /* Castillero.acv */ = {isa = PBXFileReference; lastKnownFileType = file; path = Castillero.acv; sourceTree = "<group>"; };
 		229532331C63280900C6124F /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		229532341C63280900C6124F /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		22B4BBB61C7EDD7300274E58 /* EPICday-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EPICday-Bridging-Header.h"; sourceTree = "<group>"; };
+		22B4BBB71C7EDD7400274E58 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
+		22B4BBB81C7EDD7400274E58 /* IntroParallaxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroParallaxView.swift; sourceTree = "<group>"; };
+		22B4BBB91C7EDD7400274E58 /* CharPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharPageControl.swift; sourceTree = "<group>"; };
+		22B4BBBF1C7EDDBD00274E58 /* MotionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
+		22B4BBC11C7EDEE900274E58 /* IntroParallaxView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroParallaxView.xib; sourceTree = "<group>"; };
+		22B4BBC31C7EE0E500274E58 /* NSDictionaryExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDictionaryExtension.swift; sourceTree = "<group>"; };
+		22B4BBC41C7EE0E500274E58 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		22B4BBC71C7EE12800274E58 /* FuturaLT-CondensedLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-CondensedLight.ttf"; sourceTree = "<group>"; };
+		22B4BBC81C7EE12800274E58 /* FuturaLT-CondensedLightObl.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-CondensedLightObl.ttf"; sourceTree = "<group>"; };
+		22B4BBC91C7EE12800274E58 /* FuturaLT-Condensed.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-Condensed.ttf"; sourceTree = "<group>"; };
+		22B4BBCA1C7EE12800274E58 /* FuturaLT-CondensedOblique.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-CondensedOblique.ttf"; sourceTree = "<group>"; };
+		22B4BBCB1C7EE12800274E58 /* FuturaLT-CondensedBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-CondensedBold.ttf"; sourceTree = "<group>"; };
+		22B4BBCC1C7EE12800274E58 /* FuturaLT-CondensedBoldOblique.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-CondensedBoldOblique.ttf"; sourceTree = "<group>"; };
+		22B4BBCD1C7EE12800274E58 /* FuturaLT-CondensedExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-CondensedExtraBold.ttf"; sourceTree = "<group>"; };
+		22B4BBCE1C7EE12800274E58 /* FuturaLT-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-Light.ttf"; sourceTree = "<group>"; };
+		22B4BBCF1C7EE12800274E58 /* FuturaLT-LightOblique.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-LightOblique.ttf"; sourceTree = "<group>"; };
+		22B4BBD01C7EE12800274E58 /* FuturaLT-Book.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-Book.ttf"; sourceTree = "<group>"; };
+		22B4BBD11C7EE12800274E58 /* FuturaLT-BookOblique.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-BookOblique.ttf"; sourceTree = "<group>"; };
+		22B4BBD21C7EE12800274E58 /* FuturaLT-Heavy.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-Heavy.ttf"; sourceTree = "<group>"; };
+		22B4BBD31C7EE12800274E58 /* FuturaLT-HeavyOblique.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-HeavyOblique.ttf"; sourceTree = "<group>"; };
+		22B4BBD41C7EE12800274E58 /* FuturaLT-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-Bold.ttf"; sourceTree = "<group>"; };
+		22B4BBD51C7EE12800274E58 /* FuturaLT-BoldOblique.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-BoldOblique.ttf"; sourceTree = "<group>"; };
+		22B4BBD61C7EE12800274E58 /* FuturaLT-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-ExtraBold.ttf"; sourceTree = "<group>"; };
+		22B4BBD71C7EE12800274E58 /* FuturaLT-ExtraBoldOblique.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-ExtraBoldOblique.ttf"; sourceTree = "<group>"; };
 		22F15EAB1C59D71600B07F63 /* CaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureViewController.h; sourceTree = "<group>"; };
 		22F15EAC1C59D71600B07F63 /* CaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureViewController.m; sourceTree = "<group>"; };
 		22F15EAE1C59DC8F00B07F63 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -169,6 +218,23 @@
 			children = (
 				22083C071C69426D002C947A /* FuturaBTBook.otf */,
 				22083C091C6942CF002C947A /* FuturaBTHeavy.otf */,
+				22B4BBC71C7EE12800274E58 /* FuturaLT-CondensedLight.ttf */,
+				22B4BBC81C7EE12800274E58 /* FuturaLT-CondensedLightObl.ttf */,
+				22B4BBC91C7EE12800274E58 /* FuturaLT-Condensed.ttf */,
+				22B4BBCA1C7EE12800274E58 /* FuturaLT-CondensedOblique.ttf */,
+				22B4BBCB1C7EE12800274E58 /* FuturaLT-CondensedBold.ttf */,
+				22B4BBCC1C7EE12800274E58 /* FuturaLT-CondensedBoldOblique.ttf */,
+				22B4BBCD1C7EE12800274E58 /* FuturaLT-CondensedExtraBold.ttf */,
+				22B4BBCE1C7EE12800274E58 /* FuturaLT-Light.ttf */,
+				22B4BBCF1C7EE12800274E58 /* FuturaLT-LightOblique.ttf */,
+				22B4BBD01C7EE12800274E58 /* FuturaLT-Book.ttf */,
+				22B4BBD11C7EE12800274E58 /* FuturaLT-BookOblique.ttf */,
+				22B4BBD21C7EE12800274E58 /* FuturaLT-Heavy.ttf */,
+				22B4BBD31C7EE12800274E58 /* FuturaLT-HeavyOblique.ttf */,
+				22B4BBD41C7EE12800274E58 /* FuturaLT-Bold.ttf */,
+				22B4BBD51C7EE12800274E58 /* FuturaLT-BoldOblique.ttf */,
+				22B4BBD61C7EE12800274E58 /* FuturaLT-ExtraBold.ttf */,
+				22B4BBD71C7EE12800274E58 /* FuturaLT-ExtraBoldOblique.ttf */,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -191,6 +257,20 @@
 				22083C061C693F33002C947A /* Fonts */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		22B4BBE91C7EE34A00274E58 /* Intro from Prolific */ = {
+			isa = PBXGroup;
+			children = (
+				22B4BBB71C7EDD7400274E58 /* IntroViewController.swift */,
+				22B4BBB81C7EDD7400274E58 /* IntroParallaxView.swift */,
+				22B4BBB91C7EDD7400274E58 /* CharPageControl.swift */,
+				22B4BBBF1C7EDDBD00274E58 /* MotionManager.swift */,
+				22B4BBC31C7EE0E500274E58 /* NSDictionaryExtension.swift */,
+				22B4BBC41C7EE0E500274E58 /* UIColorExtension.swift */,
+				22B4BBC11C7EDEE900274E58 /* IntroParallaxView.xib */,
+			);
+			name = "Intro from Prolific";
 			sourceTree = "<group>";
 		};
 		4B7D39F51C543E1A00E170FB = {
@@ -218,6 +298,7 @@
 		4B7D3A001C543E1A00E170FB /* EPICday */ = {
 			isa = PBXGroup;
 			children = (
+				22B4BBE91C7EE34A00274E58 /* Intro from Prolific */,
 				4B7D3A041C543E1A00E170FB /* AppDelegate.h */,
 				4B7D3A051C543E1A00E170FB /* AppDelegate.m */,
 				4B7D3A071C543E1A00E170FB /* WelcomeViewController.h */,
@@ -267,6 +348,7 @@
 				22083C141C6947DE002C947A /* Convenience Categories */,
 				227A2E7B1C658BEE00777ACE /* Resources */,
 				4B7D3A011C543E1A00E170FB /* Supporting Files */,
+				22B4BBB61C7EDD7300274E58 /* EPICday-Bridging-Header.h */,
 			);
 			path = EPICday;
 			sourceTree = "<group>";
@@ -413,11 +495,29 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22B4BBD91C7EE12D00274E58 /* FuturaLT-CondensedLightObl.ttf in Resources */,
 				227A2E7A1C658BDB00777ACE /* Castillero.acv in Resources */,
+				22B4BBC21C7EDEE900274E58 /* IntroParallaxView.xib in Resources */,
+				22B4BBE21C7EE12D00274E58 /* FuturaLT-BookOblique.ttf in Resources */,
+				22B4BBE41C7EE12D00274E58 /* FuturaLT-HeavyOblique.ttf in Resources */,
 				4B7D3A111C543E1A00E170FB /* LaunchScreen.storyboard in Resources */,
+				22B4BBE51C7EE12D00274E58 /* FuturaLT-Bold.ttf in Resources */,
+				22B4BBE01C7EE12D00274E58 /* FuturaLT-LightOblique.ttf in Resources */,
+				22B4BBDD1C7EE12D00274E58 /* FuturaLT-CondensedBoldOblique.ttf in Resources */,
+				22B4BBE61C7EE12D00274E58 /* FuturaLT-BoldOblique.ttf in Resources */,
+				22B4BBE31C7EE12D00274E58 /* FuturaLT-Heavy.ttf in Resources */,
+				22B4BBE71C7EE12D00274E58 /* FuturaLT-ExtraBold.ttf in Resources */,
+				22B4BBDE1C7EE12D00274E58 /* FuturaLT-CondensedExtraBold.ttf in Resources */,
+				22B4BBE81C7EE12D00274E58 /* FuturaLT-ExtraBoldOblique.ttf in Resources */,
 				22083C0A1C6942CF002C947A /* FuturaBTHeavy.otf in Resources */,
+				22B4BBE11C7EE12D00274E58 /* FuturaLT-Book.ttf in Resources */,
+				22B4BBDB1C7EE12D00274E58 /* FuturaLT-CondensedOblique.ttf in Resources */,
 				22083C081C69426D002C947A /* FuturaBTBook.otf in Resources */,
 				4B7D3A0E1C543E1A00E170FB /* Assets.xcassets in Resources */,
+				22B4BBDF1C7EE12D00274E58 /* FuturaLT-Light.ttf in Resources */,
+				22B4BBDA1C7EE12D00274E58 /* FuturaLT-Condensed.ttf in Resources */,
+				22B4BBD81C7EE12D00274E58 /* FuturaLT-CondensedLight.ttf in Resources */,
+				22B4BBDC1C7EE12D00274E58 /* FuturaLT-CondensedBold.ttf in Resources */,
 				4B7D3A0C1C543E1A00E170FB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -496,6 +596,8 @@
 				22083C131C6947D7002C947A /* UICollectionView+Convenience.m in Sources */,
 				22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */,
 				221D7ED31C56E3A30090A542 /* PhotoCollectionViewCell.m in Sources */,
+				22B4BBBB1C7EDD7400274E58 /* IntroViewController.swift in Sources */,
+				22B4BBC51C7EE0E500274E58 /* NSDictionaryExtension.swift in Sources */,
 				22254BAC1C585A630031BBC0 /* UIColor+EPIC.m in Sources */,
 				229532351C63280900C6124F /* User.m in Sources */,
 				4B7D3A361C54468F00E170FB /* ChannelStreamViewController.m in Sources */,
@@ -503,9 +605,13 @@
 				22083C171C6948A1002C947A /* GalleryCollectionViewCell.m in Sources */,
 				22254BA91C584E820031BBC0 /* ChannelBarView.m in Sources */,
 				22485EDC1C5AEFEE0091F736 /* CapturePreviewView.m in Sources */,
+				22B4BBBC1C7EDD7400274E58 /* IntroParallaxView.swift in Sources */,
 				22083C121C6947D7002C947A /* NSIndexSet+Convenience.m in Sources */,
+				22B4BBC01C7EDDBD00274E58 /* MotionManager.swift in Sources */,
+				22B4BBC61C7EE0E500274E58 /* UIColorExtension.swift in Sources */,
 				4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */,
 				22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */,
+				22B4BBBD1C7EDD7400274E58 /* CharPageControl.swift in Sources */,
 				4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */,
 				22254BB51C58A20C0031BBC0 /* BigCameraButton.m in Sources */,
 				22254BB21C5894A10031BBC0 /* PostCollectionViewHeader.m in Sources */,
@@ -654,6 +760,7 @@
 			baseConfigurationReference = AF35F7CA9648ED7E533241A5 /* Pods-EPICday.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = EPICday/Info.plist;
@@ -662,6 +769,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.epicurrence.EPICday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "EPICday/EPICday-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -670,6 +779,7 @@
 			baseConfigurationReference = FE997C1BCE6A49E12F40752D /* Pods-EPICday.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = EPICday/Info.plist;
@@ -678,6 +788,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.epicurrence.EPICday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "EPICday/EPICday-Bridging-Header.h";
 			};
 			name = Release;
 		};

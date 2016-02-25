@@ -81,6 +81,14 @@ static NSString * const EPIC_epicurrence_channel_id = @"-KA-1sbul1bQREXo6_sa";
     
     NSString *channelId = EPIC_epicurrence_channel_id;
     self.baseRef = [[Firebase alloc] initWithUrl:@"https://incandescent-inferno-9043.firebaseio.com/"];
+    
+    [self.baseRef observeAuthEventWithBlock:^(FAuthData *authData) {
+        if (!authData) {
+            NSLog(@"user was logged out");
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+    }];
+    
     self.selectedChannelRef = [self.baseRef childByAppendingPath:[NSString stringWithFormat:@"channels/%@", channelId]];
     [self.selectedChannelRef updateChildValues:@{[NSString stringWithFormat:@"members/%@", self.selectedChannelRef.authData.uid]: @YES}];
     BFTaskCompletionSource *channelInitialLoadTaskSource = [BFTaskCompletionSource taskCompletionSource];

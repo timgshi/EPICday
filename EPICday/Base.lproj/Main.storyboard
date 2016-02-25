@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ori-jB-gUg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="DJW-QF-Mbl">
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Montreal-Bold.ttf">
+            <string>Montreal-Bold</string>
+        </mutableArray>
+    </customFonts>
     <scenes>
         <!--Welcome View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -17,13 +21,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Welcome to EPICday" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IXs-kE-vSs">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to EPICday" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IXs-kE-vSs">
                                 <rect key="frame" x="163" y="82" width="275" height="244"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="275" id="rtL-gn-iXu"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="56"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TWW-Mc-Qih">
@@ -52,7 +56,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1152" y="315"/>
+            <point key="canvasLocation" x="1964" y="315"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7I2-th-cpl">
@@ -70,7 +74,114 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="01U-BR-XYu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="340" y="315"/>
+            <point key="canvasLocation" x="1152" y="315"/>
+        </scene>
+        <!--Intro View Controller-->
+        <scene sceneID="6hZ-73-VBx">
+            <objects>
+                <viewController storyboardIdentifier="SplashVC" id="gsM-Pc-Rd6" customClass="IntroViewController" customModule="EPICday" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="avE-gJ-BRj"/>
+                        <viewControllerLayoutGuide type="bottom" id="Kpf-xc-1Gp"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dv5-dm-zqQ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IKq-dr-ja0" customClass="IntroParallaxView" customModule="EPICday" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yY1-kh-8Wn" customClass="CharPageControl" customModule="EPICday" customModuleProvider="target">
+                                        <rect key="frame" x="243" y="488" width="115" height="12"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="12" id="Bdx-pE-gKO"/>
+                                            <constraint firstAttribute="width" constant="115" id="ouM-BX-NFS"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="14"/>
+                                        <color key="textColor" red="0.83921568629999999" green="0.29803921570000003" blue="0.74509803919999995" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="numberOfPages">
+                                                <real key="value" value="3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="currentPage">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="defaultColor">
+                                                <color key="value" red="0.01176470588" green="0.01176470588" blue="0.01176470588" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="currentColor">
+                                                <color key="value" red="0.01176470588" green="0.01176470588" blue="0.01176470588" alpha="1" colorSpace="calibratedRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="space">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="yY1-kh-8Wn" secondAttribute="bottom" constant="100" id="WgS-Zo-YW2"/>
+                                    <constraint firstItem="yY1-kh-8Wn" firstAttribute="centerX" secondItem="IKq-dr-ja0" secondAttribute="centerX" id="Zvy-uK-DXR"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="indicatorLabel" destination="yY1-kh-8Wn" id="qno-Cg-hJ4"/>
+                                </connections>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kXe-oJ-ggh">
+                                <rect key="frame" x="0.0" y="536" width="600" height="64"/>
+                                <color key="backgroundColor" red="0.23137254900000001" green="0.34901960780000002" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="4Qw-At-Xsf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Montreal-Bold" family="Montreal-Bold" pointSize="16"/>
+                                <state key="normal" title="LOGIN WITH FACEBOOK">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="startButtonDidTouch:" destination="gsM-Pc-Rd6" eventType="touchUpInside" id="ryO-NU-DzV"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="kXe-oJ-ggh" secondAttribute="trailing" id="62o-9G-HLg"/>
+                            <constraint firstAttribute="trailing" secondItem="IKq-dr-ja0" secondAttribute="trailing" id="77V-Gd-j4O"/>
+                            <constraint firstItem="IKq-dr-ja0" firstAttribute="leading" secondItem="dv5-dm-zqQ" secondAttribute="leading" id="9IG-2b-3ni"/>
+                            <constraint firstItem="kXe-oJ-ggh" firstAttribute="leading" secondItem="dv5-dm-zqQ" secondAttribute="leading" id="LUC-zS-dmw"/>
+                            <constraint firstItem="IKq-dr-ja0" firstAttribute="top" secondItem="dv5-dm-zqQ" secondAttribute="top" id="UDv-4d-P6R"/>
+                            <constraint firstItem="Kpf-xc-1Gp" firstAttribute="top" secondItem="kXe-oJ-ggh" secondAttribute="bottom" id="oU4-Vk-f7x"/>
+                            <constraint firstItem="Kpf-xc-1Gp" firstAttribute="top" secondItem="IKq-dr-ja0" secondAttribute="bottom" id="sqD-d5-rDA"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" id="nlE-XU-LE3"/>
+                    <connections>
+                        <outlet property="getStartButton" destination="kXe-oJ-ggh" id="mvl-4j-XVB"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1H8-vh-mIC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="517" y="-254"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="2T2-mz-pjw">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="DJW-QF-Mbl" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="w2S-Uk-I81">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="gsM-Pc-Rd6" kind="relationship" relationship="rootViewController" id="RXW-a9-mHo"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AGK-ZA-EUP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-295" y="-254"/>
         </scene>
     </scenes>
 </document>
