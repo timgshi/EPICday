@@ -79,6 +79,12 @@ class CharPageControl: UILabel {
     
     private func updatePage(progress: CGFloat) {
         
+        var thisProgress = progress;
+        
+        if thisProgress.isNaN {
+            thisProgress = 0;
+        }
+        
         if currentAttributedString == nil {
             preparePageControlString()
         }else{
@@ -87,8 +93,8 @@ class CharPageControl: UILabel {
         
         if let currentAttributedString = currentAttributedString {
             
-            currentAttributedString.setAttributes(attributeForProgress(progress - floor(progress)), range: NSMakeRange(max(0, Int(floor(progress))), 1))
-            currentAttributedString.setAttributes(attributeForProgress(ceil(progress) - progress), range: NSMakeRange(max(0, Int(ceil(progress))), 1))
+            currentAttributedString.setAttributes(attributeForProgress(thisProgress - floor(thisProgress)), range: NSMakeRange(max(0, Int(floor(thisProgress))), 1))
+            currentAttributedString.setAttributes(attributeForProgress(ceil(thisProgress) - thisProgress), range: NSMakeRange(max(0, Int(ceil(thisProgress))), 1))
             
             attributedText = currentAttributedString
         }
