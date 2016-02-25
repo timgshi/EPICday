@@ -54,12 +54,6 @@ static NSString * const PostUploadManagerCompletionValuesPostRefUrlKey = @"PostU
             __strong typeof(self) strongSelf = weakSelf;
             *completionHandlerReference = strongSelf.uploadCompletionHandler;
         } downloadTask:nil];
-//        NSMutableDictionary *completionValuesDict = [[NSUserDefaults standardUserDefaults] objectForKey:PostUploadManagerCompletionValuesDictKey];
-//        if (!completionValuesDict) {
-//            completionValuesDict = @{}.mutableCopy;
-//        }
-//        [[NSUserDefaults standardUserDefaults] setObject:completionValuesDict forKey:PostUploadManagerCompletionValuesDictKey];
-//        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     return self;
 }
@@ -115,39 +109,6 @@ static NSString * const PostUploadManagerCompletionValuesPostRefUrlKey = @"PostU
                                                             [self storeCompletionValuesDict:completionValues forUploadTask:task];
                                                             return nil;
                                                         }];
-                                                        
-//                                                        AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
-//                                                        uploadRequest.bucket = @"epicday";
-//                                                        uploadRequest.key = key;
-//                                                        uploadRequest.body = fileURL;
-//                                                        uploadRequest.contentType = @"image/jpeg";
-//                                                        uploadRequest.ACL = AWSS3ObjectCannedACLPublicRead;
-//                                                        [[[AWSS3TransferManager defaultS3TransferManager] upload:uploadRequest] continueWithBlock:^id _Nullable(AWSTask * _Nonnull task) {
-//                                                            if (task.error) {
-//                                                                if ([task.error.domain isEqualToString:AWSS3TransferManagerErrorDomain]) {
-//                                                                    switch (task.error.code) {
-//                                                                        case AWSS3TransferManagerErrorCancelled:
-//                                                                        case AWSS3TransferManagerErrorPaused:
-//                                                                            break;
-//                                                                            
-//                                                                        default:
-//                                                                            NSLog(@"Error: %@", task.error);
-//                                                                            break;
-//                                                                    }
-//                                                                } else {
-//                                                                    // Unknown error.
-//                                                                    NSLog(@"Error: %@", task.error);
-//                                                                }
-//                                                            }
-//                                                            
-//                                                            if (task.result) {
-//                                                                [photoRef updateChildValues:@{@"imageUrl": [NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@", uploadRequest.bucket, uploadRequest.key]}];
-//                                                                [self.currentPostRef updateChildValues:@{[NSString stringWithFormat:@"photos/%@", photoRef.key]: @YES}];
-//                                                                // The file uploaded successfully.
-//                                                            }
-//                                                            return nil;
-//                                                        }];
-//                                                        return nil;
                                                     }];
 }
 
