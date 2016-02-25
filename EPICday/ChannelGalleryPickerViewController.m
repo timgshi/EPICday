@@ -12,17 +12,29 @@
 #import "ChannelBarView.h"
 #import "GalleryCollectionViewController.h"
 #import "UIColor+EPIC.h"
+#import "UIFont+EPIC.h"
 
 #import <Masonry/Masonry.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 @interface ChannelGalleryPickerViewController ()
 
 @property (nonatomic, strong) ChannelBarView *channelBarView;
 @property (nonatomic, strong) GalleryCollectionViewController *galleryCollectionVC;
+@property (nonatomic, strong) UIButton *actionButton;
+
+@property (nonatomic, strong) NSMutableArray *selectedAssets;
 
 @end
 
 @implementation ChannelGalleryPickerViewController
+
+- (NSMutableArray *)selectedAssets {
+    if (!_selectedAssets) {
+        _selectedAssets = @[].mutableCopy;
+    }
+    return _selectedAssets;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -50,6 +62,13 @@
     [self.galleryCollectionVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
+    
+    self.actionButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.actionButton.titleLabel.font = [UIFont epicBoldFontOfSize:18];
+    [self.actionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.actionButton setTitle:@"select images to add" forState:UIControlStateDisabled];
+    [self.actionButton setTitle:@"share this image" forState:UIControlStateDisabled];
+//    self.actionButton setBackgroundImage:<#(nullable UIImage *)#> forState:<#(UIControlState)#>
 }
 
 @end

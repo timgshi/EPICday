@@ -262,15 +262,22 @@
 - (void)snapStillImage {
     [self.captureCamera capturePhotoAsJPEGProcessedUpToFilter:self.captureFilter withOrientation:UIImageOrientationUp withCompletionHandler:^(NSData *processedJPEG, NSError *error) {
         NSDictionary *metadata = self.captureCamera.currentCaptureMetadata;
-        [self uploadPhotoFromData:processedJPEG withExifAttachments:metadata];
-        [self saveImageDataToLibrary:processedJPEG];
+        UIBackgroundTaskIdentifier taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            [[UIApplication sharedApplication] endBackgroundTask:taskId];
+        }];
+        BFTask *uploadTask = [self uploadPhotoFromData:processedJPEG withExifAttachments:metadata];
+        BFTask *saveTask = [self saveImageDataToLibrary:processedJPEG];
+        [[BFTask taskForCompletionOfAllTasks:@[uploadTask, saveTask]] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+            [[UIApplication sharedApplication] endBackgroundTask:taskId];
+            return nil;
+        }];
     }];
 }
 
-- (void)uploadPhotoFromData:(NSData *)imageData withExifAttachments:(NSDictionary *)exifAttachments {
+- (BFTask *)uploadPhotoFromData:(NSData *)imageData withExifAttachments:(NSDictionary *)exifAttachments {
     self.photoCount++;
     self.photoCountLabel.text = [@(self.photoCount) stringValue];
-    [[BFTask taskWithResult:@YES] continueWithExecutor:[BFExecutor executorWithDispatchQueue:self.captureQueue]
+    return [[BFTask taskWithResult:@YES] continueWithExecutor:[BFExecutor executorWithDispatchQueue:self.captureQueue]
                                              withBlock:^id _Nullable(BFTask * _Nonnull task) {
         Firebase *photoRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"photos"] childByAutoId];
         NSDictionary *dimensions = @{
@@ -329,7 +336,8 @@
     }];
 }
 
-- (void)saveImageDataToLibrary:(NSData *)imageData {
+- (BFTask *)saveImageDataToLibrary:(NSData *)imageData {
+    BFTaskCompletionSource *taskSource = [BFTaskCompletionSource taskCompletionSource];
     [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
         if ( status == PHAuthorizationStatusAuthorized ) {
             // To preserve the metadata, we create an asset from the JPEG NSData representation.
@@ -343,6 +351,7 @@
                     if ( ! success ) {
                         NSLog( @"Error occurred while saving image to photo library: %@", error );
                     }
+                    [taskSource setResult:@YES];
                 }];
             }
             else {
@@ -363,14 +372,14 @@
                     if ( ! success ) {
                         NSLog( @"Error occurred while saving image to photo library: %@", error );
                     }
-                    
+                    [taskSource setResult:@YES];
                     // Delete the temporary file.
                     [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
                 }];
             }
         }
     }];
-
+    return taskSource.task;
 }
 
 - (BFTask *)getThumbnailImageDataFromData:(NSData *)imageData withSize:(CGSize)size {
