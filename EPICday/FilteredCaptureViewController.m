@@ -12,6 +12,7 @@
 
 #import "BigCameraButton.h"
 #import "ChannelBarView.h"
+#import "PostUploadManager.h"
 #import "UIColor+EPIC.h"
 #import "UIFont+EPIC.h"
 
@@ -192,6 +193,7 @@
     [super viewWillDisappear:animated];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.captureCamera stopCameraCapture];
 }
 
 - (UIButton *)cameraControlButtonWithTitle:(NSString *)title andAction:(SEL)action {
@@ -261,139 +263,11 @@
 
 - (void)snapStillImage {
     [self.captureCamera capturePhotoAsJPEGProcessedUpToFilter:self.captureFilter withOrientation:UIImageOrientationUp withCompletionHandler:^(NSData *processedJPEG, NSError *error) {
+        self.photoCount++;
+        self.photoCountLabel.text = [@(self.photoCount) stringValue];
         NSDictionary *metadata = self.captureCamera.currentCaptureMetadata;
-        UIBackgroundTaskIdentifier taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            [[UIApplication sharedApplication] endBackgroundTask:taskId];
-        }];
-        BFTask *uploadTask = [self uploadPhotoFromData:processedJPEG withExifAttachments:metadata];
-        BFTask *saveTask = [self saveImageDataToLibrary:processedJPEG];
-        [[BFTask taskForCompletionOfAllTasks:@[uploadTask, saveTask]] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-            [[UIApplication sharedApplication] endBackgroundTask:taskId];
-            return nil;
-        }];
+        [[PostUploadManager sharedManager] postPhotoFromData:processedJPEG withExifAttachments:metadata inChannel:self.selectedChannel withPostRef:self.currentPostRef];
     }];
-}
-
-- (BFTask *)uploadPhotoFromData:(NSData *)imageData withExifAttachments:(NSDictionary *)exifAttachments {
-    self.photoCount++;
-    self.photoCountLabel.text = [@(self.photoCount) stringValue];
-    return [[BFTask taskWithResult:@YES] continueWithExecutor:[BFExecutor executorWithDispatchQueue:self.captureQueue]
-                                             withBlock:^id _Nullable(BFTask * _Nonnull task) {
-        Firebase *photoRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"photos"] childByAutoId];
-        NSDictionary *dimensions = @{
-                                     @"width": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelYDimension],
-                                     @"height": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelXDimension]
-                                     };
-        [photoRef setValue:@{
-                             @"channel": self.selectedChannel.ref.key,
-                             @"timestamp": @([[NSDate date] timeIntervalSince1970]),
-                             @"post": self.currentPostRef.key,
-                             @"user": self.selectedChannel.ref.authData.uid,
-                             @"dimensions": dimensions
-                             }];
-        [[self getThumbnailImageDataFromData:imageData withSize:CGSizeMake([dimensions[@"width"] floatValue], [dimensions[@"height"] floatValue])] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-            NSData *thumbnailData = task.result;
-            NSString *thumbnailString = [thumbnailData base64EncodedStringWithOptions:0];
-            [photoRef updateChildValues:@{@"thumbnailBase64": thumbnailString}];
-            return nil;
-        }];
-        AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
-        uploadRequest.bucket = @"epicday";
-        NSString *key = [NSString stringWithFormat:@"photos/%@.jpg", photoRef.key];
-        uploadRequest.key = key;
-        NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
-        NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:photoRef.key] URLByAppendingPathExtension:@"jpg"];
-        [imageData writeToURL:fileURL atomically:YES];
-        uploadRequest.body = fileURL;
-        uploadRequest.contentType = @"image/jpeg";
-        uploadRequest.ACL = AWSS3ObjectCannedACLPublicRead;
-        [[[AWSS3TransferManager defaultS3TransferManager] upload:uploadRequest] continueWithBlock:^id _Nullable(AWSTask * _Nonnull task) {
-            if (task.error) {
-                if ([task.error.domain isEqualToString:AWSS3TransferManagerErrorDomain]) {
-                    switch (task.error.code) {
-                        case AWSS3TransferManagerErrorCancelled:
-                        case AWSS3TransferManagerErrorPaused:
-                            break;
-                            
-                        default:
-                            NSLog(@"Error: %@", task.error);
-                            break;
-                    }
-                } else {
-                    // Unknown error.
-                    NSLog(@"Error: %@", task.error);
-                }
-            }
-            
-            if (task.result) {
-                [photoRef updateChildValues:@{@"imageUrl": [NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@", uploadRequest.bucket, uploadRequest.key]}];
-                [self.currentPostRef updateChildValues:@{[NSString stringWithFormat:@"photos/%@", photoRef.key]: @YES}];
-                // The file uploaded successfully.
-            }
-            return nil;
-        }];
-        return nil;
-    }];
-}
-
-- (BFTask *)saveImageDataToLibrary:(NSData *)imageData {
-    BFTaskCompletionSource *taskSource = [BFTaskCompletionSource taskCompletionSource];
-    [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
-        if ( status == PHAuthorizationStatusAuthorized ) {
-            // To preserve the metadata, we create an asset from the JPEG NSData representation.
-            // Note that creating an asset from a UIImage discards the metadata.
-            // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
-            // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
-            if ( [PHAssetCreationRequest class] ) {
-                [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                    [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:imageData options:nil];
-                } completionHandler:^( BOOL success, NSError *error ) {
-                    if ( ! success ) {
-                        NSLog( @"Error occurred while saving image to photo library: %@", error );
-                    }
-                    [taskSource setResult:@YES];
-                }];
-            }
-            else {
-                NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
-                NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
-                NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
-                
-                [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                    NSError *error = nil;
-                    [imageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
-                    if ( error ) {
-                        NSLog( @"Error occured while writing image data to a temporary file: %@", error );
-                    }
-                    else {
-                        [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
-                    }
-                } completionHandler:^( BOOL success, NSError *error ) {
-                    if ( ! success ) {
-                        NSLog( @"Error occurred while saving image to photo library: %@", error );
-                    }
-                    [taskSource setResult:@YES];
-                    // Delete the temporary file.
-                    [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
-                }];
-            }
-        }
-    }];
-    return taskSource.task;
-}
-
-- (BFTask *)getThumbnailImageDataFromData:(NSData *)imageData withSize:(CGSize)size {
-    return [[BFTask taskWithResult:@YES] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-        CGImageSourceRef imageRef = CGImageSourceCreateWithData((CFDataRef)imageData, nil);
-        NSDictionary *options = @{(__bridge NSString *)kCGImageSourceThumbnailMaxPixelSize: @(MAX(size.width, size.height) * 0.2),
-                                  (__bridge NSString *)kCGImageSourceCreateThumbnailFromImageAlways: @YES};
-        CGImageRef thumbnailRef = CGImageSourceCreateThumbnailAtIndex(imageRef, 0, (__bridge CFDictionaryRef)options);
-        UIImage *thumbnailImage = [UIImage imageWithCGImage:thumbnailRef];
-        NSData *thumbnailData = UIImageJPEGRepresentation(thumbnailImage, 1.0);
-        CGImageRelease(thumbnailRef);
-        return [BFTask taskWithResult:thumbnailData];
-    }];
-    
 }
 
 @end

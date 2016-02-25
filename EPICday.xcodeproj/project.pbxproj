@@ -54,6 +54,7 @@
 		22B4BBE61C7EE12D00274E58 /* FuturaLT-BoldOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD51C7EE12800274E58 /* FuturaLT-BoldOblique.ttf */; };
 		22B4BBE71C7EE12D00274E58 /* FuturaLT-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD61C7EE12800274E58 /* FuturaLT-ExtraBold.ttf */; };
 		22B4BBE81C7EE12D00274E58 /* FuturaLT-ExtraBoldOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD71C7EE12800274E58 /* FuturaLT-ExtraBoldOblique.ttf */; };
+		22CE2D6A1C7FB2C100DE582D /* PostUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 22CE2D691C7FB2C100DE582D /* PostUploadManager.m */; };
 		22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22F15EAC1C59D71600B07F63 /* CaptureViewController.m */; };
 		22F15EAF1C59DC8F00B07F63 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F15EAE1C59DC8F00B07F63 /* ImageIO.framework */; };
 		4B7D3A031C543E1A00E170FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A021C543E1A00E170FB /* main.m */; };
@@ -151,6 +152,9 @@
 		22B4BBD51C7EE12800274E58 /* FuturaLT-BoldOblique.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-BoldOblique.ttf"; sourceTree = "<group>"; };
 		22B4BBD61C7EE12800274E58 /* FuturaLT-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-ExtraBold.ttf"; sourceTree = "<group>"; };
 		22B4BBD71C7EE12800274E58 /* FuturaLT-ExtraBoldOblique.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-ExtraBoldOblique.ttf"; sourceTree = "<group>"; };
+		22CE2D671C7FB19200DE582D /* Models.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Models.h; sourceTree = "<group>"; };
+		22CE2D681C7FB2C100DE582D /* PostUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostUploadManager.h; sourceTree = "<group>"; };
+		22CE2D691C7FB2C100DE582D /* PostUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostUploadManager.m; sourceTree = "<group>"; };
 		22F15EAB1C59D71600B07F63 /* CaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureViewController.h; sourceTree = "<group>"; };
 		22F15EAC1C59D71600B07F63 /* CaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureViewController.m; sourceTree = "<group>"; };
 		22F15EAE1C59DC8F00B07F63 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -273,6 +277,69 @@
 			name = "Intro from Prolific";
 			sourceTree = "<group>";
 		};
+		22CE2D611C7FB0E700DE582D /* Channel Stream */ = {
+			isa = PBXGroup;
+			children = (
+				4B7D3A341C54468F00E170FB /* ChannelStreamViewController.h */,
+				4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */,
+				22254BA71C584E820031BBC0 /* ChannelBarView.h */,
+				22254BA81C584E820031BBC0 /* ChannelBarView.m */,
+				221D7ECE1C56E3780090A542 /* ChannelStreamCollectionViewController.h */,
+				221D7ECF1C56E3780090A542 /* ChannelStreamCollectionViewController.m */,
+				2244EDDF1C643C860026BE70 /* ChannelStreamDataSource.h */,
+				2244EDE01C643C860026BE70 /* ChannelStreamDataSource.m */,
+				221D7ED11C56E3A30090A542 /* PhotoCollectionViewCell.h */,
+				221D7ED21C56E3A30090A542 /* PhotoCollectionViewCell.m */,
+				22254BB01C5894A10031BBC0 /* PostCollectionViewHeader.h */,
+				22254BB11C5894A10031BBC0 /* PostCollectionViewHeader.m */,
+			);
+			name = "Channel Stream";
+			sourceTree = "<group>";
+		};
+		22CE2D621C7FB0F200DE582D /* Gallery Picker */ = {
+			isa = PBXGroup;
+			children = (
+				22083C181C694CC3002C947A /* ChannelGalleryPickerViewController.h */,
+				22083C191C694CC3002C947A /* ChannelGalleryPickerViewController.m */,
+				22083C0B1C694771002C947A /* GalleryCollectionViewController.h */,
+				22083C0C1C694771002C947A /* GalleryCollectionViewController.m */,
+				22083C151C6948A0002C947A /* GalleryCollectionViewCell.h */,
+				22083C161C6948A1002C947A /* GalleryCollectionViewCell.m */,
+			);
+			name = "Gallery Picker";
+			sourceTree = "<group>";
+		};
+		22CE2D631C7FB0FD00DE582D /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				22F15EAB1C59D71600B07F63 /* CaptureViewController.h */,
+				22F15EAC1C59D71600B07F63 /* CaptureViewController.m */,
+				227A2E761C65898D00777ACE /* FilteredCaptureViewController.h */,
+				227A2E771C65898D00777ACE /* FilteredCaptureViewController.m */,
+				22485EDA1C5AEFEE0091F736 /* CapturePreviewView.h */,
+				22485EDB1C5AEFEE0091F736 /* CapturePreviewView.m */,
+			);
+			name = Capture;
+			sourceTree = "<group>";
+		};
+		22CE2D641C7FB10600DE582D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				22CE2D681C7FB2C100DE582D /* PostUploadManager.h */,
+				22CE2D691C7FB2C100DE582D /* PostUploadManager.m */,
+				22CE2D671C7FB19200DE582D /* Models.h */,
+				221D7EC51C56E0540090A542 /* Channel.h */,
+				221D7EC61C56E0540090A542 /* Channel.m */,
+				221D7ECB1C56E0680090A542 /* Post.h */,
+				221D7ECC1C56E0680090A542 /* Post.m */,
+				221D7EC81C56E05F0090A542 /* Photo.h */,
+				221D7EC91C56E05F0090A542 /* Photo.m */,
+				229532331C63280900C6124F /* User.h */,
+				229532341C63280900C6124F /* User.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		4B7D39F51C543E1A00E170FB = {
 			isa = PBXGroup;
 			children = (
@@ -303,40 +370,12 @@
 				4B7D3A051C543E1A00E170FB /* AppDelegate.m */,
 				4B7D3A071C543E1A00E170FB /* WelcomeViewController.h */,
 				4B7D3A081C543E1A00E170FB /* WelcomeViewController.m */,
-				4B7D3A341C54468F00E170FB /* ChannelStreamViewController.h */,
-				4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */,
-				22254BA71C584E820031BBC0 /* ChannelBarView.h */,
-				22254BA81C584E820031BBC0 /* ChannelBarView.m */,
-				221D7ECE1C56E3780090A542 /* ChannelStreamCollectionViewController.h */,
-				221D7ECF1C56E3780090A542 /* ChannelStreamCollectionViewController.m */,
-				2244EDDF1C643C860026BE70 /* ChannelStreamDataSource.h */,
-				2244EDE01C643C860026BE70 /* ChannelStreamDataSource.m */,
-				221D7ED11C56E3A30090A542 /* PhotoCollectionViewCell.h */,
-				221D7ED21C56E3A30090A542 /* PhotoCollectionViewCell.m */,
-				22254BB01C5894A10031BBC0 /* PostCollectionViewHeader.h */,
-				22254BB11C5894A10031BBC0 /* PostCollectionViewHeader.m */,
-				22083C181C694CC3002C947A /* ChannelGalleryPickerViewController.h */,
-				22083C191C694CC3002C947A /* ChannelGalleryPickerViewController.m */,
-				22083C0B1C694771002C947A /* GalleryCollectionViewController.h */,
-				22083C0C1C694771002C947A /* GalleryCollectionViewController.m */,
-				22083C151C6948A0002C947A /* GalleryCollectionViewCell.h */,
-				22083C161C6948A1002C947A /* GalleryCollectionViewCell.m */,
+				22CE2D611C7FB0E700DE582D /* Channel Stream */,
+				22CE2D621C7FB0F200DE582D /* Gallery Picker */,
 				22254BB31C58A20C0031BBC0 /* BigCameraButton.h */,
 				22254BB41C58A20C0031BBC0 /* BigCameraButton.m */,
-				22F15EAB1C59D71600B07F63 /* CaptureViewController.h */,
-				22F15EAC1C59D71600B07F63 /* CaptureViewController.m */,
-				227A2E761C65898D00777ACE /* FilteredCaptureViewController.h */,
-				227A2E771C65898D00777ACE /* FilteredCaptureViewController.m */,
-				22485EDA1C5AEFEE0091F736 /* CapturePreviewView.h */,
-				22485EDB1C5AEFEE0091F736 /* CapturePreviewView.m */,
-				221D7EC51C56E0540090A542 /* Channel.h */,
-				221D7EC61C56E0540090A542 /* Channel.m */,
-				221D7ECB1C56E0680090A542 /* Post.h */,
-				221D7ECC1C56E0680090A542 /* Post.m */,
-				221D7EC81C56E05F0090A542 /* Photo.h */,
-				221D7EC91C56E05F0090A542 /* Photo.m */,
-				229532331C63280900C6124F /* User.h */,
-				229532341C63280900C6124F /* User.m */,
+				22CE2D631C7FB0FD00DE582D /* Capture */,
+				22CE2D641C7FB10600DE582D /* Models */,
 				22254BAA1C585A630031BBC0 /* UIColor+EPIC.h */,
 				22254BAB1C585A630031BBC0 /* UIColor+EPIC.m */,
 				22254BAD1C585B350031BBC0 /* UIFont+EPIC.h */,
@@ -613,6 +652,7 @@
 				22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */,
 				22B4BBBD1C7EDD7400274E58 /* CharPageControl.swift in Sources */,
 				4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */,
+				22CE2D6A1C7FB2C100DE582D /* PostUploadManager.m in Sources */,
 				22254BB51C58A20C0031BBC0 /* BigCameraButton.m in Sources */,
 				22254BB21C5894A10031BBC0 /* PostCollectionViewHeader.m in Sources */,
 				2244EDE11C643C860026BE70 /* ChannelStreamDataSource.m in Sources */,
@@ -780,8 +820,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				INFOPLIST_FILE = EPICday/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

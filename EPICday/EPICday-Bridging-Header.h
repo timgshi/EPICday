@@ -9,3 +9,4 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 
 #import "ChannelStreamViewController.h"
+#import "Models.h"
