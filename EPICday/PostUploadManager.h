@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+@class BFTask;
+@class Channel;
+@class Firebase;
+
 @interface PostUploadManager : NSObject
 
 + (instancetype)sharedManager;

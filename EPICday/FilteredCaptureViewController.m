@@ -12,6 +12,7 @@
 
 #import "BigCameraButton.h"
 #import "ChannelBarView.h"
+#import "PostUploadManager.h"
 #import "UIColor+EPIC.h"
 #import "UIFont+EPIC.h"
 
@@ -262,16 +263,19 @@
 
 - (void)snapStillImage {
     [self.captureCamera capturePhotoAsJPEGProcessedUpToFilter:self.captureFilter withOrientation:UIImageOrientationUp withCompletionHandler:^(NSData *processedJPEG, NSError *error) {
+        self.photoCount++;
+        self.photoCountLabel.text = [@(self.photoCount) stringValue];
         NSDictionary *metadata = self.captureCamera.currentCaptureMetadata;
-        UIBackgroundTaskIdentifier taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            [[UIApplication sharedApplication] endBackgroundTask:taskId];
-        }];
-        BFTask *uploadTask = [self uploadPhotoFromData:processedJPEG withExifAttachments:metadata];
-        BFTask *saveTask = [self saveImageDataToLibrary:processedJPEG];
-        [[BFTask taskForCompletionOfAllTasks:@[uploadTask, saveTask]] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-            [[UIApplication sharedApplication] endBackgroundTask:taskId];
-            return nil;
-        }];
+        [[PostUploadManager sharedManager] postPhotoFromData:processedJPEG withExifAttachments:metadata inChannel:self.selectedChannel withPostRef:self.currentPostRef];
+//        UIBackgroundTaskIdentifier taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+//            [[UIApplication sharedApplication] endBackgroundTask:taskId];
+//        }];
+//        BFTask *uploadTask = [self uploadPhotoFromData:processedJPEG withExifAttachments:metadata];
+//        BFTask *saveTask = [self saveImageDataToLibrary:processedJPEG];
+//        [[BFTask taskForCompletionOfAllTasks:@[uploadTask, saveTask]] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+//            [[UIApplication sharedApplication] endBackgroundTask:taskId];
+//            return nil;
+//        }];
     }];
 }
 

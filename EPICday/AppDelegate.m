@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 
+#import "PostUploadManager.h"
+
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 #import <AWSCore/AWSCore.h>
@@ -48,6 +50,7 @@
 }
 
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler {
+    [PostUploadManager sharedManager];
     [AWSS3TransferUtility interceptApplication:application
            handleEventsForBackgroundURLSession:identifier
                              completionHandler:completionHandler];
