@@ -192,6 +192,7 @@
     [super viewWillDisappear:animated];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.captureCamera stopCameraCapture];
 }
 
 - (UIButton *)cameraControlButtonWithTitle:(NSString *)title andAction:(SEL)action {
