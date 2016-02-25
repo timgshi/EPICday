@@ -9,18 +9,10 @@
         </mutableArray>
     </customFonts>
     <scenes>
-        <!--mainImageChannel-->
-        <scene sceneID="Ifs-6L-CcB">
-            <objects>
-                <viewControllerPlaceholder storyboardName="imageChannel" referencedIdentifier="mainImageChannel" id="ScE-ij-pMR" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="RJC-hm-VHP" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-729.5" y="-57"/>
-        </scene>
         <!--Presentation View Controller-->
         <scene sceneID="VRe-jc-yYi">
             <objects>
-                <viewController storyboardIdentifier="main" id="jcL-js-m6l" customClass="PresentationViewController" customModule="EPIC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="main" id="jcL-js-m6l" customClass="PresentationViewController" customModule="EPICday" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gVI-Xe-Xpb"/>
                         <viewControllerLayoutGuide type="bottom" id="vcx-AE-YOi"/>
@@ -29,10 +21,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QcG-bK-zER" customClass="ParallaxView" customModule="EPIC" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QcG-bK-zER" customClass="ParallaxView" customModule="EPICday" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XDa-2a-lrW" customClass="CharPageControl" customModule="EPIC" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XDa-2a-lrW" customClass="CharPageControl" customModule="EPICday" customModuleProvider="target">
                                         <rect key="frame" x="243" y="488" width="115" height="12"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="115" id="1Wx-Fq-xKX"/>
@@ -82,7 +74,6 @@
                                 </state>
                                 <connections>
                                     <action selector="startButtonDidTouch:" destination="jcL-js-m6l" eventType="touchUpInside" id="Bau-TH-Uhn"/>
-                                    <segue destination="ScE-ij-pMR" kind="show" id="L70-cr-g5R"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -104,52 +95,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1WD-gH-S6R" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-295" y="-254"/>
-        </scene>
-        <!--Test View Controller-->
-        <scene sceneID="0f0-Zn-p3m">
-            <objects>
-                <viewController storyboardIdentifier="test" id="IPi-uB-Zpq" customClass="TestViewController" customModule="EPIC" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="aF7-1N-WzI"/>
-                        <viewControllerLayoutGuide type="bottom" id="Cqp-cP-qlZ"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="owY-Dx-Dae">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="4" translatesAutoresizingMaskIntoConstraints="NO" id="nCP-4D-vXa">
-                                <rect key="frame" x="23" y="170" width="239" height="31"/>
-                                <connections>
-                                    <action selector="didSlide:" destination="IPi-uB-Zpq" eventType="valueChanged" id="eNj-Ut-go9"/>
-                                </connections>
-                            </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Joh-AG-Qly" customClass="CharPageControl" customModule="EPIC" customModuleProvider="target">
-                                <rect key="frame" x="25" y="137" width="115" height="25"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                <color key="textColor" red="0.83921568629999999" green="0.29803921570000003" blue="0.74509803919999995" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="numberOfPages">
-                                        <real key="value" value="5"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="currentPage">
-                                        <real key="value" value="0.0"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="defaultColor">
-                                        <color key="value" red="0.97308333329999996" green="0.97308333329999996" blue="0.97308333329999996" alpha="0.86960336540000005" colorSpace="calibratedRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <connections>
-                        <outlet property="indicator" destination="Joh-AG-Qly" id="ZEh-kI-N8z"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Itg-9B-UnJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="415" y="-248"/>
         </scene>
     </scenes>
 </document>
