@@ -76,10 +76,10 @@
             </objects>
             <point key="canvasLocation" x="340" y="315"/>
         </scene>
-        <!--Presentation View Controller-->
+        <!--Intro View Controller-->
         <scene sceneID="6hZ-73-VBx">
             <objects>
-                <viewController storyboardIdentifier="SplashVC" id="gsM-Pc-Rd6" customClass="PresentationViewController" customModule="EPICday" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SplashVC" id="gsM-Pc-Rd6" customClass="IntroViewController" customModule="EPICday" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="avE-gJ-BRj"/>
                         <viewControllerLayoutGuide type="bottom" id="Kpf-xc-1Gp"/>
@@ -88,7 +88,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IKq-dr-ja0" customClass="ParallaxView" customModule="EPICday" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IKq-dr-ja0" customClass="IntroParallaxView" customModule="EPICday" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yY1-kh-8Wn" customClass="CharPageControl" customModule="EPICday" customModuleProvider="target">

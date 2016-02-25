@@ -7,7 +7,7 @@ public func limit<T : Comparable>(x:T, _ minValue: T, _ maxValue: T) -> T {
 }
 
 
-class ParallaxView: UIView,UIScrollViewDelegate {
+class IntroParallaxView: UIView,UIScrollViewDelegate {
     
     // subviews
     
@@ -36,7 +36,7 @@ class ParallaxView: UIView,UIScrollViewDelegate {
     }
     
     func initializeSubviews () {
-        scrollView = NSBundle.mainBundle().loadNibNamed("ParallaxView", owner: self, options: [:]).first as! UIScrollView
+        scrollView = NSBundle.mainBundle().loadNibNamed("IntroParallaxView", owner: self, options: [:]).first as! UIScrollView
         
         insertSubview(scrollView, atIndex: 0)
         

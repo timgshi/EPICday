@@ -30,12 +30,11 @@
 		227A2E781C65898D00777ACE /* FilteredCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 227A2E771C65898D00777ACE /* FilteredCaptureViewController.m */; };
 		227A2E7A1C658BDB00777ACE /* Castillero.acv in Resources */ = {isa = PBXBuildFile; fileRef = 227A2E791C658BD600777ACE /* Castillero.acv */; };
 		229532351C63280900C6124F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 229532341C63280900C6124F /* User.m */; };
-		22B4BBBB1C7EDD7400274E58 /* PresentationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBB71C7EDD7400274E58 /* PresentationViewController.swift */; };
-		22B4BBBC1C7EDD7400274E58 /* ParallaxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBB81C7EDD7400274E58 /* ParallaxView.swift */; };
+		22B4BBBB1C7EDD7400274E58 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBB71C7EDD7400274E58 /* IntroViewController.swift */; };
+		22B4BBBC1C7EDD7400274E58 /* IntroParallaxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBB81C7EDD7400274E58 /* IntroParallaxView.swift */; };
 		22B4BBBD1C7EDD7400274E58 /* CharPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBB91C7EDD7400274E58 /* CharPageControl.swift */; };
-		22B4BBBE1C7EDD7400274E58 /* landing.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBBA1C7EDD7400274E58 /* landing.storyboard */; };
 		22B4BBC01C7EDDBD00274E58 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBBF1C7EDDBD00274E58 /* MotionManager.swift */; };
-		22B4BBC21C7EDEE900274E58 /* ParallaxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBC11C7EDEE900274E58 /* ParallaxView.xib */; };
+		22B4BBC21C7EDEE900274E58 /* IntroParallaxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBC11C7EDEE900274E58 /* IntroParallaxView.xib */; };
 		22B4BBC51C7EE0E500274E58 /* NSDictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBC31C7EE0E500274E58 /* NSDictionaryExtension.swift */; };
 		22B4BBC61C7EE0E500274E58 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4BBC41C7EE0E500274E58 /* UIColorExtension.swift */; };
 		22B4BBD81C7EE12D00274E58 /* FuturaLT-CondensedLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBC71C7EE12800274E58 /* FuturaLT-CondensedLight.ttf */; };
@@ -128,12 +127,11 @@
 		229532331C63280900C6124F /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		229532341C63280900C6124F /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		22B4BBB61C7EDD7300274E58 /* EPICday-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EPICday-Bridging-Header.h"; sourceTree = "<group>"; };
-		22B4BBB71C7EDD7400274E58 /* PresentationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationViewController.swift; sourceTree = "<group>"; };
-		22B4BBB81C7EDD7400274E58 /* ParallaxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParallaxView.swift; sourceTree = "<group>"; };
+		22B4BBB71C7EDD7400274E58 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
+		22B4BBB81C7EDD7400274E58 /* IntroParallaxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroParallaxView.swift; sourceTree = "<group>"; };
 		22B4BBB91C7EDD7400274E58 /* CharPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharPageControl.swift; sourceTree = "<group>"; };
-		22B4BBBA1C7EDD7400274E58 /* landing.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = landing.storyboard; sourceTree = "<group>"; };
 		22B4BBBF1C7EDDBD00274E58 /* MotionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
-		22B4BBC11C7EDEE900274E58 /* ParallaxView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ParallaxView.xib; sourceTree = "<group>"; };
+		22B4BBC11C7EDEE900274E58 /* IntroParallaxView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroParallaxView.xib; sourceTree = "<group>"; };
 		22B4BBC31C7EE0E500274E58 /* NSDictionaryExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDictionaryExtension.swift; sourceTree = "<group>"; };
 		22B4BBC41C7EE0E500274E58 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		22B4BBC71C7EE12800274E58 /* FuturaLT-CondensedLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FuturaLT-CondensedLight.ttf"; sourceTree = "<group>"; };
@@ -261,6 +259,20 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		22B4BBE91C7EE34A00274E58 /* Intro from Prolific */ = {
+			isa = PBXGroup;
+			children = (
+				22B4BBB71C7EDD7400274E58 /* IntroViewController.swift */,
+				22B4BBB81C7EDD7400274E58 /* IntroParallaxView.swift */,
+				22B4BBB91C7EDD7400274E58 /* CharPageControl.swift */,
+				22B4BBBF1C7EDDBD00274E58 /* MotionManager.swift */,
+				22B4BBC31C7EE0E500274E58 /* NSDictionaryExtension.swift */,
+				22B4BBC41C7EE0E500274E58 /* UIColorExtension.swift */,
+				22B4BBC11C7EDEE900274E58 /* IntroParallaxView.xib */,
+			);
+			name = "Intro from Prolific";
+			sourceTree = "<group>";
+		};
 		4B7D39F51C543E1A00E170FB = {
 			isa = PBXGroup;
 			children = (
@@ -286,14 +298,7 @@
 		4B7D3A001C543E1A00E170FB /* EPICday */ = {
 			isa = PBXGroup;
 			children = (
-				22B4BBB71C7EDD7400274E58 /* PresentationViewController.swift */,
-				22B4BBB81C7EDD7400274E58 /* ParallaxView.swift */,
-				22B4BBB91C7EDD7400274E58 /* CharPageControl.swift */,
-				22B4BBBF1C7EDDBD00274E58 /* MotionManager.swift */,
-				22B4BBC31C7EE0E500274E58 /* NSDictionaryExtension.swift */,
-				22B4BBC41C7EE0E500274E58 /* UIColorExtension.swift */,
-				22B4BBBA1C7EDD7400274E58 /* landing.storyboard */,
-				22B4BBC11C7EDEE900274E58 /* ParallaxView.xib */,
+				22B4BBE91C7EE34A00274E58 /* Intro from Prolific */,
 				4B7D3A041C543E1A00E170FB /* AppDelegate.h */,
 				4B7D3A051C543E1A00E170FB /* AppDelegate.m */,
 				4B7D3A071C543E1A00E170FB /* WelcomeViewController.h */,
@@ -492,7 +497,7 @@
 			files = (
 				22B4BBD91C7EE12D00274E58 /* FuturaLT-CondensedLightObl.ttf in Resources */,
 				227A2E7A1C658BDB00777ACE /* Castillero.acv in Resources */,
-				22B4BBC21C7EDEE900274E58 /* ParallaxView.xib in Resources */,
+				22B4BBC21C7EDEE900274E58 /* IntroParallaxView.xib in Resources */,
 				22B4BBE21C7EE12D00274E58 /* FuturaLT-BookOblique.ttf in Resources */,
 				22B4BBE41C7EE12D00274E58 /* FuturaLT-HeavyOblique.ttf in Resources */,
 				4B7D3A111C543E1A00E170FB /* LaunchScreen.storyboard in Resources */,
@@ -513,7 +518,6 @@
 				22B4BBDA1C7EE12D00274E58 /* FuturaLT-Condensed.ttf in Resources */,
 				22B4BBD81C7EE12D00274E58 /* FuturaLT-CondensedLight.ttf in Resources */,
 				22B4BBDC1C7EE12D00274E58 /* FuturaLT-CondensedBold.ttf in Resources */,
-				22B4BBBE1C7EDD7400274E58 /* landing.storyboard in Resources */,
 				4B7D3A0C1C543E1A00E170FB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -592,7 +596,7 @@
 				22083C131C6947D7002C947A /* UICollectionView+Convenience.m in Sources */,
 				22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */,
 				221D7ED31C56E3A30090A542 /* PhotoCollectionViewCell.m in Sources */,
-				22B4BBBB1C7EDD7400274E58 /* PresentationViewController.swift in Sources */,
+				22B4BBBB1C7EDD7400274E58 /* IntroViewController.swift in Sources */,
 				22B4BBC51C7EE0E500274E58 /* NSDictionaryExtension.swift in Sources */,
 				22254BAC1C585A630031BBC0 /* UIColor+EPIC.m in Sources */,
 				229532351C63280900C6124F /* User.m in Sources */,
@@ -601,7 +605,7 @@
 				22083C171C6948A1002C947A /* GalleryCollectionViewCell.m in Sources */,
 				22254BA91C584E820031BBC0 /* ChannelBarView.m in Sources */,
 				22485EDC1C5AEFEE0091F736 /* CapturePreviewView.m in Sources */,
-				22B4BBBC1C7EDD7400274E58 /* ParallaxView.swift in Sources */,
+				22B4BBBC1C7EDD7400274E58 /* IntroParallaxView.swift in Sources */,
 				22083C121C6947D7002C947A /* NSIndexSet+Convenience.m in Sources */,
 				22B4BBC01C7EDDBD00274E58 /* MotionManager.swift in Sources */,
 				22B4BBC61C7EE0E500274E58 /* UIColorExtension.swift in Sources */,

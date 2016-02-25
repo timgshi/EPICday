@@ -1,7 +1,7 @@
 
 import UIKit
 
-class PresentationViewController: UIViewController {
+class IntroViewController: UIViewController {
 
     @IBAction func startButtonDidTouch(sender: AnyObject) {
     }
