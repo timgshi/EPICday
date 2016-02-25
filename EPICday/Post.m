@@ -62,9 +62,11 @@ NSString * const EPICPostDidUpdatePhotosNotification = @"EPICPostDidUpdatePhotos
     Post *post = [self new];
     post.ref = ref;
     [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        post.channel = channel;
-        post.timestamp = [NSDate dateWithTimeIntervalSince1970:[snapshot.value[@"timestamp"] doubleValue]];
-        post.userRef = [[[ref root] childByAppendingPath:@"users"] childByAppendingPath:snapshot.value[@"user"]];
+        if (snapshot.value && ![snapshot.value isKindOfClass:[NSNull class]]) {
+            post.channel = channel;
+            post.timestamp = [NSDate dateWithTimeIntervalSince1970:[snapshot.value[@"timestamp"] doubleValue]];
+            post.userRef = [[[ref root] childByAppendingPath:@"users"] childByAppendingPath:snapshot.value[@"user"]];
+        }
         [taskSource trySetResult:post];
     }];
     return taskSource.task;

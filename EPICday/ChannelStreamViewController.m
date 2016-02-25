@@ -94,6 +94,10 @@ static NSString * const EPIC_epicurrence_channel_id = @"-KA-1sbul1bQREXo6_sa";
     BFTaskCompletionSource *channelInitialLoadTaskSource = [BFTaskCompletionSource taskCompletionSource];
     self.selectedChannel = [Channel channelFromRef:self.selectedChannelRef withInitialLoadTaskSource:channelInitialLoadTaskSource];
     
+    [self.baseRef observeAuthEventWithBlock:^(FAuthData *authData) {
+        NSLog(@"%@", authData);
+    }];
+    
     self.channelBarView = [ChannelBarView barViewWithChannel:self.selectedChannel];
     [self.view addSubview:self.channelBarView];
     [self.channelBarView mas_makeConstraints:^(MASConstraintMaker *make) {
