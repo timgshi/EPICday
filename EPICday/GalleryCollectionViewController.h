@@ -9,11 +9,16 @@
 @import UIKit;
 @import Photos;
 
+@class BFTask;
+
 @interface GalleryCollectionViewController : UICollectionViewController
 
 @property (nonatomic, strong) PHFetchResult *assetsFetchResults;
 @property (nonatomic, strong) PHAssetCollection *assetCollection;
+@property (nonatomic, copy) void (^selectionBlock)(GalleryCollectionViewController *galleryCollectionVC);
+@property (nonatomic, readonly) NSMutableSet *selectedAssets;
 
 + (instancetype)galleryCollectionPickerVC;
+- (BFTask *)getSelectedAssetData;
 
 @end
