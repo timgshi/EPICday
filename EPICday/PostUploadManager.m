@@ -11,6 +11,7 @@
 #import "Models.h"
 
 #import <Bolts/Bolts.h>
+#import <GPUImage/GPUImage.h>
 #import <ImageIO/ImageIO.h>
 #import <Firebase/Firebase.h>
 #import <AWSS3/AWSS3.h>
@@ -76,7 +77,7 @@ static NSString * const PostUploadManagerCompletionValuesPostRefUrlKey = @"PostU
                          }];
     CGSize imgSize = CGSizeMake([dimensions[@"width"] floatValue], [dimensions[@"height"] floatValue]);
     BFTask *thumbnailTask = [self createThumbnailForPhotoRef:photoRef inPostRef:postRef withImageData:imageData andSize:imgSize];
-    BFTask *s3UploadTask = [self uploadPhotoRef:photoRef toS3FromData:imageData withExifAttachments:exifAttachments inChannel:channel withPostRef:postRef];
+    BFTask *s3UploadTask = [self uploadPhotoRef:photoRef toS3FromData:imageData inChannel:channel withPostRef:postRef];
     BFTask *saveTask = [self saveImageDataToLibrary:imageData];
     return [[BFTask taskForCompletionOfAllTasks:@[thumbnailTask, s3UploadTask, saveTask]] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
         [[UIApplication sharedApplication] endBackgroundTask:taskId];
@@ -84,7 +85,58 @@ static NSString * const PostUploadManagerCompletionValuesPostRefUrlKey = @"PostU
     }];
 }
 
-- (BFTask *)uploadPhotoRef:(Firebase *)photoRef toS3FromData:(NSData *)imageData withExifAttachments:(NSDictionary *)exifAttachments inChannel:(Channel *)channel withPostRef:(Firebase *)postRef {
+- (BFTask *)postPhotosFromUnfilteredGalleryImageAsData:(NSArray *)assets inSelectedChannel:(Channel *)channel {
+    NSMutableArray *filteredImages = @[].mutableCopy;
+    NSMutableArray *filteringTasks = @[].mutableCopy;
+    NSURL *filterAcvUrl = [[NSBundle mainBundle] URLForResource:@"Castillero" withExtension:@"acv"];
+    for (NSData *imageData in assets) {
+        BFTask *task = [[BFTask taskWithResult:@YES] continueWithExecutor:[BFExecutor executorWithDispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)] withBlock:^id _Nullable(BFTask * _Nonnull task) {
+            GPUImageFilter *filter = [[GPUImageToneCurveFilter alloc] initWithACVURL:filterAcvUrl];
+            GPUImagePicture *image = [[GPUImagePicture alloc] initWithImage:[UIImage imageWithData:imageData]];
+            [image addTarget:filter];
+            [filter useNextFrameForImageCapture];
+            [image processImage];
+            @autoreleasepool {
+                UIImage *filteredImage = [filter imageFromCurrentFramebuffer];
+                [filteredImages addObject:filteredImage];
+            }
+            return [BFTask taskWithResult:@YES];
+        }];
+        [filteringTasks addObject:task];
+    }
+    return [[BFTask taskForCompletionOfAllTasks:filteringTasks] continueWithExecutor:[BFExecutor executorWithDispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)] withBlock:^id _Nullable(BFTask * _Nonnull task) {
+        Firebase *postRef = [[[channel.ref root] childByAppendingPath:@"posts"] childByAutoId];
+        [postRef setValue:@{
+                            @"channel": channel.ref.key,
+                            @"timestamp": @([[NSDate date] timeIntervalSince1970]),
+                            @"user": channel.ref.authData.uid
+                            }];
+        [channel.ref updateChildValues:@{[NSString stringWithFormat:@"posts/%@", postRef.key]: @YES}];
+        NSMutableArray *uploadTasks = @[].mutableCopy;
+        for (UIImage *filteredImage in filteredImages) {
+            Firebase *photoRef = [[[channel.ref root] childByAppendingPath:@"photos"] childByAutoId];
+            NSDictionary *dimensions = @{
+                                         @"width": @(filteredImage.size.width),
+                                         @"height": @(filteredImage.size.height)
+                                         };
+            [photoRef setValue:@{
+                                 @"channel": channel.ref.key,
+                                 @"timestamp": @([[NSDate date] timeIntervalSince1970]),
+                                 @"post": postRef.key,
+                                 @"user": channel.ref.authData.uid,
+                                 @"dimensions": dimensions
+                                 }];
+            NSData *filteredImageData = UIImageJPEGRepresentation(filteredImage, 1.0);
+            BFTask *thumbnailTask = [self createThumbnailForPhotoRef:photoRef inPostRef:postRef withImageData:filteredImageData andSize:filteredImage.size];
+            BFTask *s3UploadTask = [self uploadPhotoRef:photoRef toS3FromData:filteredImageData inChannel:channel withPostRef:postRef];
+            BFTask *task = [BFTask taskForCompletionOfAllTasks:@[thumbnailTask, s3UploadTask]];
+            [uploadTasks addObject:task];
+        }
+        return [BFTask taskForCompletionOfAllTasks:uploadTasks];
+    }];
+}
+
+- (BFTask *)uploadPhotoRef:(Firebase *)photoRef toS3FromData:(NSData *)imageData inChannel:(Channel *)channel withPostRef:(Firebase *)postRef {
     return [[BFTask taskWithResult:@YES] continueWithExecutor:[BFExecutor executorWithDispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)]
                                                     withBlock:^id _Nullable(BFTask * _Nonnull task) {
                                                         

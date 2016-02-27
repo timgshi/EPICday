@@ -13,6 +13,8 @@
 #import "UICollectionView+Convenience.h"
 #import "UIColor+EPIC.h"
 
+#import <Bolts/Bolts.h>
+
 @import PhotosUI;
 
 @interface GalleryCollectionViewController () <PHPhotoLibraryChangeObserver, UICollectionViewDelegateFlowLayout>
@@ -72,6 +74,24 @@
     
     // Begin caching assets in and around collection view's visible rect.
     [self updateCachedAssets];
+}
+
+- (BFTask *)getSelectedAssetData {
+    NSMutableArray *imagesAsData = @[].mutableCopy;
+    NSMutableArray *tasks = @[].mutableCopy;
+    for (PHAsset *asset in self.selectedAssets) {
+        BFTaskCompletionSource *taskSource = [BFTaskCompletionSource taskCompletionSource];
+        [tasks addObject:taskSource.task];
+        [self.imageManager requestImageDataForAsset:asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            if (imageData) {
+                [imagesAsData addObject:imageData];
+            }
+            [taskSource setResult:imageData];
+        }];
+    }
+    return [[BFTask taskForCompletionOfAllTasks:tasks] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+        return [BFTask taskWithResult:imagesAsData];
+    }];
 }
 
 #pragma mark - PHPhotoLibraryChangeObserver
