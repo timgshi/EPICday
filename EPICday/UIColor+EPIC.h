@@ -17,4 +17,8 @@
 + (UIColor *)epicRedColor;
 + (UIColor *)epicLightRedColor;
 
++ (UIColor *)epicGreenColor;
+
+- (UIImage *)image;
+
 @end

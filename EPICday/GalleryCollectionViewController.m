@@ -16,8 +16,11 @@
 @import PhotosUI;
 
 @interface GalleryCollectionViewController () <PHPhotoLibraryChangeObserver, UICollectionViewDelegateFlowLayout>
+
 @property (nonatomic, strong) PHCachingImageManager *imageManager;
 @property CGRect previousPreheatRect;
+@property (nonatomic, strong) NSMutableSet *selectedAssets;
+
 @end
 
 
@@ -30,10 +33,18 @@
     return galleryVC;
 }
 
+- (NSMutableSet *)selectedAssets {
+    if (!_selectedAssets) {
+        _selectedAssets = [NSMutableSet set];
+    }
+    return _selectedAssets;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.collectionView.backgroundColor = [UIColor epicDarkGrayColor];
+    self.collectionView.allowsMultipleSelection = YES;
     
     PHFetchOptions *allPhotosOptions = [[PHFetchOptions alloc] init];
     allPhotosOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
@@ -144,7 +155,18 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     PHAsset *asset = self.assetsFetchResults[indexPath.item];
-    
+    [self.selectedAssets addObject:asset];
+    if (self.selectionBlock) {
+        self.selectionBlock(self);
+    }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    PHAsset *asset = self.assetsFetchResults[indexPath.item];
+    [self.selectedAssets removeObject:asset];
+    if (self.selectionBlock) {
+        self.selectionBlock(self);
+    }
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
