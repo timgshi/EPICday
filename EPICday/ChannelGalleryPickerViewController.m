@@ -11,9 +11,11 @@
 #import "Channel.h"
 #import "ChannelBarView.h"
 #import "GalleryCollectionViewController.h"
+#import "PostUploadManager.h"
 #import "UIColor+EPIC.h"
 #import "UIFont+EPIC.h"
 
+#import <Bolts/Bolts.h>
 #import <Masonry/Masonry.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
@@ -82,6 +84,7 @@
     [self.actionButton setTitle:@"share this image" forState:UIControlStateNormal];
     [self.actionButton setBackgroundImage:[[UIColor epicDarkGrayColor] image] forState:UIControlStateDisabled];
     [self.actionButton setBackgroundImage:[[UIColor epicGreenColor] image] forState:UIControlStateNormal];
+    [self.actionButton addTarget:self action:@selector(actionButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.actionButton];
     [self.actionButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
@@ -93,6 +96,13 @@
 
 - (void)closeButtonPressed {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)actionButtonPressed {
+    [[self.galleryCollectionVC getSelectedAssetData] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        return [[PostUploadManager sharedManager] postPhotosFromUnfilteredGalleryImageAsData:task.result inSelectedChannel:self.selectedChannel];
+    }];
 }
 
 - (void)updateActionButtonWithCount:(NSInteger)count {
