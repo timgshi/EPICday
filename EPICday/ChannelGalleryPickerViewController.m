@@ -21,7 +21,7 @@
 
 @property (nonatomic, strong) ChannelBarView *channelBarView;
 @property (nonatomic, strong) GalleryCollectionViewController *galleryCollectionVC;
-@property (nonatomic, strong) UIButton *actionButton;
+@property (nonatomic, strong) UIButton *closeButton, *actionButton;
 
 @property (nonatomic, strong) NSMutableArray *selectedAssets;
 
@@ -62,6 +62,10 @@
     [self.galleryCollectionVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
+    
+    self.closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.closeButton setImage:[UIImage imageNamed:@"ic_close_white"] forState:UIControlStateNormal];
+    [self.view addSubview:self.closeButton];
     
     self.actionButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.actionButton.titleLabel.font = [UIFont epicBoldFontOfSize:18];
