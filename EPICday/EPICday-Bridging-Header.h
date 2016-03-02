@@ -7,6 +7,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <Firebase/Firebase.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 #import "ChannelStreamViewController.h"
 #import "Models.h"

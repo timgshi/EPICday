@@ -55,6 +55,16 @@
 		22B4BBE71C7EE12D00274E58 /* FuturaLT-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD61C7EE12800274E58 /* FuturaLT-ExtraBold.ttf */; };
 		22B4BBE81C7EE12D00274E58 /* FuturaLT-ExtraBoldOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B4BBD71C7EE12800274E58 /* FuturaLT-ExtraBoldOblique.ttf */; };
 		22CE2D6A1C7FB2C100DE582D /* PostUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 22CE2D691C7FB2C100DE582D /* PostUploadManager.m */; };
+		22EE1A071C8674E100FE7862 /* imageChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22EE19FD1C8674E100FE7862 /* imageChannel.storyboard */; };
+		22EE1A081C8674E100FE7862 /* imageUICollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22EE19FE1C8674E100FE7862 /* imageUICollectionViewCell.xib */; };
+		22EE1A091C8674E100FE7862 /* imageUICollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE19FF1C8674E100FE7862 /* imageUICollectionViewCell.swift */; };
+		22EE1A0A1C8674E100FE7862 /* ImageChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A001C8674E100FE7862 /* ImageChannelViewController.swift */; };
+		22EE1A0B1C8674E100FE7862 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A011C8674E100FE7862 /* DataSource.swift */; };
+		22EE1A0C1C8674E100FE7862 /* allUsersCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A021C8674E100FE7862 /* allUsersCollectionViewLayout.swift */; };
+		22EE1A0D1C8674E100FE7862 /* CollectionViewWaterfallLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A031C8674E100FE7862 /* CollectionViewWaterfallLayout.swift */; };
+		22EE1A0E1C8674E100FE7862 /* AllUserDelegateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A041C8674E100FE7862 /* AllUserDelegateController.swift */; };
+		22EE1A0F1C8674E100FE7862 /* UserThumbnailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A051C8674E100FE7862 /* UserThumbnailsView.swift */; };
+		22EE1A101C8674E100FE7862 /* ThumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A061C8674E100FE7862 /* ThumbView.swift */; };
 		22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22F15EAC1C59D71600B07F63 /* CaptureViewController.m */; };
 		22F15EAF1C59DC8F00B07F63 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F15EAE1C59DC8F00B07F63 /* ImageIO.framework */; };
 		4B7D3A031C543E1A00E170FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A021C543E1A00E170FB /* main.m */; };
@@ -155,6 +165,16 @@
 		22CE2D671C7FB19200DE582D /* Models.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Models.h; sourceTree = "<group>"; };
 		22CE2D681C7FB2C100DE582D /* PostUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostUploadManager.h; sourceTree = "<group>"; };
 		22CE2D691C7FB2C100DE582D /* PostUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostUploadManager.m; sourceTree = "<group>"; };
+		22EE19FD1C8674E100FE7862 /* imageChannel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = imageChannel.storyboard; sourceTree = "<group>"; };
+		22EE19FE1C8674E100FE7862 /* imageUICollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = imageUICollectionViewCell.xib; sourceTree = "<group>"; };
+		22EE19FF1C8674E100FE7862 /* imageUICollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = imageUICollectionViewCell.swift; sourceTree = "<group>"; };
+		22EE1A001C8674E100FE7862 /* ImageChannelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageChannelViewController.swift; sourceTree = "<group>"; };
+		22EE1A011C8674E100FE7862 /* DataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
+		22EE1A021C8674E100FE7862 /* allUsersCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = allUsersCollectionViewLayout.swift; sourceTree = "<group>"; };
+		22EE1A031C8674E100FE7862 /* CollectionViewWaterfallLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewWaterfallLayout.swift; sourceTree = "<group>"; };
+		22EE1A041C8674E100FE7862 /* AllUserDelegateController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllUserDelegateController.swift; sourceTree = "<group>"; };
+		22EE1A051C8674E100FE7862 /* UserThumbnailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserThumbnailsView.swift; sourceTree = "<group>"; };
+		22EE1A061C8674E100FE7862 /* ThumbView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbView.swift; sourceTree = "<group>"; };
 		22F15EAB1C59D71600B07F63 /* CaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureViewController.h; sourceTree = "<group>"; };
 		22F15EAC1C59D71600B07F63 /* CaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureViewController.m; sourceTree = "<group>"; };
 		22F15EAE1C59DC8F00B07F63 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -340,6 +360,23 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		22EE1A111C8674E800FE7862 /* Channel from Prolific */ = {
+			isa = PBXGroup;
+			children = (
+				22EE19FD1C8674E100FE7862 /* imageChannel.storyboard */,
+				22EE19FE1C8674E100FE7862 /* imageUICollectionViewCell.xib */,
+				22EE19FF1C8674E100FE7862 /* imageUICollectionViewCell.swift */,
+				22EE1A001C8674E100FE7862 /* ImageChannelViewController.swift */,
+				22EE1A011C8674E100FE7862 /* DataSource.swift */,
+				22EE1A021C8674E100FE7862 /* allUsersCollectionViewLayout.swift */,
+				22EE1A031C8674E100FE7862 /* CollectionViewWaterfallLayout.swift */,
+				22EE1A041C8674E100FE7862 /* AllUserDelegateController.swift */,
+				22EE1A051C8674E100FE7862 /* UserThumbnailsView.swift */,
+				22EE1A061C8674E100FE7862 /* ThumbView.swift */,
+			);
+			name = "Channel from Prolific";
+			sourceTree = "<group>";
+		};
 		4B7D39F51C543E1A00E170FB = {
 			isa = PBXGroup;
 			children = (
@@ -365,11 +402,12 @@
 		4B7D3A001C543E1A00E170FB /* EPICday */ = {
 			isa = PBXGroup;
 			children = (
-				22B4BBE91C7EE34A00274E58 /* Intro from Prolific */,
 				4B7D3A041C543E1A00E170FB /* AppDelegate.h */,
 				4B7D3A051C543E1A00E170FB /* AppDelegate.m */,
 				4B7D3A071C543E1A00E170FB /* WelcomeViewController.h */,
 				4B7D3A081C543E1A00E170FB /* WelcomeViewController.m */,
+				22B4BBE91C7EE34A00274E58 /* Intro from Prolific */,
+				22EE1A111C8674E800FE7862 /* Channel from Prolific */,
 				22CE2D611C7FB0E700DE582D /* Channel Stream */,
 				22CE2D621C7FB0F200DE582D /* Gallery Picker */,
 				22254BB31C58A20C0031BBC0 /* BigCameraButton.h */,
@@ -535,6 +573,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22B4BBD91C7EE12D00274E58 /* FuturaLT-CondensedLightObl.ttf in Resources */,
+				22EE1A071C8674E100FE7862 /* imageChannel.storyboard in Resources */,
 				227A2E7A1C658BDB00777ACE /* Castillero.acv in Resources */,
 				22B4BBC21C7EDEE900274E58 /* IntroParallaxView.xib in Resources */,
 				22B4BBE21C7EE12D00274E58 /* FuturaLT-BookOblique.ttf in Resources */,
@@ -549,6 +588,7 @@
 				22B4BBDE1C7EE12D00274E58 /* FuturaLT-CondensedExtraBold.ttf in Resources */,
 				22B4BBE81C7EE12D00274E58 /* FuturaLT-ExtraBoldOblique.ttf in Resources */,
 				22083C0A1C6942CF002C947A /* FuturaBTHeavy.otf in Resources */,
+				22EE1A081C8674E100FE7862 /* imageUICollectionViewCell.xib in Resources */,
 				22B4BBE11C7EE12D00274E58 /* FuturaLT-Book.ttf in Resources */,
 				22B4BBDB1C7EE12D00274E58 /* FuturaLT-CondensedOblique.ttf in Resources */,
 				22083C081C69426D002C947A /* FuturaBTBook.otf in Resources */,
@@ -632,31 +672,39 @@
 			files = (
 				227A2E781C65898D00777ACE /* FilteredCaptureViewController.m in Sources */,
 				221D7ECA1C56E05F0090A542 /* Photo.m in Sources */,
+				22EE1A091C8674E100FE7862 /* imageUICollectionViewCell.swift in Sources */,
 				22083C131C6947D7002C947A /* UICollectionView+Convenience.m in Sources */,
 				22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */,
 				221D7ED31C56E3A30090A542 /* PhotoCollectionViewCell.m in Sources */,
 				22B4BBBB1C7EDD7400274E58 /* IntroViewController.swift in Sources */,
 				22B4BBC51C7EE0E500274E58 /* NSDictionaryExtension.swift in Sources */,
+				22EE1A0F1C8674E100FE7862 /* UserThumbnailsView.swift in Sources */,
 				22254BAC1C585A630031BBC0 /* UIColor+EPIC.m in Sources */,
 				229532351C63280900C6124F /* User.m in Sources */,
 				4B7D3A361C54468F00E170FB /* ChannelStreamViewController.m in Sources */,
 				221D7ED01C56E3780090A542 /* ChannelStreamCollectionViewController.m in Sources */,
 				22083C171C6948A1002C947A /* GalleryCollectionViewCell.m in Sources */,
+				22EE1A0C1C8674E100FE7862 /* allUsersCollectionViewLayout.swift in Sources */,
 				22254BA91C584E820031BBC0 /* ChannelBarView.m in Sources */,
 				22485EDC1C5AEFEE0091F736 /* CapturePreviewView.m in Sources */,
 				22B4BBBC1C7EDD7400274E58 /* IntroParallaxView.swift in Sources */,
 				22083C121C6947D7002C947A /* NSIndexSet+Convenience.m in Sources */,
 				22B4BBC01C7EDDBD00274E58 /* MotionManager.swift in Sources */,
+				22EE1A0B1C8674E100FE7862 /* DataSource.swift in Sources */,
 				22B4BBC61C7EE0E500274E58 /* UIColorExtension.swift in Sources */,
 				4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */,
 				22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */,
 				22B4BBBD1C7EDD7400274E58 /* CharPageControl.swift in Sources */,
 				4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */,
 				22CE2D6A1C7FB2C100DE582D /* PostUploadManager.m in Sources */,
+				22EE1A0E1C8674E100FE7862 /* AllUserDelegateController.swift in Sources */,
 				22254BB51C58A20C0031BBC0 /* BigCameraButton.m in Sources */,
 				22254BB21C5894A10031BBC0 /* PostCollectionViewHeader.m in Sources */,
 				2244EDE11C643C860026BE70 /* ChannelStreamDataSource.m in Sources */,
+				22EE1A0D1C8674E100FE7862 /* CollectionViewWaterfallLayout.swift in Sources */,
 				221D7EC71C56E0540090A542 /* Channel.m in Sources */,
+				22EE1A0A1C8674E100FE7862 /* ImageChannelViewController.swift in Sources */,
+				22EE1A101C8674E100FE7862 /* ThumbView.swift in Sources */,
 				4B7D3A031C543E1A00E170FB /* main.m in Sources */,
 				22083C1A1C694CC3002C947A /* ChannelGalleryPickerViewController.m in Sources */,
 				221D7ECD1C56E0680090A542 /* Post.m in Sources */,
@@ -803,6 +851,12 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Prototype",
+					from,
+					Prolific/EPIC/Frameworks,
+				);
 				INFOPLIST_FILE = EPICday/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -822,6 +876,12 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Prototype",
+					from,
+					Prolific/EPIC/Frameworks,
+				);
 				INFOPLIST_FILE = EPICday/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -54,8 +54,9 @@ class IntroViewController: UIViewController {
     }
     
     func pushChannelStreamVC(animated: Bool) {
-        let streamVC = ChannelStreamViewController();
-        self.navigationController?.pushViewController(streamVC, animated: animated);
+//        let streamVC = ChannelStreamViewController();
+        let streamVC = UIStoryboard(name: "imageChannel", bundle: nil).instantiateInitialViewController();
+        self.navigationController?.pushViewController(streamVC!, animated: animated);
     }
 
 }
