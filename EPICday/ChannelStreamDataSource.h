@@ -21,6 +21,9 @@
 
 + (instancetype)dataSourceWithChannel:(Channel *)channel
                      inCollectionView:(UICollectionView *)collectionView
+                   andReuseIdentifier:(NSString *)reuseIdentifier;
++ (instancetype)dataSourceWithChannel:(Channel *)channel
+                     inCollectionView:(UICollectionView *)collectionView
                         withCellClass:(Class)cellClass
                    andReuseIdentifier:(NSString *)reuseIdentifier;
 

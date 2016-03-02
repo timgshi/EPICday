@@ -28,6 +28,17 @@
 
 + (instancetype)dataSourceWithChannel:(Channel *)channel
                      inCollectionView:(UICollectionView *)collectionView
+                   andReuseIdentifier:(NSString *)reuseIdentifier {
+    ChannelStreamDataSource *dataSource = [self new];
+    dataSource.channel = channel;
+    dataSource.collectionView = collectionView;
+    collectionView.dataSource = dataSource;
+    dataSource.reuseIdentifier = reuseIdentifier;
+    return dataSource;
+}
+
++ (instancetype)dataSourceWithChannel:(Channel *)channel
+                     inCollectionView:(UICollectionView *)collectionView
                         withCellClass:(Class)cellClass
                    andReuseIdentifier:(NSString *)reuseIdentifier {
     ChannelStreamDataSource *dataSource = [self new];
@@ -130,13 +141,13 @@
     return cell;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-        PostCollectionViewHeader *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[PostCollectionViewHeader defaultIdentifier] forIndexPath:indexPath];
-        header.post = [self postForSection:indexPath.section];
-        return header;
-    }
-    return nil;
-}
+//- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+//    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+//        PostCollectionViewHeader *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[PostCollectionViewHeader defaultIdentifier] forIndexPath:indexPath];
+//        header.post = [self postForSection:indexPath.section];
+//        return header;
+//    }
+//    return nil;
+//}
 
 @end

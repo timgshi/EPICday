@@ -8,7 +8,11 @@
 
 import UIKit
 
-class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CollectionViewWaterfallLayoutDelegate, allUsersCollectionViewLayoutDelegate{
+import Firebase
+import Bolts
+import SDWebImage
+
+class ImageChannelViewController: UIViewController, UICollectionViewDelegate, CollectionViewWaterfallLayoutDelegate, allUsersCollectionViewLayoutDelegate{
 
     //outlet Constraints
     @IBOutlet weak var channelNameLabelTopConstraint: NSLayoutConstraint!
@@ -39,6 +43,17 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UI
     let userDataStore = userDataSource().DataSetted
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     
+    var dataSource: ChannelStreamDataSource?
+    var selectedChannel: Channel?
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +81,7 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UI
             //imageData.populateData()
         
         // Attach imageCollectionView datasource and delegate
-        imageCollectionView.dataSource  = self
+//        imageCollectionView.dataSource  = self
         imageCollectionView.delegate = self
          //
         
@@ -77,6 +92,26 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UI
         
         //Register nibs
         registerNibs()
+        
+        let channelInitialLoadTaskSource = BFTaskCompletionSource()
+        
+        let baseRef = Firebase(url:"https://incandescent-inferno-9043.firebaseio.com/")
+        let channelRef = baseRef.childByAppendingPath("channels/-KA-1sbul1bQREXo6_sa")
+        self.selectedChannel = Channel(fromRef: channelRef, withInitialLoadTaskSource: channelInitialLoadTaskSource)
+        
+        
+        self.dataSource = ChannelStreamDataSource(channel: self.selectedChannel, inCollectionView: self.imageCollectionView, andReuseIdentifier: "cell")
+        self.dataSource?.populateCell = { blockCell, photo in
+            
+            let imageCell = blockCell as! imageUICollectionViewCell
+            imageCell.image.sd_setImageWithURL(photo.imageUrl)
+            
+        }
+        
+        channelInitialLoadTaskSource.task.continueWithBlock { (task) -> AnyObject? in
+            self.imageCollectionView.reloadData()
+            return nil
+        }
 
         //Animation
         //let animator = CKWaveCollectionViewAnimator()
@@ -96,7 +131,7 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UI
         
         var urls = [NSURL]()
         for i in 1...20 {
-            urls.append(NSURL(string:"http://lorempixel.com/400/400/people/\(i)/")!)
+            urls.append(NSURL(string:"https://lorempixel.com/400/400/people/\(i)/")!)
         }
         
         allUserView.usersThumbURLs = urls
@@ -255,39 +290,41 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UI
     //MARK: - CollectionView Delegate Methods
     
     //** Number of Cells in the CollectionView */
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if (collectionView == imageCollectionView){
-            return imageData.count
-        }
-        return 0
-    }
-    
-    
-    //** Create a basic CollectionView Cell */
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-  
-            // Create the cell and return the cell
-            let subCell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! imageUICollectionViewCell
-        
-            // Add image to cell
-            subCell.image.image = UIImage(named: imageData[indexPath.row].imageName)
-            //cell.author.text = imageData[indexPath.row].author
-            subCell.author.attributedText =  NSAttributedString(string: imageData[indexPath.row].author, attributes:  NSDictionary.headerSmallAttributes(UIColor.colorEpicWhite(), alignmentValue: NSTextAlignment.Natural))
-            
-            return subCell
-
-        
-    }
+//    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        if (collectionView == imageCollectionView){
+//            return imageData.count
+//        }
+//        return 0
+//    }
+//    
+//    
+//    //** Create a basic CollectionView Cell */
+//    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+//  
+//            // Create the cell and return the cell
+//            let subCell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! imageUICollectionViewCell
+//        
+//            // Add image to cell
+//            subCell.image.image = UIImage(named: imageData[indexPath.row].imageName)
+//            //cell.author.text = imageData[indexPath.row].author
+//            subCell.author.attributedText =  NSAttributedString(string: imageData[indexPath.row].author, attributes:  NSDictionary.headerSmallAttributes(UIColor.colorEpicWhite(), alignmentValue: NSTextAlignment.Natural))
+//            
+//            return subCell
+//
+//        
+//    }
     
     // MARK: WaterfallLayoutDelegate
     
     func collectionView(collectionView: UICollectionView, layout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         // create a cell size from the image size, and return the size
         var cellSize = CGSize(width: 16, height: 16)
-        if (collectionView == imageCollectionView){
-        let getImage : UIImage = UIImage(named: imageData[indexPath.row].imageName)!
-        let imageSize = getImage.size
-            cellSize = imageSize
+        if (collectionView == imageCollectionView) {
+            let photo = self.dataSource?.photoAtIndexPath(indexPath)
+            cellSize = (photo?.size)!
+//            let getImage : UIImage = UIImage(named: imageData[indexPath.row].imageName)!
+//            let imageSize = getImage.size
+//                cellSize = imageSize
             
         }
         return cellSize
