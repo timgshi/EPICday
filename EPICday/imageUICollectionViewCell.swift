@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FormatterKit
 
 class imageUICollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var image: UIImageView!
@@ -15,6 +16,8 @@ class imageUICollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var timeAgoLabel: UILabel!
     @IBOutlet weak var cellWrapView: UIView!
+    
+    static let timeAgoFormatter = TTTTimeIntervalFormatter()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -42,5 +45,10 @@ class imageUICollectionViewCell: UICollectionViewCell {
         author.text = ""
         timeAgoLabel.text = ""
         image.image = nil
+    }
+    
+    func setTimeAgoTextFromDate(date: NSDate!) {
+        let timeAgoText = imageUICollectionViewCell.timeAgoFormatter.stringForTimeIntervalFromDate(NSDate(), toDate: date)
+        self.timeAgoLabel.text = timeAgoText
     }
 }

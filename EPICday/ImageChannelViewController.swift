@@ -114,6 +114,12 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
                 (next:AnyObject!) -> () in
                 imageCell.author.text = user.displayName
             }
+            photo.rac_valuesForKeyPath("timestamp", observer: photo)
+                .takeUntil(imageCell.rac_prepareForReuseSignal)
+                .subscribeNext {
+                    (next:AnyObject!) -> () in
+                    imageCell.setTimeAgoTextFromDate(photo.timestamp)
+            }
         }
         
         channelInitialLoadTaskSource.task.continueWithBlock { (task) -> AnyObject? in

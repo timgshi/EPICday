@@ -30,6 +30,25 @@ PODS:
   - FBSDKLoginKit (4.9.1):
     - FBSDKCoreKit
   - Firebase (2.5.0)
+  - FormatterKit (1.8.0):
+    - FormatterKit/AddressFormatter (= 1.8.0)
+    - FormatterKit/ArrayFormatter (= 1.8.0)
+    - FormatterKit/ColorFormatter (= 1.8.0)
+    - FormatterKit/LocationFormatter (= 1.8.0)
+    - FormatterKit/NameFormatter (= 1.8.0)
+    - FormatterKit/OrdinalNumberFormatter (= 1.8.0)
+    - FormatterKit/TimeIntervalFormatter (= 1.8.0)
+    - FormatterKit/UnitOfInformationFormatter (= 1.8.0)
+    - FormatterKit/URLRequestFormatter (= 1.8.0)
+  - FormatterKit/AddressFormatter (1.8.0)
+  - FormatterKit/ArrayFormatter (1.8.0)
+  - FormatterKit/ColorFormatter (1.8.0)
+  - FormatterKit/LocationFormatter (1.8.0)
+  - FormatterKit/NameFormatter (1.8.0)
+  - FormatterKit/OrdinalNumberFormatter (1.8.0)
+  - FormatterKit/TimeIntervalFormatter (1.8.0)
+  - FormatterKit/UnitOfInformationFormatter (1.8.0)
+  - FormatterKit/URLRequestFormatter (1.8.0)
   - GPUImage (0.1.7)
   - Masonry (0.6.4)
   - Parse (1.12.0):
@@ -62,6 +81,7 @@ DEPENDENCIES:
   - AWSS3 (~> 2.3)
   - FBSDKCoreKit (~> 4.9)
   - Firebase
+  - FormatterKit (~> 1.8)
   - GPUImage (~> 0.1)
   - Masonry (~> 0.6)
   - ParseFacebookUtilsV4 (~> 1.11)
@@ -77,6 +97,7 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: aee20b6d9855f15b618d4fddd1a5ad45f5a4a59d
   FBSDKLoginKit: ec22dc49bd372b064e93d6773df4ffefb3a552a2
   Firebase: 744617c0733b45198f9486ebd5cac64ec2d10d79
+  FormatterKit: bddde83e054edf9d9ee14f9de3b3a5103db256f4
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
   Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
   Parse: de2c52a9a1421b91ae7594ab8ce191afd184f19b

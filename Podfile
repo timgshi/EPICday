@@ -12,5 +12,6 @@ target 'EPICday' do
   pod 'AWSCognito', '~> 2.3'
   pod 'ReactiveCocoa', '~> 4.0'
   pod 'GPUImage', '~> 0.1'
+  pod 'FormatterKit', '~> 1.8'
 end
 
