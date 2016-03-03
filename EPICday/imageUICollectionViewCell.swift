@@ -25,6 +25,7 @@ class imageUICollectionViewCell: UICollectionViewCell {
         author.layer.shadowRadius = 4
         author.layer.shadowOpacity = 1
         author.layer.shouldRasterize = true;
+        author.text = ""
         
         //
         
@@ -34,5 +35,12 @@ class imageUICollectionViewCell: UICollectionViewCell {
         timeAgoLabel.layer.shadowRadius = 4
         timeAgoLabel.layer.shadowOpacity = 1
         timeAgoLabel.layer.shouldRasterize = true;
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        author.text = ""
+        timeAgoLabel.text = ""
+        image.image = nil
     }
 }

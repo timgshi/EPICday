@@ -11,6 +11,7 @@ import UIKit
 import Firebase
 import Bolts
 import SDWebImage
+import ReactiveCocoa
 
 class ImageChannelViewController: UIViewController, UICollectionViewDelegate, CollectionViewWaterfallLayoutDelegate, allUsersCollectionViewLayoutDelegate{
 
@@ -105,7 +106,14 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
             
             let imageCell = blockCell as! imageUICollectionViewCell
             imageCell.image.sd_setImageWithURL(photo.imageUrl)
-            
+            let userRef = photo.post.userRef
+            let user = User(fromRef: userRef)
+            let nameSignal = user.rac_valuesForKeyPath("displayName", observer: user)
+                                .takeUntil(imageCell.rac_prepareForReuseSignal)
+            nameSignal.subscribeNext {
+                (next:AnyObject!) -> () in
+                imageCell.author.text = user.displayName
+            }
         }
         
         channelInitialLoadTaskSource.task.continueWithBlock { (task) -> AnyObject? in

@@ -113,8 +113,11 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [photosArray insertObject:photo atIndex:index];
                 [self.allPhotos insertObject:photo atIndex:allPhotosIndex];
-                NSInteger sectionIndex = [self.posts indexOfObject:postDict];
-                [self.collectionView reloadData];
+                [self.collectionView performBatchUpdates:^{
+                    [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:allPhotosIndex inSection:0]]];
+                } completion:nil];
+//                NSInteger sectionIndex = [self.posts indexOfObject:postDict];
+//                [self.collectionView reloadData];
 //                [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:sectionIndex]]];
             });
             return nil;
