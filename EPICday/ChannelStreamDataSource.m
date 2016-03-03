@@ -21,6 +21,7 @@
 @property (nonatomic, strong) UICollectionView *collectionView;
 
 @property (nonatomic, strong) NSMutableArray *posts;
+@property (nonatomic, strong) NSMutableArray *allPhotos;
 
 @end
 
@@ -62,6 +63,13 @@
     return _posts;
 }
 
+- (NSMutableArray *)allPhotos {
+    if (!_allPhotos) {
+        _allPhotos = @[].mutableCopy;
+    }
+    return _allPhotos;
+}
+
 - (void)setChannel:(Channel *)channel {
     _channel = channel;
     [self setupListeners];
@@ -99,8 +107,12 @@
             NSInteger index = [photosArray indexOfObject:photo inSortedRange:NSMakeRange(0, photosArray.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
                 return [p2.timestamp compare:p1.timestamp];
             }];
+            NSInteger allPhotosIndex = [self.allPhotos indexOfObject:photo inSortedRange:NSMakeRange(0, self.allPhotos.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
+                return [p2.timestamp compare:p1.timestamp];
+            }];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [photosArray insertObject:photo atIndex:index];
+                [self.allPhotos insertObject:photo atIndex:allPhotosIndex];
                 NSInteger sectionIndex = [self.posts indexOfObject:postDict];
                 [self.collectionView reloadData];
 //                [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:sectionIndex]]];
@@ -110,24 +122,30 @@
     }];
 }
 
-- (Post *)postForSection:(NSInteger)section {
-    return self.posts[section][@"post"];
-}
+//- (Post *)postForSection:(NSInteger)section {
+//    return self.posts[section][@"post"];
+//}
+//
+//- (Photo *)photoAtIndexPath:(NSIndexPath *)indexPath {
+//    NSArray *photos = self.posts[indexPath.section][@"photos"];
+//    return photos[indexPath.item];
+//}
 
 - (Photo *)photoAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *photos = self.posts[indexPath.section][@"photos"];
-    return photos[indexPath.item];
+    return self.allPhotos[indexPath.item];
 }
 
 #pragma mark - UICollectionViewDataSource Methods
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return self.posts.count;
+//    return self.posts.count;
+    return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSArray *photos = self.posts[section][@"photos"];
-    return photos.count;
+//    NSArray *photos = self.posts[section][@"photos"];
+//    return photos.count;
+    return self.allPhotos.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
