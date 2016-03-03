@@ -10,6 +10,7 @@
 
 extern NSString * const EPICChannelDidUpdatePostsNotification;
 
+@class BFTask;
 @class BFTaskCompletionSource;
 @class Firebase;
 
@@ -25,5 +26,7 @@ extern NSString * const EPICChannelDidUpdatePostsNotification;
 @property (nonatomic, strong) Firebase *ref;
 
 + (instancetype)channelFromRef:(Firebase *)ref withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource;
+
+- (BFTask *)fetchMemberThumbUrls;
 
 @end

@@ -8,11 +8,18 @@
 
 #import "Channel.h"
 
+#import "User.h"
 #import "Photo.h"
 #import "Post.h"
 
 #import <Bolts/Bolts.h>
 #import <Firebase/Firebase.h>
+
+@interface Channel ()
+
+@property (nonatomic, strong) NSArray *memberThumbUrls;
+
+@end
 
 @implementation Channel
 
@@ -26,6 +33,7 @@ NSString * const EPICChannelDidUpdatePostsNotification = @"EPICChannelDidUpdateP
         channel.name = valuesDict[@"name"];
         channel.avatarUrl = [NSURL URLWithString:valuesDict[@"avatarUrl"]];
         channel.membersDict = valuesDict[@"members"];
+        channel.memberThumbUrls = nil;
         [taskSource trySetResult:channel];
 //        NSMutableArray *postsInitialLoadTasks = @[].mutableCopy;
 //        NSDictionary *snapshotPosts = snapshot.value[@"posts"];
@@ -63,6 +71,30 @@ NSString * const EPICChannelDidUpdatePostsNotification = @"EPICChannelDidUpdateP
         _posts = [NSMutableOrderedSet orderedSet];
     }
     return _posts;
+}
+
+- (BFTask *)fetchMemberThumbUrls {
+    BFTaskCompletionSource *taskSource = [BFTaskCompletionSource taskCompletionSource];
+    if (!self.memberThumbUrls) {
+        NSMutableArray *urls = @[].mutableCopy;
+        NSMutableArray *tasks = @[].mutableCopy;
+        [self.membersDict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *val, BOOL * _Nonnull stop) {
+            BFTask *task = [[User asyncUserFromRef:[[self.ref.root childByAppendingPath:@"users"] childByAppendingPath:key]] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+                User *user = task.result;
+                [urls addObject:user.avatarUrl];
+                return nil;
+            }];
+            [tasks addObject:task];
+        }];
+        [[BFTask taskForCompletionOfAllTasks:tasks] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+            self.memberThumbUrls = urls;
+            [taskSource trySetResult:urls];
+            return nil;
+        }];
+    } else {
+        [taskSource trySetResult:self.memberThumbUrls];
+    }
+    return taskSource.task;
 }
 
 - (NSString *)objectId {

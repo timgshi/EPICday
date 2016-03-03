@@ -124,6 +124,13 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         
         channelInitialLoadTaskSource.task.continueWithBlock { (task) -> AnyObject? in
             self.imageCollectionView.reloadData()
+            self.channelNameLabel.attributedText = NSAttributedString(string: (self.selectedChannel?.name!)!, attributes: NSDictionary.headerExtraLargeScalableAttributes(UIColor.colorEpicBlack(), alignmentValue: NSTextAlignment.Left, fontSize: 24, kernValue: 0.8))
+            self.channelDateLabel.attributedText = NSAttributedString(string: self.channelDateLabel.text!, attributes: NSDictionary.subtextMediumAttributes())
+            self.selectedChannel?.fetchMemberThumbUrls().continueWithBlock({ (task) -> AnyObject? in
+                let urls = task.result as! [NSURL]
+                self.allUserView.usersThumbURLs = urls
+                return nil;
+            });
             return nil
         }
 
@@ -143,12 +150,12 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        var urls = [NSURL]()
-        for i in 1...20 {
-            urls.append(NSURL(string:"https://lorempixel.com/400/400/people/\(i)/")!)
-        }
-        
-        allUserView.usersThumbURLs = urls
+//        var urls = [NSURL]()
+//        for i in 1...20 {
+//            urls.append(NSURL(string:"https://lorempixel.com/400/400/people/\(i)/")!)
+//        }
+//        
+//        allUserView.usersThumbURLs = urls
         
         
         

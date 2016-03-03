@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class Firebase;
+@class BFTask;
 
 @interface User : NSObject
 
@@ -18,5 +19,6 @@
 @property (nonatomic, strong) Firebase *ref;
 
 + (instancetype)userFromRef:(Firebase *)ref;
++ (BFTask *)asyncUserFromRef:(Firebase *)ref;
 
 @end
