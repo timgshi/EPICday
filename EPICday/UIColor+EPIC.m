@@ -30,4 +30,22 @@
     return [UIColor colorWithRed:0.908 green:0.299 blue:0.351 alpha:1];
 }
 
++ (UIColor *)epicGreenColor {
+    return [UIColor colorWithRed:0.298 green:0.586 blue:0.533 alpha:1];
+}
+
+- (UIImage *)image {
+    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSetFillColorWithColor(context, [self CGColor]);
+    CGContextFillRect(context, rect);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
 @end

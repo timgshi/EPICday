@@ -13,11 +13,16 @@
 #import "UICollectionView+Convenience.h"
 #import "UIColor+EPIC.h"
 
+#import <Bolts/Bolts.h>
+
 @import PhotosUI;
 
 @interface GalleryCollectionViewController () <PHPhotoLibraryChangeObserver, UICollectionViewDelegateFlowLayout>
+
 @property (nonatomic, strong) PHCachingImageManager *imageManager;
 @property CGRect previousPreheatRect;
+@property (nonatomic, strong) NSMutableSet *selectedAssets;
+
 @end
 
 
@@ -30,10 +35,18 @@
     return galleryVC;
 }
 
+- (NSMutableSet *)selectedAssets {
+    if (!_selectedAssets) {
+        _selectedAssets = [NSMutableSet set];
+    }
+    return _selectedAssets;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.collectionView.backgroundColor = [UIColor epicDarkGrayColor];
+    self.collectionView.allowsMultipleSelection = YES;
     
     PHFetchOptions *allPhotosOptions = [[PHFetchOptions alloc] init];
     allPhotosOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
@@ -61,6 +74,24 @@
     
     // Begin caching assets in and around collection view's visible rect.
     [self updateCachedAssets];
+}
+
+- (BFTask *)getSelectedAssetData {
+    NSMutableArray *imagesAsData = @[].mutableCopy;
+    NSMutableArray *tasks = @[].mutableCopy;
+    for (PHAsset *asset in self.selectedAssets) {
+        BFTaskCompletionSource *taskSource = [BFTaskCompletionSource taskCompletionSource];
+        [tasks addObject:taskSource.task];
+        [self.imageManager requestImageDataForAsset:asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            if (imageData) {
+                [imagesAsData addObject:imageData];
+            }
+            [taskSource setResult:imageData];
+        }];
+    }
+    return [[BFTask taskForCompletionOfAllTasks:tasks] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+        return [BFTask taskWithResult:imagesAsData];
+    }];
 }
 
 #pragma mark - PHPhotoLibraryChangeObserver
@@ -144,7 +175,18 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     PHAsset *asset = self.assetsFetchResults[indexPath.item];
-    
+    [self.selectedAssets addObject:asset];
+    if (self.selectionBlock) {
+        self.selectionBlock(self);
+    }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    PHAsset *asset = self.assetsFetchResults[indexPath.item];
+    [self.selectedAssets removeObject:asset];
+    if (self.selectionBlock) {
+        self.selectionBlock(self);
+    }
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
