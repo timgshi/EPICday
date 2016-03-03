@@ -34,6 +34,7 @@ NSString * const EPICChannelDidUpdatePostsNotification = @"EPICChannelDidUpdateP
         channel.avatarUrl = [NSURL URLWithString:valuesDict[@"avatarUrl"]];
         channel.membersDict = valuesDict[@"members"];
         channel.memberThumbUrls = nil;
+        channel.purpose = valuesDict[@"purpose"] ?: @"";
         [taskSource trySetResult:channel];
 //        NSMutableArray *postsInitialLoadTasks = @[].mutableCopy;
 //        NSDictionary *snapshotPosts = snapshot.value[@"posts"];

@@ -105,6 +105,7 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         self.dataSource?.populateCell = { blockCell, photo in
             
             let imageCell = blockCell as! imageUICollectionViewCell
+//            imageCell.image.sd_setImageWithPreviousCachedImageWithURL(photo.imageUrl, placeholderImage: nil, options: SDWebImageOptions.HighPriority, progress: nil, completed: nil)
             imageCell.image.sd_setImageWithURL(photo.imageUrl)
             let userRef = photo.post.userRef
             let user = User(fromRef: userRef)
@@ -125,7 +126,7 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         channelInitialLoadTaskSource.task.continueWithBlock { (task) -> AnyObject? in
             self.imageCollectionView.reloadData()
             self.channelNameLabel.attributedText = NSAttributedString(string: (self.selectedChannel?.name!)!, attributes: NSDictionary.headerExtraLargeScalableAttributes(UIColor.colorEpicBlack(), alignmentValue: NSTextAlignment.Left, fontSize: 24, kernValue: 0.8))
-            self.channelDateLabel.attributedText = NSAttributedString(string: self.channelDateLabel.text!, attributes: NSDictionary.subtextMediumAttributes())
+            self.channelDateLabel.attributedText = NSAttributedString(string: (self.selectedChannel?.purpose!)!, attributes: NSDictionary.subtextMediumAttributes())
             self.selectedChannel?.fetchMemberThumbUrls().continueWithBlock({ (task) -> AnyObject? in
                 let urls = task.result as! [NSURL]
                 self.allUserView.usersThumbURLs = urls
