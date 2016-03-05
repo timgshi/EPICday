@@ -27,7 +27,6 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
     
     // outlet elements
 
-    
     @IBOutlet weak var channelNameLabel: UILabel!
     @IBOutlet weak var channelDateLabel: UILabel!
     
@@ -40,12 +39,16 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
     
     @IBOutlet weak var allUserView: UserThumbnailsView!
     
+    @IBOutlet weak var cameraButton: UIButton!
+    
     let imageData = imageDataSource().DataSetted
     let userDataStore = userDataSource().DataSetted
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     
     var dataSource: ChannelStreamDataSource?
     var selectedChannel: Channel?
+    
+    let transition = QZCircleSegue()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -145,6 +148,11 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         viewAllUsersButton.alpha = 0
         imageCollectionView.alpha = 0
         
+        cameraButton.layer.cornerRadius = cameraButton.frame.height / 2
+        cameraButton.layer.masksToBounds = true
+        cameraButton.layer.shadowColor = UIColor.blackColor().CGColor
+        cameraButton.layer.shadowOpacity = 0.5
+        cameraButton.layer.shadowRadius = 12.0
         
     }
     
@@ -174,6 +182,21 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
             self.imageCollectionView.alpha = 1
             }, completion: nil)
         
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "EPICCaptureSegue") {
+            /* Send the button to your transition manager */
+            self.transition.animationChild = cameraButton
+            /* Set the color to your transition manager*/
+            self.transition.animationColor = UIColor(red: 0/255, green: 217/255, blue: 144/255, alpha: 1.0)
+        }
+        let toViewController = segue.destinationViewController
+        /* Set both, the origin and destination to your transition manager*/
+        self.transition.fromViewController = self
+        self.transition.toViewController = toViewController
+        /* Add the transition manager to your transitioningDelegate View Controller*/
+        toViewController.transitioningDelegate = transition
     }
 
     override func didReceiveMemoryWarning() {

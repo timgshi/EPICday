@@ -177,6 +177,20 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XpB-j5-gtM">
+                                <rect key="frame" x="264" y="480" width="72" height="72"/>
+                                <color key="backgroundColor" red="0.0" green="0.85098039219999999" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="72" id="iVR-U6-kID"/>
+                                    <constraint firstAttribute="width" constant="72" id="ysj-h2-bOx"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="cameraSymbol">
+                                    <color key="titleColor" red="0.0" green="0.85098039219999999" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <segue destination="4Nb-oy-Z7b" kind="presentation" identifier="EPICCaptureSegue" id="tw5-Ae-Bcs"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -185,6 +199,7 @@
                             <constraint firstItem="Lxe-NC-NhS" firstAttribute="leading" secondItem="9Jf-BJ-3gu" secondAttribute="leading" id="3Cp-wd-JFB"/>
                             <constraint firstItem="0cp-oz-Xwd" firstAttribute="leading" secondItem="cQa-xo-EUt" secondAttribute="leading" id="4FG-5w-4K6"/>
                             <constraint firstItem="c9g-gD-11h" firstAttribute="top" secondItem="cQa-xo-EUt" secondAttribute="top" constant="208" id="CQV-Fx-kGm"/>
+                            <constraint firstItem="XpB-j5-gtM" firstAttribute="centerX" secondItem="cQa-xo-EUt" secondAttribute="centerX" id="CzA-18-pn9"/>
                             <constraint firstItem="9Nq-Vb-xXj" firstAttribute="leading" secondItem="c9g-gD-11h" secondAttribute="trailing" constant="8" id="DGl-hF-ukv"/>
                             <constraint firstItem="nd5-hq-bds" firstAttribute="leading" secondItem="cQa-xo-EUt" secondAttribute="leading" id="Enq-4x-Beb"/>
                             <constraint firstItem="9Jf-BJ-3gu" firstAttribute="firstBaseline" secondItem="cQa-xo-EUt" secondAttribute="topMargin" constant="168" id="FjD-gi-pUd"/>
@@ -197,6 +212,7 @@
                             <constraint firstItem="9Jf-BJ-3gu" firstAttribute="leading" secondItem="cQa-xo-EUt" secondAttribute="leading" constant="64" id="VUj-H4-nuD"/>
                             <constraint firstItem="nd5-hq-bds" firstAttribute="top" secondItem="cQa-xo-EUt" secondAttribute="topMargin" id="Xav-yA-sd2"/>
                             <constraint firstItem="aWe-je-687" firstAttribute="leading" secondItem="cQa-xo-EUt" secondAttribute="leading" id="gb3-OD-hq4"/>
+                            <constraint firstItem="txN-ic-lHA" firstAttribute="top" secondItem="XpB-j5-gtM" secondAttribute="bottom" constant="48" id="gij-xw-zev"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="9Jf-BJ-3gu" secondAttribute="trailing" priority="750" constant="64" id="tPZ-jK-K2r"/>
                             <constraint firstAttribute="trailing" secondItem="0cp-oz-Xwd" secondAttribute="trailing" id="tv8-KB-X6w"/>
                             <constraint firstItem="0cp-oz-Xwd" firstAttribute="top" secondItem="cQa-xo-EUt" secondAttribute="top" id="zwV-Xz-Z7u"/>
@@ -208,6 +224,7 @@
                     <connections>
                         <outlet property="allUserView" destination="c9g-gD-11h" id="3zz-Ao-GbN"/>
                         <outlet property="allUsersCollectionViewTopConstraint" destination="CQV-Fx-kGm" id="Dq9-p3-NCI"/>
+                        <outlet property="cameraButton" destination="XpB-j5-gtM" id="p3Z-Kf-dzV"/>
                         <outlet property="channelDateLabel" destination="Lxe-NC-NhS" id="Dxn-Xo-0YH"/>
                         <outlet property="channelDateLabelTopConstraint" destination="TK9-RG-t1q" id="YvL-4B-z8h"/>
                         <outlet property="channelNameLabel" destination="9Jf-BJ-3gu" id="roA-aq-pLm"/>
@@ -224,8 +241,27 @@
             </objects>
             <point key="canvasLocation" x="1094" y="214"/>
         </scene>
+        <!--Filtered Capture View Controller-->
+        <scene sceneID="mcR-rT-LjC">
+            <objects>
+                <viewController id="4Nb-oy-Z7b" customClass="FilteredCaptureViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="MZC-U8-jtw"/>
+                        <viewControllerLayoutGuide type="bottom" id="SaA-0j-Lfx"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="BOa-rE-ys1">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vxV-cd-fvL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1771" y="214"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="cameraSymbol" width="72" height="72"/>
         <image name="navBarShadowPattern_sym" width="8" height="8"/>
     </resources>
 </document>

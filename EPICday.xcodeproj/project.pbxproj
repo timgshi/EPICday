@@ -76,6 +76,7 @@
 		4B7D3A1C1C543E1A00E170FB /* EPICdayTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A1B1C543E1A00E170FB /* EPICdayTests.m */; };
 		4B7D3A271C543E1A00E170FB /* EPICdayUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A261C543E1A00E170FB /* EPICdayUITests.m */; };
 		4B7D3A361C54468F00E170FB /* ChannelStreamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */; };
+		4BB7EB3E1C8A7E3200AD6C83 /* QZCircleSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -196,6 +197,7 @@
 		4B7D3A281C543E1A00E170FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B7D3A341C54468F00E170FB /* ChannelStreamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelStreamViewController.h; sourceTree = "<group>"; };
 		4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelStreamViewController.m; sourceTree = "<group>"; };
+		4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QZCircleSegue.swift; sourceTree = "<group>"; };
 		A094ED59DDEBB334E8CBE3DC /* Pods_EPICday.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EPICday.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF35F7CA9648ED7E533241A5 /* Pods-EPICday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EPICday.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EPICday/Pods-EPICday.debug.xcconfig"; sourceTree = "<group>"; };
 		FE997C1BCE6A49E12F40752D /* Pods-EPICday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EPICday.release.xcconfig"; path = "Pods/Target Support Files/Pods-EPICday/Pods-EPICday.release.xcconfig"; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 				22EE1A041C8674E100FE7862 /* AllUserDelegateController.swift */,
 				22EE1A051C8674E100FE7862 /* UserThumbnailsView.swift */,
 				22EE1A061C8674E100FE7862 /* ThumbView.swift */,
+				4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */,
 			);
 			name = "Channel from Prolific";
 			sourceTree = "<group>";
@@ -706,6 +709,7 @@
 				22EE1A0A1C8674E100FE7862 /* ImageChannelViewController.swift in Sources */,
 				22EE1A101C8674E100FE7862 /* ThumbView.swift in Sources */,
 				4B7D3A031C543E1A00E170FB /* main.m in Sources */,
+				4BB7EB3E1C8A7E3200AD6C83 /* QZCircleSegue.swift in Sources */,
 				22083C1A1C694CC3002C947A /* ChannelGalleryPickerViewController.m in Sources */,
 				221D7ECD1C56E0680090A542 /* Post.m in Sources */,
 				22083C0D1C694771002C947A /* GalleryCollectionViewController.m in Sources */,
