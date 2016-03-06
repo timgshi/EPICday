@@ -118,7 +118,11 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
             
             let imageCell = blockCell as! imageUICollectionViewCell
 //            imageCell.image.sd_setImageWithPreviousCachedImageWithURL(photo.imageUrl, placeholderImage: nil, options: SDWebImageOptions.HighPriority, progress: nil, completed: nil)
-            imageCell.image.sd_setImageWithURL(photo.imageUrl)
+            if (photo.thumbnail != nil) {
+                imageCell.image.sd_setImageWithURL(photo.imageUrl, placeholderImage: photo.thumbnail)
+            } else {
+                imageCell.image.sd_setImageWithURL(photo.imageUrl)
+            }
             let userRef = photo.post.userRef
             let user = User(fromRef: userRef)
             let nameSignal = user.rac_valuesForKeyPath("displayName", observer: user)
