@@ -104,13 +104,14 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         let channelInitialLoadTaskSource = BFTaskCompletionSource()
         
         let baseRef = Firebase(url:"https://incandescent-inferno-9043.firebaseio.com/")
-        let channelRef = baseRef.childByAppendingPath("channels/-KA-1sbul1bQREXo6_sa")
+        let channelRef = baseRef.childByAppendingPath("channels/-KC9ab7YPlnvcydfGk-Q")
         channelRef.observeAuthEventWithBlock { (authData) -> Void in
             if authData == nil {
                 print("user was logged out")
                 self.navigationController?.popViewControllerAnimated(true)
             }
         }
+        channelRef.updateChildValues(["members/\(channelRef.authData.uid)": 1])
         self.selectedChannel = Channel(fromRef: channelRef, withInitialLoadTaskSource: channelInitialLoadTaskSource)
         
         self.dataSource = ChannelStreamDataSource(channel: self.selectedChannel, inCollectionView: self.imageCollectionView, andReuseIdentifier: "cell")
