@@ -447,7 +447,7 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
             self.fullScreenImageView.frame = self.originalThumbFrame
             self.fullScreenImageView.backgroundColor = UIColor.clearColor()
             }) { (finished) -> Void in
-                self.fullScreenImageView.hidden = false
+                self.fullScreenImageView.hidden = true
                 self.fullScreenImageView.image = nil
                 self.originalThumbFrame = CGRectZero
         }

@@ -77,7 +77,7 @@
 
 - (void)setupListeners {
     BFTaskCompletionSource *initalLoadTaskSource = [BFTaskCompletionSource taskCompletionSource];
-    [[self.channel.ref childByAppendingPath:@"posts"] observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+    [[self.channel.ref childByAppendingPath:@"posts"] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         NSDictionary *postsDict = snapshot.value;
         NSMutableArray *tasks = @[].mutableCopy;
         [postsDict enumerateKeysAndObjectsUsingBlock:^(NSString *key, id  _Nonnull obj, BOOL * _Nonnull stop) {
@@ -92,7 +92,7 @@
     }];
     [initalLoadTaskSource.task continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
         [self.collectionView reloadData];
-        [[self.channel.ref childByAppendingPath:@"posts"] observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
+        [[self.channel.ref childByAppendingPath:@"posts"] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
             Firebase *postRef = [[[self.channel.ref root] childByAppendingPath:@"posts"] childByAppendingPath:snapshot.key];
             [self insertPostFromRefAndSetupListeners:postRef updateCollectionView:YES];
         }];
@@ -122,20 +122,30 @@
 - (BFTask *)insertPostFromRefAndSetupListeners:(Firebase *)postRef updateCollectionView:(BOOL)updateCollectionView {
     return [[Post postFromRef:postRef inChannel:self.channel] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
         Post *post = task.result;
-        NSDictionary *postDict = @{@"post": post, @"photos": @[].mutableCopy};
-        NSInteger index = [self.posts indexOfObject:postDict inSortedRange:NSMakeRange(0, self.posts.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(NSDictionary *p1Dict, NSDictionary *p2Dict) {
-            Post *p1 = p1Dict[@"post"];
-            Post *p2 = p2Dict[@"post"];
-            return [p2.timestamp compare:p1.timestamp];
-        }];
-        [self.posts insertObject:postDict atIndex:index];
-        return [self setupListenersForPostDict:postDict updateCollectionView:updateCollectionView];
+        
+//        NSDictionary *postDict = @{@"post": post, @"photos": @[].mutableCopy};
+//        NSInteger index = [self.posts indexOfObject:postDict inSortedRange:NSMakeRange(0, self.posts.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(NSDictionary *p1Dict, NSDictionary *p2Dict) {
+//            Post *p1 = p1Dict[@"post"];
+//            Post *p2 = p2Dict[@"post"];
+//            return [p2.timestamp compare:p1.timestamp];
+//        }];
+//        [self.posts insertObject:postDict atIndex:index];
+        
+        if (![self.posts containsObject:post]) {
+            NSInteger index = [self.posts indexOfObject:post inSortedRange:NSMakeRange(0, self.posts.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(Post *p1, Post *p2) {
+                return [p2.timestamp compare:p1.timestamp];
+            }];
+            [self.posts insertObject:post atIndex:index];
+            return [self setupListenersForPost:post updateCollectionView:updateCollectionView];
+        } else {
+            return [BFTask taskWithResult:@YES];
+        }
+        
 //        return nil;
     }];
 }
 
-- (BFTask *)setupListenersForPostDict:(NSDictionary *)postDict updateCollectionView:(BOOL)updateCollectionView {
-    Post *post = postDict[@"post"];
+- (BFTask *)setupListenersForPost:(Post *)post updateCollectionView:(BOOL)updateCollectionView {
     BFTaskCompletionSource *initalLoadTaskSource = [BFTaskCompletionSource taskCompletionSource];
     [[post.ref childByAppendingPath:@"photos"] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         if ([snapshot.value isKindOfClass:[NSDictionary class]]) {
@@ -155,7 +165,7 @@
         }
     }];
     return [initalLoadTaskSource.task continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-        [[post.ref childByAppendingPath:@"photos"] observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
+        [[post.ref childByAppendingPath:@"photos"] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
             Firebase *photoRef = [[[post.ref root] childByAppendingPath:@"photos"] childByAppendingPath:snapshot.key];
             [self insertPhotoFromRefAndSetupListeners:photoRef inPost:post updateCollectionView:YES];
         }];
@@ -167,20 +177,29 @@
     return [[Photo photoFromRef:photoRef inPost:post] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
         BFTaskCompletionSource *taskSource = [BFTaskCompletionSource taskCompletionSource];
         Photo *photo = task.result;
+        BOOL photoExists = [self.allPhotos containsObject:photo];
         NSInteger allPhotosIndex = [self.allPhotos indexOfObject:photo inSortedRange:NSMakeRange(0, self.allPhotos.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
             return [p2.timestamp compare:p1.timestamp];
         }];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (updateCollectionView) {
                 [self.collectionView performBatchUpdates:^{
-                    [self.allPhotos insertObject:photo atIndex:allPhotosIndex];
-                    [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:allPhotosIndex inSection:0]]];
+                    if (photoExists) {
+                        [self.allPhotos replaceObjectAtIndex:allPhotosIndex withObject:photo];
+                        [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:allPhotosIndex inSection:0]]];
+                    } else {
+                        [self.allPhotos insertObject:photo atIndex:allPhotosIndex];
+                        [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:allPhotosIndex inSection:0]]];
+                    }
                 } completion:^(BOOL finished) {
                     [taskSource trySetResult:@YES];
                 }];
             } else {
-                
-                [self.allPhotos insertObject:photo atIndex:allPhotosIndex];
+                if (photoExists) {
+                    [self.allPhotos replaceObjectAtIndex:allPhotosIndex withObject:photo];
+                } else {
+                    [self.allPhotos insertObject:photo atIndex:allPhotosIndex];
+                }
                 [taskSource trySetResult:@YES];
             }
         });
