@@ -53,11 +53,16 @@
 - (Firebase *)currentPostRef {
     if (!_currentPostRef) {
         _currentPostRef = [[[self.selectedChannel.ref root] childByAppendingPath:@"posts"] childByAutoId];
-        [_currentPostRef setValue:@{
-                                    @"channel": self.selectedChannel.ref.key,
-                                    @"timestamp": @([[NSDate date] timeIntervalSince1970]),
-                                    @"user": self.selectedChannel.ref.authData.uid
-                                    }];
+        NSLog(@"%@", self.selectedChannel);
+        NSLog(@"%@", self.selectedChannel.ref.key);
+        NSLog(@"%@", self.selectedChannel.ref.authData.uid);
+        NSDictionary *postValues = @{
+                                     @"channel": self.selectedChannel.ref.key,
+                                     @"timestamp": @([[NSDate date] timeIntervalSince1970]),
+                                     @"user": self.selectedChannel.ref.authData.uid
+                                     };
+        NSLog(@"%@", postValues);
+        [_currentPostRef setValue:postValues];
         [self.selectedChannel.ref updateChildValues:@{[NSString stringWithFormat:@"posts/%@", _currentPostRef.key]: @YES}];
     }
     return _currentPostRef;
@@ -258,7 +263,8 @@
 
 - (void)backButtonPressed {
     [self.captureCamera stopCameraCapture];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)snapStillImage {
@@ -266,6 +272,7 @@
         self.photoCount++;
         self.photoCountLabel.text = [@(self.photoCount) stringValue];
         NSDictionary *metadata = self.captureCamera.currentCaptureMetadata;
+        NSLog(@"%@", metadata);
         [[PostUploadManager sharedManager] postPhotoFromData:processedJPEG withExifAttachments:metadata inChannel:self.selectedChannel withPostRef:self.currentPostRef];
     }];
 }

@@ -50,6 +50,10 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
     
     let transition = QZCircleSegue()
     
+    let fullScreenImageView = UIImageView()
+    var fullScreenImagePanGR: UIPanGestureRecognizer?
+    var originalThumbFrame = CGRectZero
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -101,6 +105,12 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         
         let baseRef = Firebase(url:"https://incandescent-inferno-9043.firebaseio.com/")
         let channelRef = baseRef.childByAppendingPath("channels/-KA-1sbul1bQREXo6_sa")
+        channelRef.observeAuthEventWithBlock { (authData) -> Void in
+            if authData == nil {
+                print("user was logged out")
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+        }
         self.selectedChannel = Channel(fromRef: channelRef, withInitialLoadTaskSource: channelInitialLoadTaskSource)
         
         
@@ -123,6 +133,10 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
                 .subscribeNext {
                     (next:AnyObject!) -> () in
                     imageCell.setTimeAgoTextFromDate(photo.timestamp)
+            }
+            imageCell.cellDidTapBlock = {
+                (blockCell:imageUICollectionViewCell) in
+                self.showFullScreenImageViewFromCell(blockCell, photo: photo)
             }
         }
         
@@ -154,6 +168,14 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         cameraButton.layer.shadowOpacity = 0.5
         cameraButton.layer.shadowRadius = 12.0
         
+        self.fullScreenImageView.backgroundColor = UIColor.clearColor()
+        self.fullScreenImageView.contentMode = .ScaleAspectFit
+        self.fullScreenImageView.hidden = true
+        self.fullScreenImageView.userInteractionEnabled = true
+        self.view.addSubview(self.fullScreenImageView)
+        self.fullScreenImagePanGR = UIPanGestureRecognizer(target: self, action: "handleFullScreenImageDrag:")
+        self.fullScreenImagePanGR!.enabled = false
+        self.fullScreenImageView.addGestureRecognizer(self.fullScreenImagePanGR!)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -191,7 +213,8 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
             /* Set the color to your transition manager*/
             self.transition.animationColor = UIColor(red: 0/255, green: 217/255, blue: 144/255, alpha: 1.0)
         }
-        let toViewController = segue.destinationViewController
+        let toViewController = segue.destinationViewController as! FilteredCaptureViewController
+        toViewController.selectedChannel = self.selectedChannel
         /* Set both, the origin and destination to your transition manager*/
         self.transition.fromViewController = self
         self.transition.toViewController = toViewController
@@ -405,25 +428,46 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         return CGRectMake(point.x - (size.width/2), point.y - (size.height/2), size.width, size.height)
     }
     
+    func showFullScreenImageViewFromCell(cell: imageUICollectionViewCell, photo: Photo) {
+        self.fullScreenImageView.sd_setImageWithURL(photo.imageUrl, placeholderImage: photo.thumbnail)
+        let convertedFrame = self.imageCollectionView.convertRect(cell.frame, toView: self.view)
+        self.originalThumbFrame = convertedFrame
+        self.fullScreenImageView.frame = convertedFrame
+        self.fullScreenImageView.hidden = false
+        UIView.animateWithDuration(0.3) { () -> Void in
+            self.fullScreenImageView.frame = self.view.bounds
+            self.fullScreenImageView.backgroundColor = UIColor.blackColor()
+            self.fullScreenImagePanGR?.enabled = true
+        }
+    }
     
+    func hideFullScreenImageView() {
+        self.fullScreenImagePanGR?.enabled = false
+        UIView.animateWithDuration(0.3, animations: { () -> Void in
+            self.fullScreenImageView.frame = self.originalThumbFrame
+            self.fullScreenImageView.backgroundColor = UIColor.clearColor()
+            }) { (finished) -> Void in
+                self.fullScreenImageView.hidden = false
+                self.fullScreenImageView.image = nil
+                self.originalThumbFrame = CGRectZero
+        }
+    }
     
-    
-    /////////////
-    
-    
-    //    func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation,
-    //        fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-    //
-    //            let animator = CKWaveCollectionViewAnimator()
-    //            animator.animationDuration = 0.7
-    //
-    //            if operation != UINavigationControllerOperation.Push {
-    //
-    //                animator.reversed = true
-    //            }
-    //            
-    //            return animator
-    //    }
+    func handleFullScreenImageDrag(sender:UIPanGestureRecognizer) {
+        let translation = sender.translationInView(self.view)
+        if (sender.state == .Began || sender.state == .Changed) {
+            var transform = CGAffineTransformMakeScale(0.8, 0.8)
+            transform = CGAffineTransformTranslate(transform, translation.x, translation.y)
+            self.fullScreenImageView.transform = transform
+        } else if (sender.state == .Ended) {
+            let maxTranslation = max(translation.x, translation.y)
+            if (maxTranslation >= 50) {
+                self.hideFullScreenImageView()
+            } else {
+                self.fullScreenImageView.transform = CGAffineTransformIdentity
+            }
+        }
+    }
     
     
 }

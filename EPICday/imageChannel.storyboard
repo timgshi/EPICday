@@ -125,7 +125,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionReusableView>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c9g-gD-11h" customClass="UserThumbnailsView" customModule="EPICday" customModuleProvider="target">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c9g-gD-11h" customClass="UserThumbnailsView" customModule="EPICday" customModuleProvider="target">
                                 <rect key="frame" x="64" y="208" width="399" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Ioe-jt-ZCz"/>
@@ -160,7 +160,7 @@
                                     <constraint firstAttribute="height" constant="8" id="rtY-IS-5pV"/>
                                 </constraints>
                             </imageView>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Nq-Vb-xXj">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Nq-Vb-xXj">
                                 <rect key="frame" x="471" y="212" width="65" height="32"/>
                                 <fontDescription key="fontDescription" name="FuturaLT-Book" family="Futura LT" pointSize="15"/>
                                 <state key="normal" title="View all ▸"/>
@@ -171,7 +171,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#montues" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Jf-BJ-3gu">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="#montues" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Jf-BJ-3gu">
                                 <rect key="frame" x="64" y="143" width="101" height="32"/>
                                 <fontDescription key="fontDescription" name="FuturaLT-Heavy" family="Futura LT" pointSize="24"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>

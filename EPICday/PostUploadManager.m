@@ -64,10 +64,12 @@ static NSString * const PostUploadManagerCompletionValuesPostRefUrlKey = @"PostU
         [[UIApplication sharedApplication] endBackgroundTask:taskId];
     }];
     Firebase *photoRef = [[[channel.ref root] childByAppendingPath:@"photos"] childByAutoId];
+    NSLog(@"%@", exifAttachments[@"{Exif}"]);
     NSDictionary *dimensions = @{
                                  @"width": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelYDimension],
                                  @"height": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelXDimension]
                                  };
+    NSLog(@"%@", dimensions);
     [photoRef setValue:@{
                          @"channel": channel.ref.key,
                          @"timestamp": @([[NSDate date] timeIntervalSince1970]),

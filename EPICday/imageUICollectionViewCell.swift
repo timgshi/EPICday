@@ -8,6 +8,7 @@
 
 import UIKit
 import FormatterKit
+import SDWebImage
 
 class imageUICollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var image: UIImageView!
@@ -18,6 +19,9 @@ class imageUICollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var cellWrapView: UIView!
     
     static let timeAgoFormatter = TTTTimeIntervalFormatter()
+    
+    var cellDidTapBlock:((imageUICollectionViewCell)->Void)!
+    var cellDidLongPressBlock:((imageUICollectionViewCell)->Void)!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -38,17 +42,36 @@ class imageUICollectionViewCell: UICollectionViewCell {
         timeAgoLabel.layer.shadowRadius = 4
         timeAgoLabel.layer.shadowOpacity = 1
         timeAgoLabel.layer.shouldRasterize = true;
+        
+        let tapGR = UITapGestureRecognizer(target: self, action: "handleTapGR:")
+        self.contentView.addGestureRecognizer(tapGR)
+        let longPressGR = UILongPressGestureRecognizer(target: self, action: "handleLongPressGR:")
+        self.contentView.addGestureRecognizer(longPressGR)
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         author.text = ""
         timeAgoLabel.text = ""
+        image.sd_cancelCurrentImageLoad()
         image.image = nil
+        self.cellDidTapBlock = nil
+        self.cellDidLongPressBlock = nil
     }
     
     func setTimeAgoTextFromDate(date: NSDate!) {
         let timeAgoText = imageUICollectionViewCell.timeAgoFormatter.stringForTimeIntervalFromDate(NSDate(), toDate: date)
         self.timeAgoLabel.text = timeAgoText
     }
+    @IBAction func handleTapGR(sender: UITapGestureRecognizer) {
+        if (sender.state == .Ended && self.cellDidTapBlock != nil) {
+            self.cellDidTapBlock(self)
+        }
+    }
+    @IBAction func handleLongPressGR(sender: UILongPressGestureRecognizer) {
+        if (sender.state == .Began && self.cellDidLongPressBlock != nil) {
+            self.cellDidLongPressBlock(self)
+        }
+    }
+    
 }
