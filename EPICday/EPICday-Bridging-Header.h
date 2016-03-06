@@ -14,3 +14,4 @@
 #import "Models.h"
 #import "ChannelStreamDataSource.h"
 #import "FilteredCaptureViewController.h"
+#import <FirebaseUI/FirebaseCollectionViewDataSource.h>

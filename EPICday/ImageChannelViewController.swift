@@ -113,7 +113,6 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         }
         self.selectedChannel = Channel(fromRef: channelRef, withInitialLoadTaskSource: channelInitialLoadTaskSource)
         
-        
         self.dataSource = ChannelStreamDataSource(channel: self.selectedChannel, inCollectionView: self.imageCollectionView, andReuseIdentifier: "cell")
         self.dataSource?.populateCell = { blockCell, photo in
             

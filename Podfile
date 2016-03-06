@@ -8,6 +8,7 @@ target 'EPICday' do
   pod 'ParseFacebookUtilsV4', '~> 1.11'
   pod 'FBSDKCoreKit', '~> 4.9'
   pod 'Firebase'
+  pod 'FirebaseUI/Core'
   pod 'AWSS3', '~> 2.3'
   pod 'AWSCognito', '~> 2.3'
   pod 'ReactiveCocoa', '~> 4.0'

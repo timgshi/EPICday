@@ -15,11 +15,20 @@ the following to your `Podfile`:
 pod 'FirebaseUI', '~> 0.3'       # Pull in all Firebase UI features
 ```
 
-If you don't want to use all of FirebaseUI, there are two subspecs, `Core` and `Auth` which can selectively install subsets of the full feature set.
+If you don't want to use all of FirebaseUI, there are multiple subspecs which can selectively install subsets of the full feature set:
 
 ```
-pod 'FirebaseUI/Core', '~> 0.3'  # Only pull in the "Core" FirebaseUI features
-pod 'FirebaseUI/Auth', '~> 0.3'  # Only pull in the "Auth" FirebaseUI features
+# Only pull in the "Core" FirebaseUI features
+pod 'FirebaseUI/Core', '~> 0.3'
+
+# Pull in the "Auth" FirebaseUI features: Facebook, Google, Twitter, and Email/Password auth
+pod 'FirebaseUI/Auth', '~> 0.3'
+
+# Selectively pull in Auth providers
+pod 'FirebaseUI/Facebook', '~> 0.3.2'
+pod 'FirebaseUI/Google', '~> 0.3.2'
+pod 'FirebaseUI/Twitter', '~> 0.3.2'
+pod 'FirebaseUI/Password', '~> 0.3.2'
 ```
 
 If you're including FirebaseUI in a Swift project, make sure you also have:
@@ -645,9 +654,9 @@ $ cd FirebaseUI-iOS
 $ ./setup.sh
 ```
 
-Note that `setup.sh` pulls in a number of provider frameworks (Facebook, Google), which need to be pulled in for local development. The debug build and framework release have the flag `LOCAL_BUILD=1` which uses the local frameworks installed via `setup.sh`, while the Cocoapods release doesn't have this flag set, so the appropriate Pod `#import` statements are used.
+Note that `setup.sh` pulls in a number of provider frameworks (Facebook, Google), which need to be pulled in for local development. The debug build and framework release have the flag `LOCAL_BUILD=1` which uses the local frameworks installed via `setup.sh`, while the CocoaPods release doesn't have this flag set, so the appropriate Pod `#import` statements are used.
 
-FirebaseUI makes use of XCode 7 features such as lightweight generics and `__kindof` annotations, but it should be backwards compatible to XCode 6 thanks to [XCodeMacros.h](https://github.com/firebase/FirebaseUI-iOS/blob/master/FirebaseUI/XCodeMacros.h).
+FirebaseUI makes use of Xcode 7 features such as lightweight generics and `__kindof` annotations, but it should be backwards compatible to Xcode 6 thanks to [XcodeMacros.h](https://github.com/firebase/FirebaseUI-iOS/blob/master/FirebaseUI/XcodeMacros.h).
 
 ## Deployment
 
@@ -655,7 +664,7 @@ FirebaseUI makes use of XCode 7 features such as lightweight generics and `__kin
 - tag and push the tag for this release
 - `./build.sh` to build a binary
 - `./create-docs.sh` to generate docs
-- From your macbook that already has been granted permissions to FirebaseUI Cocoapods, do `pod trunk push`
+- From your macbook that already has been granted permissions to FirebaseUI CocoaPods, do `pod trunk push`
 - `firebase deploy` the FirebaseUI website with newly generated docs
 
 ## Contributing to FirebaseUI
