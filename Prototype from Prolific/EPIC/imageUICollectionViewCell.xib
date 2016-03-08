@@ -20,6 +20,20 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NuM-Sr-pha">
                                 <rect key="frame" x="0.0" y="0.0" width="160" height="160"/>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="INQ-9r-0Qx">
+                                <rect key="frame" x="0.0" y="0.0" width="160" height="160"/>
+                            </imageView>
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t6M-V0-nPt">
+                                <rect key="frame" x="0.0" y="0.0" width="160" height="160"/>
+                                <color key="backgroundColor" red="0.0" green="0.85098039215686272" blue="0.56470588235294117" alpha="0.66666599999999998" colorSpace="calibratedRGB"/>
+                            </view>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="center" image="stolenSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="ady-OX-tEP">
+                                <rect key="frame" x="46" y="63" width="68" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="GTe-Uo-QVs"/>
+                                    <constraint firstAttribute="width" constant="68" id="Gwr-x7-qyy"/>
+                                </constraints>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chris Mayers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xpA-wR-U27">
                                 <rect key="frame" x="8" y="139" width="72.5" height="16"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="12"/>
@@ -35,12 +49,23 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="INQ-9r-0Qx" firstAttribute="leading" secondItem="Xri-gY-oax" secondAttribute="leading" id="2a0-Bo-6Wh"/>
                             <constraint firstAttribute="bottom" secondItem="6dz-54-fnY" secondAttribute="bottom" constant="4" id="5hC-cc-Xv7"/>
                             <constraint firstAttribute="trailing" secondItem="xpA-wR-U27" secondAttribute="trailing" constant="8" id="92z-ht-zIc"/>
+                            <constraint firstItem="xpA-wR-U27" firstAttribute="top" secondItem="t6M-V0-nPt" secondAttribute="bottom" id="Bzm-Z5-wia"/>
+                            <constraint firstItem="ady-OX-tEP" firstAttribute="centerX" secondItem="Xri-gY-oax" secondAttribute="centerX" id="C3Z-Ro-ehO"/>
+                            <constraint firstItem="t6M-V0-nPt" firstAttribute="leading" secondItem="Xri-gY-oax" secondAttribute="leading" id="Ws9-Wj-xwR"/>
+                            <constraint firstAttribute="trailing" secondItem="t6M-V0-nPt" secondAttribute="trailing" id="Wvo-pJ-CFb"/>
+                            <constraint firstItem="ady-OX-tEP" firstAttribute="centerY" secondItem="Xri-gY-oax" secondAttribute="centerY" id="WxO-Fx-i36"/>
+                            <constraint firstItem="t6M-V0-nPt" firstAttribute="top" secondItem="Xri-gY-oax" secondAttribute="top" id="Yla-HD-0JQ"/>
+                            <constraint firstAttribute="bottom" secondItem="INQ-9r-0Qx" secondAttribute="bottom" id="ZyN-gY-5Db"/>
+                            <constraint firstItem="INQ-9r-0Qx" firstAttribute="top" secondItem="Xri-gY-oax" secondAttribute="top" id="asc-17-60W"/>
                             <constraint firstItem="NuM-Sr-pha" firstAttribute="top" secondItem="Xri-gY-oax" secondAttribute="top" id="crP-hF-CV5"/>
                             <constraint firstAttribute="trailing" secondItem="6dz-54-fnY" secondAttribute="trailing" constant="8" id="f3a-9I-2Lk"/>
                             <constraint firstItem="6dz-54-fnY" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="xpA-wR-U27" secondAttribute="trailing" constant="8" id="grl-9R-2mc"/>
                             <constraint firstAttribute="bottom" secondItem="xpA-wR-U27" secondAttribute="baseline" constant="8" id="hKB-cl-yYV"/>
+                            <constraint firstAttribute="trailing" secondItem="INQ-9r-0Qx" secondAttribute="trailing" id="mzp-fy-HhF"/>
+                            <constraint firstAttribute="bottom" secondItem="t6M-V0-nPt" secondAttribute="bottom" id="nUY-qx-GOM"/>
                             <constraint firstItem="xpA-wR-U27" firstAttribute="leading" secondItem="Xri-gY-oax" secondAttribute="leading" constant="8" id="rV7-YQ-ZJV"/>
                             <constraint firstItem="NuM-Sr-pha" firstAttribute="leading" secondItem="Xri-gY-oax" secondAttribute="leading" id="v4n-xQ-tTk"/>
                             <constraint firstAttribute="trailing" secondItem="NuM-Sr-pha" secondAttribute="trailing" id="vmg-oV-J3X"/>
@@ -49,6 +74,7 @@
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="92z-ht-zIc"/>
+                                <exclude reference="Bzm-Z5-wia"/>
                             </mask>
                         </variation>
                     </view>
@@ -65,10 +91,16 @@
             <connections>
                 <outlet property="author" destination="xpA-wR-U27" id="O2T-wl-xf6"/>
                 <outlet property="cellWrapView" destination="Xri-gY-oax" id="j6B-9o-WDf"/>
+                <outlet property="greenOverlay" destination="t6M-V0-nPt" id="fFg-FQ-NSU"/>
                 <outlet property="image" destination="NuM-Sr-pha" id="KPs-bB-K9a"/>
+                <outlet property="imageGray" destination="INQ-9r-0Qx" id="wkk-H6-ogC"/>
+                <outlet property="stolenSymbol" destination="ady-OX-tEP" id="66e-WJ-3EA"/>
                 <outlet property="timeAgoLabel" destination="6dz-54-fnY" id="O7d-Wy-Cpy"/>
             </connections>
             <point key="canvasLocation" x="348" y="383"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="stolenSymbol" width="68" height="35"/>
+    </resources>
 </document>

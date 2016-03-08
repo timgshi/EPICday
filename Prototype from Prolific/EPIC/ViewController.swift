@@ -32,14 +32,14 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        scrollView.contentOffset.x = -scrollView.frame.width
+       // scrollView.contentOffset.x = -scrollView.frame.width
         
-        UIView.animateWithDuration(1.2, delay: 0, options: .CurveEaseInOut, animations: {
-            self.scrollView.contentOffset.x = 0
-            self.updateHorizontalParallaxScrollView(self.scrollView)
-            }, completion: { finished in
-                
-        })
+//        UIView.animateWithDuration(1.2, delay: 0, options: .CurveEaseInOut, animations: {
+//            self.scrollView.contentOffset.x = 0
+//            self.updateHorizontalParallaxScrollView(self.scrollView)
+//            }, completion: { finished in
+//                
+//        })
         
     }
     func scrollViewDidScroll(scrollView: UIScrollView) {

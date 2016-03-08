@@ -83,7 +83,7 @@ class ParallaxView: UIView,UIScrollViewDelegate {
         layoutIfNeeded()
         let l: CGFloat = frame.width * 0.05
         
-        motionManager.startGyroUpdatesWithRate(frame.width / 1800.0) { offset in
+        motionManager.startGyroUpdatesWithRate(0) { offset in
             self.parallaxOffset.horizontal  = limit(offset.horizontal + self.parallaxOffset.horizontal, -l, l)
             self.parallaxOffset.vertical    = limit(offset.vertical + self.parallaxOffset.vertical, -l, l)
             self.updatingScroll()

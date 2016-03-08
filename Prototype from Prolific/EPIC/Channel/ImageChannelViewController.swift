@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import ARNTransitionAnimator
 
-class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CollectionViewWaterfallLayoutDelegate, allUsersCollectionViewLayoutDelegate{
+class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CollectionViewWaterfallLayoutDelegate, allUsersCollectionViewLayoutDelegate, UIGestureRecognizerDelegate, ARNImageTransitionZoomable{
 
     //outlet Constraints
     @IBOutlet weak var channelNameLabelTopConstraint: NSLayoutConstraint!
@@ -35,13 +36,39 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UI
     
     @IBOutlet weak var allUserView: UserThumbnailsView!
     
+    @IBOutlet weak var cameraButton: SpringButton!
+    
+    var transition = QZCircleSegue()
+    
+    var animator : ARNTransitionAnimator?
+    
+    weak var selectedImageView : UIImageView?
+    
+    
     let imageData = imageDataSource().DataSetted
     let userDataStore = userDataSource().DataSetted
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        selectedImageView?.contentMode = UIViewContentMode.ScaleAspectFit
+        
+        
+        
+        let lpgr = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
+        lpgr.minimumPressDuration = 0.333
+        lpgr.allowableMovement = 20.0
+        lpgr.delegate = self
+        self.imageCollectionView.addGestureRecognizer(lpgr)
+        
+        
+//        let tgr = UITapGestureRecognizer(target: self, action: "handleTap:")
+//        //        lpgr.allowableMovement = 100.0
+//        tgr.delegate = self
+//        self.imageCollectionView.addGestureRecognizer(tgr)
+//        UIView.setAnimationsEnabled(false)
         //print(imageData)
         
 //        let storeChannelNameLabelTopConstraint = channelNameLabelTopConstraint.constant
@@ -53,8 +80,10 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UI
         // Paint Work
         channelNameLabel.attributedText = NSAttributedString(string: channelNameLabel.text!, attributes: NSDictionary.headerExtraLargeScalableAttributes(UIColor.colorEpicBlack(), alignmentValue: NSTextAlignment.Left, fontSize: 24, kernValue: 0.8))
         channelDateLabel.attributedText = NSAttributedString(string: channelDateLabel.text!, attributes: NSDictionary.subtextMediumAttributes())
-        viewAllUsersButton.setAttributedTitle(NSAttributedString(string: "View all ▸", attributes:  NSDictionary.callToActionFloatAttributes(NSTextAlignment.Left)), forState: .Normal)
         
+        
+        viewAllUsersButton.setAttributedTitle(NSAttributedString(string: "View all ▸", attributes:  NSDictionary.callToActionFloatAttributes(NSTextAlignment.Left)), forState: .Normal)
+//        viewAllUsersButton.buttonWithType
 
         
         
@@ -87,20 +116,51 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UI
         channelDateLabel.alpha = 0
         viewAllUsersButton.alpha = 0
         imageCollectionView.alpha = 0
+        cameraButton.alpha = 0
+        
+        
+        cameraButton.layer.cornerRadius = 36
+        cameraButton.layer.shadowColor = UIColor.blackColor().CGColor
+        cameraButton.layer.shadowOpacity = 0.33
+        cameraButton.layer.shadowRadius = 12.0
+        cameraButton.layer.shadowOffset = CGSize(width: 0, height: 12)
+        cameraButton.layer.masksToBounds = false
+        cameraButton.layer.rasterizationScale = 2.0
+        cameraButton.layer.shouldRasterize = true
+        
+        
+//        UIView.setAnimationsEnabled(true)
+        
+        
+        
+        
+        
+        
+        
         
         
     }
     
+    override func viewDidDisappear(animated: Bool) {
+        self.channelNameLabel.alpha = 0
+        self.channelDateLabel.alpha = 0
+        self.viewAllUsersButton.alpha = 0
+        self.imageCollectionView.alpha = 0
+        self.allUserView.alpha = 0
+        self.cameraButton.alpha = 0
+    }
+    
+    
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        
         
         var urls = [NSURL]()
         for i in 1...20 {
             urls.append(NSURL(string:"http://lorempixel.com/400/400/people/\(i)/")!)
         }
-        
-        allUserView.usersThumbURLs = urls
-        
         
         
         
@@ -112,16 +172,76 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UI
             }, completion: nil)
         UIView.animateWithDuration(0.3, delay: 0.2, options: .CurveLinear, animations: {
             self.viewAllUsersButton.alpha = 1
+            self.allUserView.alpha = 1
             }, completion: nil)
         UIView.animateWithDuration(0.3, delay: 0.4, options: .CurveLinear, animations: {
             self.imageCollectionView.alpha = 1
             }, completion: nil)
         
+        allUserView.usersThumbURLs = urls
+        
+
+        cameraButton.animation = "squeezeUp"
+        cameraButton.curve = "easeOut"
+        cameraButton.force = 0.7
+        cameraButton.duration = 0.77
+        cameraButton.delay = 0.4
+        cameraButton.animate()
+        view.bringSubviewToFront(cameraButton)
+        
+        delay(1.5) {
+            self.performSegueWithIdentifier("segueToAlert", sender: self)
+            self.cameraButton.userInteractionEnabled = true
+            self.imageCollectionView.userInteractionEnabled = true
+        }
+        
     }
+    
+    
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,Int64(delay * Double(NSEC_PER_SEC))),dispatch_get_main_queue(), closure)
+    }
+
+    
+    
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "segueCamera") {
+            /* Send the button to your transition manager */
+            self.transition.animationChild = cameraButton
+            /* Set the color to your transition manager*/
+            self.transition.animationColor = UIColor(red: 0/255, green: 217/255, blue: 144/255, alpha: 1.0)
+            
+            let toViewController = segue.destinationViewController as! XMCCameraViewController
+            /* Set both, the origin and destination to your transition manager*/
+            self.transition.fromViewController = self
+            self.transition.toViewController = toViewController
+            /* Add the transition manager to your transitioningDelegate View Controller*/
+            toViewController.transitioningDelegate = transition
+        } else if segue.identifier == "segueToSelectedImageView"{
+            let indexPaths = imageCollectionView.indexPathsForSelectedItems()
+            print(indexPaths)
+            let indexPath = indexPaths![0] as NSIndexPath
+            //            var previewItem = DataSetted[indexPath.row]
+            
+            let selectedImageSetup = segue.destinationViewController as! selectedImageViewController
+//            selectedImageSetup.imageView.image = UIImageVi
+            
+        }
+        
+        
+    }
+    
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+
     }
     
 
@@ -271,6 +391,9 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UI
         
             // Add image to cell
             subCell.image.image = UIImage(named: imageData[indexPath.row].imageName)
+        subCell.imageGray.image = subCell.convertToGrayScale(UIImage(named: imageData[indexPath.row].imageName)!)
+        subCell.imageGray.alpha = 0
+        
             //cell.author.text = imageData[indexPath.row].author
             subCell.author.attributedText =  NSAttributedString(string: imageData[indexPath.row].author, attributes:  NSDictionary.headerSmallAttributes(UIColor.colorEpicWhite(), alignmentValue: NSTextAlignment.Natural))
             
@@ -326,6 +449,247 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UI
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //// somthing
+    
+    
+    
+    func showInteractive() {
+        let storyboard = UIStoryboard(name: "imageChannel", bundle: nil)
+        let controller = storyboard.instantiateViewControllerWithIdentifier("selectedImageViewController") as! selectedImageViewController
+        
+        let operationType: ARNTransitionAnimatorOperation = .Present
+        let animator = ARNTransitionAnimator(operationType: operationType, fromVC: self, toVC: controller)
+        
+        animator.presentationBeforeHandler = { [weak self, weak controller] (containerView: UIView, transitionContext: UIViewControllerContextTransitioning) in
+            containerView.addSubview(self!.view)
+            containerView.addSubview(controller!.view)
+//            controller!.closeButton.hidden = true
+            
+            controller!.view.layoutIfNeeded()
+            
+            let sourceImageView = self!.createTransitionImageView()
+            let destinationImageView = controller!.createTransitionImageView()
+            
+            containerView.addSubview(sourceImageView)
+            
+            controller!.presentationBeforeAction()
+            
+            controller!.view.alpha = 0.0
+            
+            
+            
+            animator.presentationAnimationHandler = { (containerView: UIView, percentComplete: CGFloat) in
+                sourceImageView.frame = destinationImageView.frame
+                
+                controller!.view.alpha = 1.0
+            }
+            
+            animator.presentationCompletionHandler = { (containerView: UIView, completeTransition: Bool) in
+                sourceImageView.removeFromSuperview()
+                self!.presentationCompletionAction(completeTransition)
+                controller!.presentationCompletionAction(completeTransition)
+            }
+        }
+        
+        animator.dismissalBeforeHandler = { [weak self, weak controller] (containerView: UIView, transitionContext: UIViewControllerContextTransitioning) in
+            containerView.addSubview(self!.view)
+            containerView.bringSubviewToFront(controller!.view)
+            
+            let sourceImageView = controller!.createTransitionImageView()
+            let destinationImageView = self!.createTransitionImageView()
+            containerView.addSubview(sourceImageView)
+            
+            let sourceFrame = sourceImageView.frame;
+            let destFrame = destinationImageView.frame;
+            
+            controller!.dismissalBeforeAction()
+            
+            animator.dismissalCancelAnimationHandler = { (containerView: UIView) in
+                sourceImageView.frame = sourceFrame
+                controller!.view.alpha = 1.0
+            }
+            
+            animator.dismissalAnimationHandler = { (containerView: UIView, percentComplete: CGFloat) in
+                if percentComplete < -0.05 { return }
+                let frame = CGRectMake(
+                    destFrame.origin.x - (destFrame.origin.x - sourceFrame.origin.x) * (1 - percentComplete),
+                    destFrame.origin.y - (destFrame.origin.y - sourceFrame.origin.y) * (1 - percentComplete),
+                    destFrame.size.width + (sourceFrame.size.width - destFrame.size.width) * (1 - percentComplete),
+                    destFrame.size.height + (sourceFrame.size.height - destFrame.size.height) * (1 - percentComplete)
+                )
+                sourceImageView.frame = frame
+                controller!.view.alpha = 1.0 - (1.0 * percentComplete)
+            }
+            
+            animator.dismissalCompletionHandler = { (containerView: UIView, completeTransition: Bool) in
+                self!.dismissalCompletionAction(completeTransition)
+                controller!.dismissalCompletionAction(completeTransition)
+                sourceImageView.removeFromSuperview()
+            }
+        }
+        
+        self.animator = animator
+
+    }
+    
+
+    
+    
+    
+    // MARK: - ARNImageTransitionZoomable
+    
+        func createTransitionImageView() -> UIImageView {
+            let imageView = UIImageView(image: self.selectedImageView!.image)
+            imageView.contentMode = UIViewContentMode.ScaleAspectFit//self.selectedImageView!.contentMode
+//            imageView.backgroundColor = UIColor.purpleColor()
+            imageView.clipsToBounds = true
+            imageView.userInteractionEnabled = false
+            imageView.frame = self.selectedImageView!.convertRect(self.selectedImageView!.frame, toView: self.view)
+            
+            return imageView
+        }
+    
+    func presentationCompletionAction(completeTransition: Bool) {
+        self.selectedImageView?.hidden = true
+    }
+    
+    func dismissalCompletionAction(completeTransition: Bool) {
+        self.selectedImageView?.hidden = false
+    }
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - UICollectionViewDelegate
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! imageUICollectionViewCell
+        let controller = UIStoryboard(name: "imageChannel", bundle: nil).instantiateViewControllerWithIdentifier("selectedImageViewController") as! selectedImageViewController
+        let segueID = "segueToSelectedImageView"
+        performSegueWithIdentifier(segueID, sender: cell.image.image)
+        self.selectedImageView = cell.image
+//        controller.imageView.transform = CGAffineTransformMakeScale(0.5, 0.5)
+        //segueToSelectedImageView
+        print(cell.image.image)
+        print(indexPath)
+//        self.handleTransition()
+    }
+    
+    //MARK: Prepare Segue
+    
+    
+
+    
+    
+    
+
+    
+    func handleTransition() {
+        let storyboard = UIStoryboard(name: "imageChannel", bundle: nil)
+        let controller = storyboard.instantiateViewControllerWithIdentifier("selectedImageViewController") as! selectedImageViewController
+        controller.transitioningDelegate = controller
+//        controller.imageView.image = self.selectedImageView?.image
+        self.presentViewController(controller, animated: true, completion: nil)
+    }
+
+    
+    
+    
+    func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
+        if gestureReconizer.state != UIGestureRecognizerState.Began {
+            
+            let p = gestureReconizer.locationInView(self.imageCollectionView)
+            let indexPath = self.imageCollectionView.indexPathForItemAtPoint(p)
+            
+            if let index = indexPath {
+                let cell = imageCollectionView.cellForItemAtIndexPath(indexPath!) as! imageUICollectionViewCell
+                //var cell = self.imageCollectionView.cellForItemAtIndexPath(index)
+                // do stuff with your cell, for example print the indexPath
+                UIView.animateWithDuration(0.05, delay: 0, options: .CurveLinear, animations: {
+                    cell.transform = CGAffineTransformMakeScale(0.888, 0.888)
+                    cell.stolenSymbol.alpha = 1
+                    cell.imageGray.alpha = 1
+                    cell.greenOverlay.alpha = 1
+                    //cell.
+                    }, completion: nil )
+                
+                print(index.row)
+            }
+            
+            
+            
+        }
+        
+        if gestureReconizer.state == UIGestureRecognizerState.Ended {
+            
+            let p = gestureReconizer.locationInView(self.imageCollectionView)
+            let indexPath = self.imageCollectionView.indexPathForItemAtPoint(p)
+            
+            if let index = indexPath {
+                let cell = imageCollectionView.cellForItemAtIndexPath(indexPath!) as! imageUICollectionViewCell
+                // do stuff with your cell, for example print the indexPath
+                //cell?.transform = CGAffineTransformMakeScale(1.1, 1.1)
+                UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 15, options: .CurveLinear , animations: {
+                    cell.transform = CGAffineTransformMakeScale(1, 1)
+                    
+                    }, completion: nil)
+                UIView.animateWithDuration(0.1, animations: {
+                
+                    cell.imageGray.alpha = 0
+                    cell.greenOverlay.alpha = 0
+                })
+                
+                UIView.animateWithDuration(1, animations: {
+                    
+                   cell.stolenSymbol.alpha = 0
+                })
+                
+                print(index.row)
+            } else {
+                print("Could not find index path")
+            }
+
+        }
+        
+        
+    }
+    
+
+//    func handleTap(gestureReconizer: UITapGestureRecognizer) {
+//        if gestureReconizer.state != .Ended {
+//            return
+//        }
+//        
+//        let p = gestureReconizer.locationInView(self.imageCollectionView)
+//        let indexPath = self.imageCollectionView.indexPathForItemAtPoint(p)
+//        
+//        if let index = indexPath {
+//            var cell = self.imageCollectionView.cellForItemAtIndexPath(index)
+//            // do stuff with your cell, for example print the indexPath
+//            cell?.transform = CGAffineTransformMakeScale(1.1, 1.1)
+//            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 5, options: .CurveLinear , animations: {
+//                cell?.transform = CGAffineTransformMakeScale(1, 1)
+//                }, completion: nil)
+//            
+//            print(index.row)
+//        } else {
+//            print("Could not find index path")
+//        }
+//    }
+    
+    
     /////////////
     
     
@@ -343,5 +707,16 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, UI
     //            return animator
     //    }
     
+    func minimizeView(sender: AnyObject) {
+        SpringAnimation.springEaseInOut(0.5, animations: {
+            self.view.transform = CGAffineTransformMakeScale(0.9, 0.9)
+        })
+    }
+    
+    func maximizeView(sender: AnyObject) {
+        SpringAnimation.springEaseInOut(0.5, animations: {
+            self.view.transform = CGAffineTransformMakeScale(1, 1)
+        })
+    }
     
 }

@@ -2,6 +2,8 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="jcL-js-m6l">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="Montreal-Bold.ttf">
@@ -15,7 +17,51 @@
                 <viewControllerPlaceholder storyboardName="imageChannel" referencedIdentifier="mainImageChannel" id="ScE-ij-pMR" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RJC-hm-VHP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-729.5" y="-57"/>
+            <point key="canvasLocation" x="-1569" y="239"/>
+        </scene>
+        <!--Loading View Controller-->
+        <scene sceneID="IY5-f6-X4F">
+            <objects>
+                <viewController id="oAG-hK-sq0" customClass="loadingViewController" customModule="EPIC" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="YEQ-iE-PwC"/>
+                        <viewControllerLayoutGuide type="bottom" id="Crz-bj-KBo"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="9Xg-RG-Qnl">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C9d-d8-utZ" customClass="EPICLoadingAnimationView" customModule="EPIC" customModuleProvider="target">
+                                <rect key="frame" x="236" y="236" width="128" height="128"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="9f8-Sm-ToU"/>
+                                    <constraint firstAttribute="width" constant="128" id="THk-Ac-R3k"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="C9d-d8-utZ" firstAttribute="width" secondItem="9Xg-RG-Qnl" secondAttribute="width" id="MUB-YK-Wlq"/>
+                            <constraint firstItem="C9d-d8-utZ" firstAttribute="height" secondItem="9Xg-RG-Qnl" secondAttribute="height" id="PjP-LO-iTv"/>
+                            <constraint firstItem="C9d-d8-utZ" firstAttribute="centerY" secondItem="9Xg-RG-Qnl" secondAttribute="centerY" id="Smt-T7-6gw"/>
+                            <constraint firstItem="C9d-d8-utZ" firstAttribute="centerX" secondItem="9Xg-RG-Qnl" secondAttribute="centerX" id="c56-Wl-R9W"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="MUB-YK-Wlq"/>
+                                <exclude reference="PjP-LO-iTv"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="animationView" destination="C9d-d8-utZ" id="HWM-Gc-g0P"/>
+                        <segue destination="ScE-ij-pMR" kind="showDetail" identifier="segueToMainView" animates="NO" action="showViewController:sender:" id="I7j-Ia-wet"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sdM-sn-NrK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1022" y="-127"/>
         </scene>
         <!--Presentation View Controller-->
         <scene sceneID="VRe-jc-yYi">
@@ -69,7 +115,7 @@
                                     <outlet property="indicatorLabel" destination="XDa-2a-lrW" id="fb1-Xl-LwM"/>
                                 </connections>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KMi-sl-zml">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KMi-sl-zml" customClass="SpringButton" customModule="EPIC" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="536" width="600" height="64"/>
                                 <color key="backgroundColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -82,9 +128,26 @@
                                 </state>
                                 <connections>
                                     <action selector="startButtonDidTouch:" destination="jcL-js-m6l" eventType="touchUpInside" id="Bau-TH-Uhn"/>
-                                    <segue destination="ScE-ij-pMR" kind="show" id="L70-cr-g5R"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cRP-cB-Ab9">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pSI-8j-cKh" customClass="animateLogoView" customModule="EPIC" customModuleProvider="target">
+                                        <rect key="frame" x="44" y="-31" width="512" height="512"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="pSI-8j-cKh" secondAttribute="height" multiplier="1:1" id="OxV-s8-I8q"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="pSI-8j-cKh" firstAttribute="centerX" secondItem="cRP-cB-Ab9" secondAttribute="centerX" id="S4I-H2-8yb"/>
+                                    <constraint firstItem="pSI-8j-cKh" firstAttribute="centerY" secondItem="cRP-cB-Ab9" secondAttribute="centerY" multiplier="0.749625" id="oi3-DO-T6r"/>
+                                    <constraint firstItem="pSI-8j-cKh" firstAttribute="width" secondItem="cRP-cB-Ab9" secondAttribute="width" multiplier="0.853333" id="sR8-et-SXH"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -93,17 +156,26 @@
                             <constraint firstAttribute="trailing" secondItem="QcG-bK-zER" secondAttribute="trailing" id="DvM-7z-6TC"/>
                             <constraint firstAttribute="trailing" secondItem="KMi-sl-zml" secondAttribute="trailing" id="JrA-8a-f5e"/>
                             <constraint firstItem="KMi-sl-zml" firstAttribute="leading" secondItem="OzH-Xu-0ao" secondAttribute="leading" id="MeH-L6-X8H"/>
+                            <constraint firstItem="cRP-cB-Ab9" firstAttribute="height" secondItem="OzH-Xu-0ao" secondAttribute="height" id="P8x-V9-XRE"/>
+                            <constraint firstItem="cRP-cB-Ab9" firstAttribute="centerX" secondItem="OzH-Xu-0ao" secondAttribute="centerX" id="Sc7-Yb-kXB"/>
+                            <constraint firstItem="cRP-cB-Ab9" firstAttribute="centerY" secondItem="OzH-Xu-0ao" secondAttribute="centerY" id="WjD-6Q-TDy"/>
+                            <constraint firstItem="cRP-cB-Ab9" firstAttribute="width" secondItem="OzH-Xu-0ao" secondAttribute="width" id="iyX-Mg-Avc"/>
                             <constraint firstItem="vcx-AE-YOi" firstAttribute="top" secondItem="QcG-bK-zER" secondAttribute="bottom" id="l1A-mT-69l"/>
                             <constraint firstItem="vcx-AE-YOi" firstAttribute="top" secondItem="KMi-sl-zml" secondAttribute="bottom" id="oBS-LA-own"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="animationLoadLogoView" destination="pSI-8j-cKh" id="BE4-hw-RI2"/>
+                        <outlet property="buttonBottomConstraint" destination="oBS-LA-own" id="fCE-EP-GTI"/>
                         <outlet property="getStartButton" destination="KMi-sl-zml" id="t0q-Oc-s87"/>
+                        <outlet property="overlayView" destination="cRP-cB-Ab9" id="pFy-tZ-hZT"/>
+                        <outlet property="parallaxView" destination="QcG-bK-zER" id="hcp-gt-gP1"/>
+                        <segue destination="oAG-hK-sq0" kind="showDetail" identifier="segueToLoading" animates="NO" action="showViewController:sender:" id="nPy-VI-R6p"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1WD-gH-S6R" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-295" y="-254"/>
+            <point key="canvasLocation" x="-244" y="-248"/>
         </scene>
         <!--Test View Controller-->
         <scene sceneID="0f0-Zn-p3m">

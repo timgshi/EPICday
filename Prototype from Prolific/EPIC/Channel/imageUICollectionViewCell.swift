@@ -10,9 +10,12 @@ import UIKit
 
 class imageUICollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var image: UIImageView!
+    @IBOutlet weak var imageGray: UIImageView!
+    @IBOutlet weak var greenOverlay: UIView!
     
     @IBOutlet weak var author: UILabel!
     
+    @IBOutlet weak var stolenSymbol: UIImageView!
     @IBOutlet weak var timeAgoLabel: UILabel!
     @IBOutlet weak var cellWrapView: UIView!
     
@@ -34,5 +37,21 @@ class imageUICollectionViewCell: UICollectionViewCell {
         timeAgoLabel.layer.shadowRadius = 4
         timeAgoLabel.layer.shadowOpacity = 1
         timeAgoLabel.layer.shouldRasterize = true;
+    }
+    
+    func convertToGrayScale(image: UIImage) -> UIImage {
+        let imageRect:CGRect = CGRectMake(0, 0, image.size.width, image.size.height)
+        let colorSpace = CGColorSpaceCreateDeviceGray()
+        let width = image.size.width
+        let height = image.size.height
+        
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.None.rawValue)
+        let context = CGBitmapContextCreate(nil, Int(width), Int(height), 8, 0, colorSpace, bitmapInfo.rawValue)
+        
+        CGContextDrawImage(context, imageRect, image.CGImage)
+        let imageRef = CGBitmapContextCreateImage(context)
+        let newImage = UIImage(CGImage: imageRef!)
+        
+        return newImage
     }
 }
