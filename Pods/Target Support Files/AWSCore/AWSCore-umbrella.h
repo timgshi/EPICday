@@ -53,6 +53,7 @@
 #import "AWSURLResponseSerialization.h"
 #import "AWSValidation.h"
 #import "AWSClientContext.h"
+#import "AWSInfo.h"
 #import "AWSService.h"
 #import "AWSServiceEnum.h"
 #import "AWSSTS.h"

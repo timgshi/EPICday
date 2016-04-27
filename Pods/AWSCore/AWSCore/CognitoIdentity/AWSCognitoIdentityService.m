@@ -27,6 +27,11 @@
 #import "AWSSynchronizedMutableDictionary.h"
 #import "AWSCognitoIdentityResources.h"
 
+#import "FABKitProtocol.h"
+#import "Fabric+FABKits.h"
+
+static NSString *const AWSInfoCognitoIdentity = @"CognitoIdentity";
+
 @interface AWSCognitoIdentityResponseSerializer : AWSJSONResponseSerializer
 
 @end
@@ -38,9 +43,6 @@
 static NSDictionary *errorCodeDictionary = nil;
 + (void)initialize {
     errorCodeDictionary = @{
-                            @"IncompleteSignature" : @(AWSCognitoIdentityErrorIncompleteSignature),
-                            @"InvalidClientTokenId" : @(AWSCognitoIdentityErrorInvalidClientTokenId),
-                            @"MissingAuthenticationToken" : @(AWSCognitoIdentityErrorMissingAuthenticationToken),
                             @"DeveloperUserAlreadyRegisteredException" : @(AWSCognitoIdentityErrorDeveloperUserAlreadyRegistered),
                             @"ExternalServiceException" : @(AWSCognitoIdentityErrorExternalService),
                             @"InternalErrorException" : @(AWSCognitoIdentityErrorInternalError),
@@ -80,11 +82,19 @@ static NSDictionary *errorCodeDictionary = nil;
             }
             return responseObject;
         }
+    }
 
+    if (!*error && response.statusCode/100 != 2) {
+        *error = [NSError errorWithDomain:AWSCognitoIdentityErrorDomain
+                                     code:AWSCognitoIdentityErrorUnknown
+                                 userInfo:nil];
+    }
+
+    if (!*error && [responseObject isKindOfClass:[NSDictionary class]]) {
         if (self.outputClass) {
             responseObject = [AWSMTLJSONAdapter modelOfClass:self.outputClass
-                                       fromJSONDictionary:responseObject
-                                                    error:error];
+                                          fromJSONDictionary:responseObject
+                                                       error:error];
         }
     }
 
@@ -99,32 +109,6 @@ static NSDictionary *errorCodeDictionary = nil;
 
 @implementation AWSCognitoIdentityRequestRetryHandler
 
-- (AWSNetworkingRetryType)shouldRetry:(uint32_t)currentRetryCount
-                             response:(NSHTTPURLResponse *)response
-                                 data:(NSData *)data
-                                error:(NSError *)error {
-    AWSNetworkingRetryType retryType = [super shouldRetry:currentRetryCount
-                                                 response:response
-                                                     data:data
-                                                    error:error];
-    if(retryType == AWSNetworkingRetryTypeShouldNotRetry
-       && [error.domain isEqualToString:AWSCognitoIdentityErrorDomain]
-       && currentRetryCount < self.maxRetryCount) {
-        switch (error.code) {
-            case AWSCognitoIdentityErrorIncompleteSignature:
-            case AWSCognitoIdentityErrorInvalidClientTokenId:
-            case AWSCognitoIdentityErrorMissingAuthenticationToken:
-                retryType = AWSNetworkingRetryTypeShouldRefreshCredentialsAndRetry;
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    return retryType;
-}
-
 @end
 
 @interface AWSRequest()
@@ -133,7 +117,7 @@ static NSDictionary *errorCodeDictionary = nil;
 
 @end
 
-@interface AWSCognitoIdentity()
+@interface AWSCognitoIdentity() <FABKit>
 
 @property (nonatomic, strong) AWSNetworking *networking;
 @property (nonatomic, strong) AWSServiceConfiguration *configuration;
@@ -148,22 +132,77 @@ static NSDictionary *errorCodeDictionary = nil;
 
 @implementation AWSCognitoIdentity
 
+#pragma mark - Fabric
+
++ (NSString *)bundleIdentifier {
+    return @"com.amazonaws.sdk.ios.AWSCognitoIdentity";
+}
+
++ (NSString *)kitDisplayVersion {
+    return AWSiOSSDKVersion;
+}
+
++ (void)internalInitializeIfNeeded {
+    // Retrieves the configuration from info.plist.
+    Class fabricClass = NSClassFromString(@"Fabric");
+    if (fabricClass
+        && [fabricClass respondsToSelector:@selector(configurationDictionaryForKitClass:)]) {
+        NSDictionary *configurationDictionary = [fabricClass configurationDictionaryForKitClass:[AWSCognitoIdentity class]];
+        NSString *defaultRegionTypeString = configurationDictionary[@"AWSDefaultRegionType"];
+        AWSRegionType defaultRegionType = [defaultRegionTypeString aws_regionTypeValue];
+        NSString *cognitoIdentityRegionTypeString = configurationDictionary[@"AWSCognitoIdentityRegionType"];
+        AWSRegionType cognitoIdentityRegionType = [cognitoIdentityRegionTypeString aws_regionTypeValue];
+        NSString *cognitoIdentityPoolId = configurationDictionary[@"AWSCognitoIdentityPoolId"];
+
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            // Performs some basic configuration check.
+            if (cognitoIdentityPoolId
+                && defaultRegionType != AWSRegionUnknown
+                && cognitoIdentityRegionType != AWSRegionUnknown) {
+                // Sets up the AWS Mobile SDK.
+                AWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProvider alloc] initWithRegionType:cognitoIdentityRegionType
+                                                                                                                identityPoolId:cognitoIdentityPoolId];
+                AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:defaultRegionType
+                                                                                     credentialsProvider:credentialsProvider];
+                [configuration addUserAgentProductToken:@"fabric"];
+                AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = configuration;
+                AWSLogInfo(@"The default Cognito credentials provider and service configuration were successfully initialized.");
+            } else {
+                // The configuration values from info.plist seem invalid.
+                AWSLogWarn(@"Could not find valid 'AWSDefaultRegionType', 'AWSCognitoRegionType', and 'AWSCognitoIdentityPoolId' values in info.plist. Unable to set the default Cognito credentials provider and service configuration. Please follow the instructions on this website and manually set up the AWS Mobile SDK for iOS. http://docs.aws.amazon.com/mobile/sdkforios/developerguide/setup.html");
+            }
+        });
+    } else {
+        AWSLogError(@"Fabric is not available.");
+    }
+}
+
+#pragma mark - Setup
+
 static AWSSynchronizedMutableDictionary *_serviceClients = nil;
 
 + (instancetype)defaultCognitoIdentity {
-    if (![AWSServiceManager defaultServiceManager].defaultServiceConfiguration) {
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                       reason:@"`defaultServiceConfiguration` is `nil`. You need to set it before using this method."
-                                     userInfo:nil];
-    }
-
     static AWSCognitoIdentity *_defaultCognitoIdentity = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        _defaultCognitoIdentity = [[AWSCognitoIdentity alloc] initWithConfiguration:AWSServiceManager.defaultServiceManager.defaultServiceConfiguration];
-#pragma clang diagnostic pop
+        AWSServiceConfiguration *serviceConfiguration = nil;
+        AWSServiceInfo *serviceInfo = [[AWSInfo defaultAWSInfo] defaultServiceInfo:AWSInfoCognitoIdentity];
+        if (serviceInfo) {
+            serviceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:serviceInfo.region
+                                                               credentialsProvider:serviceInfo.cognitoCredentialsProvider];
+        }
+
+        if (!serviceConfiguration) {
+            serviceConfiguration = [AWSServiceManager defaultServiceManager].defaultServiceConfiguration;
+        }
+
+        if (!serviceConfiguration) {
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                           reason:@"The service configuration is `nil`. You need to configure `Info.plist` or set `defaultServiceConfiguration` before using this method."
+                                         userInfo:nil];
+        }
+        _defaultCognitoIdentity = [[AWSCognitoIdentity alloc] initWithConfiguration:serviceConfiguration];
     });
 
     return _defaultCognitoIdentity;
@@ -174,15 +213,28 @@ static AWSSynchronizedMutableDictionary *_serviceClients = nil;
     dispatch_once(&onceToken, ^{
         _serviceClients = [AWSSynchronizedMutableDictionary new];
     });
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [_serviceClients setObject:[[AWSCognitoIdentity alloc] initWithConfiguration:configuration]
                         forKey:key];
-#pragma clang diagnostic pop
 }
 
 + (instancetype)CognitoIdentityForKey:(NSString *)key {
-    return [_serviceClients objectForKey:key];
+    @synchronized(self) {
+        AWSCognitoIdentity *serviceClient = [_serviceClients objectForKey:key];
+        if (serviceClient) {
+            return serviceClient;
+        }
+
+        AWSServiceInfo *serviceInfo = [[AWSInfo defaultAWSInfo] serviceInfo:AWSInfoCognitoIdentity
+                                                                     forKey:key];
+        if (serviceInfo) {
+            AWSServiceConfiguration *serviceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:serviceInfo.region
+                                                                                        credentialsProvider:serviceInfo.cognitoCredentialsProvider];
+            [AWSCognitoIdentity registerCognitoIdentityWithConfiguration:serviceConfiguration
+                                                                  forKey:key];
+        }
+
+        return [_serviceClients objectForKey:key];
+    }
 }
 
 + (void)removeCognitoIdentityForKey:(NSString *)key {

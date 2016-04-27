@@ -133,7 +133,7 @@ typedef NS_ENUM(NSInteger, AWSS3PresignedURLErrorType) {
 + (void)registerS3PreSignedURLBuilderWithConfiguration:(AWSServiceConfiguration *)configuration forKey:(NSString *)key;
 
 /**
- Retrieves the service client associated with the key. You need to call `+ registerS3PreSignedURLBuilderWithConfiguration:forKey:` before invoking this method. If `+ registerS3PreSignedURLBuilderWithConfiguration:forKey:` has not been called in advance or the key does not exist, this method returns `nil`.
+ Retrieves the service client associated with the key. You need to call `+ registerS3PreSignedURLBuilderWithConfiguration:forKey:` before invoking this method.
 
  For example, set the default service configuration in `- application:didFinishLaunchingWithOptions:`
 
@@ -184,16 +184,6 @@ typedef NS_ENUM(NSInteger, AWSS3PresignedURLErrorType) {
  @param key A string to identify the service client.
  */
 + (void)removeS3PreSignedURLBuilderForKey:(NSString *)key;
-
-/**
- a AWSServiceConfiguration object contains credentialsProvider and endpoint instance.
- credentialProvider contains accessKey, secretKey, and maybe sessionKey if STS credential is used.
- endpoint contains regionType and serviceType. If endpoint is nil, AWSRegionUSEast1 and AWSServiceS3 will be used as default value.
-
- @warning This method has been deprecated. Use `+ registerS3PreSignedURLBuilderWithConfiguration:forKey:` and `+ S3PreSignedURLBuilderForKey:` instead.
-
- */
-- (instancetype)initWithConfiguration:(AWSServiceConfiguration *)configuration __attribute__ ((deprecated("Use '+ registerS3PreSignedURLBuilderWithConfiguration:forKey:' and '+ S3PreSignedURLBuilderForKey:' instead.")));
 
 /**
  Build a time-limited pre-signed URL to get object from S3, return nil if build process failed.
@@ -247,15 +237,6 @@ typedef NS_ENUM(NSInteger, AWSS3PresignedURLErrorType) {
  Expected content-md5 header of the request. If set, this header value will be included when calculating the signature and future requests must include the same content-md5 header value to access the presigned URL. This parameter is ignored unless HTTPMethod is equal to AWSHTTPMethodPUT. Default is nil.
  */
 @property (nonatomic, strong) NSString * _Nullable contentMD5;
-
-/**
- VersionId used in the pre signed URL. Default is nil.
- 
- @warning This method has been deprecated. Use `additionalParameters` to set versionId instead. If both has been set, this property will be overwritten by the value in `additionalParameters`.
- 
- @see additionalParameters
- */
-@property (nonatomic, strong) NSString * _Nullable versionId __attribute__ ((deprecated("Use 'additionalParameters' instead to set versionId.")));
 
 /**
  This NSDictionary can contains additional request parameters to be included in the pre-signed URL. Adding additional request parameters enables more advanced pre-signed URLs, such as accessing Amazon S3's torrent resource for an object, or for specifying a version ID when accessing an object. Default is emtpy.
