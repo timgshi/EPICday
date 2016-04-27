@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="e2C-xf-Z7C" customClass="imageUICollectionViewCell" customModule="EPICday" customModuleProvider="target">
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="e2C-xf-Z7C" customClass="ImageCell" customModule="EPICday" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="160" height="160"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -21,30 +21,51 @@
                                 <rect key="frame" x="0.0" y="0.0" width="160" height="160"/>
                                 <gestureRecognizers/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Chris Mayers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xpA-wR-U27">
-                                <rect key="frame" x="8" y="139" width="73" height="16"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chris Mayers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xpA-wR-U27">
+                                <rect key="frame" x="8" y="140" width="73" height="16"/>
                                 <gestureRecognizers/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="12"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="2h" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6dz-54-fnY">
-                                <rect key="frame" x="112" y="140" width="40" height="16"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2h" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6dz-54-fnY">
+                                <rect key="frame" x="138" y="140" width="14" height="16"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="12"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E7w-X8-cMT">
+                                <rect key="frame" x="0.0" y="0.0" width="160" height="160"/>
+                                <subviews>
+                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="stolenSymbol" translatesAutoresizingMaskIntoConstraints="NO" id="0Zm-9S-dwc">
+                                        <rect key="frame" x="46" y="63" width="68" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="68" id="96O-GG-UZP"/>
+                                            <constraint firstAttribute="height" constant="35" id="Wsq-za-e7x"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.85098039219999999" blue="0.56470588239999997" alpha="0.66666599999999998" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="0Zm-9S-dwc" firstAttribute="centerY" secondItem="E7w-X8-cMT" secondAttribute="centerY" id="awJ-Ok-3cr"/>
+                                    <constraint firstItem="0Zm-9S-dwc" firstAttribute="centerX" secondItem="E7w-X8-cMT" secondAttribute="centerX" id="mwC-Vz-3ej"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="E7w-X8-cMT" secondAttribute="trailing" id="5Yf-RF-Y9o"/>
                             <constraint firstAttribute="bottom" secondItem="6dz-54-fnY" secondAttribute="bottom" constant="4" id="5hC-cc-Xv7"/>
                             <constraint firstAttribute="trailing" secondItem="xpA-wR-U27" secondAttribute="trailing" constant="8" id="92z-ht-zIc"/>
+                            <constraint firstAttribute="bottom" secondItem="E7w-X8-cMT" secondAttribute="bottom" id="WLt-BY-zuU"/>
                             <constraint firstItem="NuM-Sr-pha" firstAttribute="top" secondItem="Xri-gY-oax" secondAttribute="top" id="crP-hF-CV5"/>
                             <constraint firstAttribute="trailing" secondItem="6dz-54-fnY" secondAttribute="trailing" constant="8" id="f3a-9I-2Lk"/>
                             <constraint firstItem="6dz-54-fnY" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="xpA-wR-U27" secondAttribute="trailing" constant="8" id="grl-9R-2mc"/>
                             <constraint firstAttribute="bottom" secondItem="xpA-wR-U27" secondAttribute="baseline" constant="8" id="hKB-cl-yYV"/>
+                            <constraint firstItem="E7w-X8-cMT" firstAttribute="leading" secondItem="Xri-gY-oax" secondAttribute="leading" id="jdg-mw-Iru"/>
                             <constraint firstItem="xpA-wR-U27" firstAttribute="leading" secondItem="Xri-gY-oax" secondAttribute="leading" constant="8" id="rV7-YQ-ZJV"/>
+                            <constraint firstItem="E7w-X8-cMT" firstAttribute="top" secondItem="Xri-gY-oax" secondAttribute="top" id="s3O-Iy-EQn"/>
                             <constraint firstItem="NuM-Sr-pha" firstAttribute="leading" secondItem="Xri-gY-oax" secondAttribute="leading" id="v4n-xQ-tTk"/>
                             <constraint firstAttribute="trailing" secondItem="NuM-Sr-pha" secondAttribute="trailing" id="vmg-oV-J3X"/>
                             <constraint firstAttribute="bottom" secondItem="NuM-Sr-pha" secondAttribute="bottom" id="ydU-mq-Iwh"/>
@@ -66,12 +87,16 @@
             </constraints>
             <size key="customSize" width="450" height="342"/>
             <connections>
-                <outlet property="author" destination="xpA-wR-U27" id="O2T-wl-xf6"/>
-                <outlet property="cellWrapView" destination="Xri-gY-oax" id="j6B-9o-WDf"/>
-                <outlet property="image" destination="NuM-Sr-pha" id="KPs-bB-K9a"/>
+                <outlet property="authorLabel" destination="xpA-wR-U27" id="PhS-HR-mgH"/>
+                <outlet property="imageView" destination="NuM-Sr-pha" id="G37-y3-RlY"/>
+                <outlet property="stolenOverlayView" destination="E7w-X8-cMT" id="iwg-mX-EuG"/>
                 <outlet property="timeAgoLabel" destination="6dz-54-fnY" id="O7d-Wy-Cpy"/>
+                <outlet property="wrapperView" destination="Xri-gY-oax" id="c0X-wb-J5B"/>
             </connections>
             <point key="canvasLocation" x="348" y="383"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="stolenSymbol" width="68" height="35"/>
+    </resources>
 </document>

@@ -13,7 +13,7 @@ import Bolts
 import SDWebImage
 import ReactiveCocoa
 
-class ImageChannelViewController: UIViewController, UICollectionViewDelegate, CollectionViewWaterfallLayoutDelegate, allUsersCollectionViewLayoutDelegate{
+class ImageChannelViewController: UIViewController, UICollectionViewDelegate, CollectionViewWaterfallLayoutDelegate, allUsersCollectionViewLayoutDelegate {
 
     //outlet Constraints
     @IBOutlet weak var channelNameLabelTopConstraint: NSLayoutConstraint!
@@ -69,9 +69,6 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         channelDateLabel.attributedText = NSAttributedString(string: channelDateLabel.text!, attributes: NSDictionary.subtextMediumAttributes())
         viewAllUsersButton.setAttributedTitle(NSAttributedString(string: "View all ▸", attributes:  NSDictionary.callToActionFloatAttributes(NSTextAlignment.Left)), forState: .Normal)
         
-
-        
-        
         navigationBar.backgroundColor = UIColor.colorEpicWhite()
         navigationBar.shadowImage = UIImage()
         navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
@@ -100,19 +97,17 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         self.dataSource = ChannelStreamDataSource(channel: self.selectedChannel, inCollectionView: self.imageCollectionView, andReuseIdentifier: "cell")
         self.dataSource?.populateCell = { blockCell, photo in
             
-            let imageCell = blockCell as! imageUICollectionViewCell
-            if (photo.thumbnail != nil) {
-                imageCell.image.sd_setImageWithURL(photo.imageUrl, placeholderImage: photo.thumbnail)
-            } else {
-                imageCell.image.sd_setImageWithURL(photo.imageUrl)
-            }
+            let imageCell = blockCell as! ImageCell
+            imageCell.photo = photo
+            imageCell.delegate = self
+            
             let userRef = photo.post.userRef
             let user = User(fromRef: userRef)
             let nameSignal = user.rac_valuesForKeyPath("displayName", observer: user)
                                 .takeUntil(imageCell.rac_prepareForReuseSignal)
             nameSignal.subscribeNext {
                 (next:AnyObject!) -> () in
-                imageCell.author.text = user.displayName
+                imageCell.authorLabel.text = user.displayName
             }
             photo.rac_valuesForKeyPath("timestamp", observer: photo)
                 .takeUntil(imageCell.rac_prepareForReuseSignal)
@@ -121,7 +116,7 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
                     imageCell.setTimeAgoTextFromDate(photo.timestamp)
             }
             imageCell.cellDidTapBlock = {
-                (blockCell:imageUICollectionViewCell) in
+                (blockCell:ImageCell) in
                 self.showFullScreenImageViewFromCell(blockCell, photo: photo)
             }
         }
@@ -328,23 +323,18 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        cell.contentView.alpha = 0
         
-        if let cell = cell as? imageUICollectionViewCell {
-            cell.cellWrapView.alpha = 0
-            
-            UIView.animateWithDuration(0.4) {
-                cell.cellWrapView.alpha = 1
-            }
+        UIView.animateWithDuration(0.4) {
+            cell.contentView.alpha = 1
         }
-        
-        
     }
     
     func centerPointWithSizeToFrame(point: CGPoint, size: CGSize) -> CGRect {
         return CGRectMake(point.x - (size.width/2), point.y - (size.height/2), size.width, size.height)
     }
     
-    func showFullScreenImageViewFromCell(cell: imageUICollectionViewCell, photo: Photo) {
+    func showFullScreenImageViewFromCell(cell: ImageCell, photo: Photo) {
         self.fullScreenImageView.sd_setImageWithURL(photo.imageUrl, placeholderImage: photo.thumbnail)
         let convertedFrame = self.imageCollectionView.convertRect(cell.frame, toView: self.view)
         self.originalThumbFrame = convertedFrame
@@ -382,6 +372,16 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
             } else {
                 self.fullScreenImageView.transform = CGAffineTransformIdentity
             }
+        }
+    }
+}
+
+extension ImageChannelViewController: ImageCellDelegate {
+    func imageCellDidLongPress(cell: ImageCell) {
+        if let image = cell.image {
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        } else {
+            self.presentViewController(UIAlertController(title: "Error", message: "Could not save photo", preferredStyle: .Alert), animated: true, completion: nil)
         }
     }
 }

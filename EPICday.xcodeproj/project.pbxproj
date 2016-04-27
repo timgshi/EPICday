@@ -57,7 +57,7 @@
 		22CE2D6A1C7FB2C100DE582D /* PostUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 22CE2D691C7FB2C100DE582D /* PostUploadManager.m */; };
 		22EE1A071C8674E100FE7862 /* imageChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22EE19FD1C8674E100FE7862 /* imageChannel.storyboard */; };
 		22EE1A081C8674E100FE7862 /* imageUICollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22EE19FE1C8674E100FE7862 /* imageUICollectionViewCell.xib */; };
-		22EE1A091C8674E100FE7862 /* imageUICollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE19FF1C8674E100FE7862 /* imageUICollectionViewCell.swift */; };
+		22EE1A091C8674E100FE7862 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE19FF1C8674E100FE7862 /* ImageCell.swift */; };
 		22EE1A0A1C8674E100FE7862 /* ImageChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A001C8674E100FE7862 /* ImageChannelViewController.swift */; };
 		22EE1A0C1C8674E100FE7862 /* allUsersCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A021C8674E100FE7862 /* allUsersCollectionViewLayout.swift */; };
 		22EE1A0D1C8674E100FE7862 /* CollectionViewWaterfallLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A031C8674E100FE7862 /* CollectionViewWaterfallLayout.swift */; };
@@ -167,7 +167,7 @@
 		22CE2D691C7FB2C100DE582D /* PostUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostUploadManager.m; sourceTree = "<group>"; };
 		22EE19FD1C8674E100FE7862 /* imageChannel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = imageChannel.storyboard; sourceTree = "<group>"; };
 		22EE19FE1C8674E100FE7862 /* imageUICollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = imageUICollectionViewCell.xib; sourceTree = "<group>"; };
-		22EE19FF1C8674E100FE7862 /* imageUICollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = imageUICollectionViewCell.swift; sourceTree = "<group>"; };
+		22EE19FF1C8674E100FE7862 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		22EE1A001C8674E100FE7862 /* ImageChannelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageChannelViewController.swift; sourceTree = "<group>"; };
 		22EE1A021C8674E100FE7862 /* allUsersCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = allUsersCollectionViewLayout.swift; sourceTree = "<group>"; };
 		22EE1A031C8674E100FE7862 /* CollectionViewWaterfallLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewWaterfallLayout.swift; sourceTree = "<group>"; };
@@ -365,7 +365,7 @@
 			children = (
 				22EE19FD1C8674E100FE7862 /* imageChannel.storyboard */,
 				22EE19FE1C8674E100FE7862 /* imageUICollectionViewCell.xib */,
-				22EE19FF1C8674E100FE7862 /* imageUICollectionViewCell.swift */,
+				22EE19FF1C8674E100FE7862 /* ImageCell.swift */,
 				22EE1A001C8674E100FE7862 /* ImageChannelViewController.swift */,
 				22EE1A021C8674E100FE7862 /* allUsersCollectionViewLayout.swift */,
 				22EE1A031C8674E100FE7862 /* CollectionViewWaterfallLayout.swift */,
@@ -672,7 +672,7 @@
 			files = (
 				227A2E781C65898D00777ACE /* FilteredCaptureViewController.m in Sources */,
 				221D7ECA1C56E05F0090A542 /* Photo.m in Sources */,
-				22EE1A091C8674E100FE7862 /* imageUICollectionViewCell.swift in Sources */,
+				22EE1A091C8674E100FE7862 /* ImageCell.swift in Sources */,
 				22083C131C6947D7002C947A /* UICollectionView+Convenience.m in Sources */,
 				22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */,
 				221D7ED31C56E3A30090A542 /* PhotoCollectionViewCell.m in Sources */,
