@@ -20,8 +20,8 @@ class imageUICollectionViewCell: UICollectionViewCell {
     
     static let timeAgoFormatter = TTTTimeIntervalFormatter()
     
-    var cellDidTapBlock:((imageUICollectionViewCell)->Void)!
-    var cellDidLongPressBlock:((imageUICollectionViewCell)->Void)!
+    var cellDidTapBlock: (imageUICollectionViewCell -> Void)?
+    var cellDidLongPressBlock: (imageUICollectionViewCell -> Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -43,9 +43,9 @@ class imageUICollectionViewCell: UICollectionViewCell {
         timeAgoLabel.layer.shadowOpacity = 1
         timeAgoLabel.layer.shouldRasterize = true;
         
-        let tapGR = UITapGestureRecognizer(target: self, action: "handleTapGR:")
+        let tapGR = UITapGestureRecognizer(target: self, action: #selector(handleTapGR))
         self.contentView.addGestureRecognizer(tapGR)
-        let longPressGR = UILongPressGestureRecognizer(target: self, action: "handleLongPressGR:")
+        let longPressGR = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGR))
         self.contentView.addGestureRecognizer(longPressGR)
     }
     
@@ -64,13 +64,18 @@ class imageUICollectionViewCell: UICollectionViewCell {
         self.timeAgoLabel.text = timeAgoText
     }
     @IBAction func handleTapGR(sender: UITapGestureRecognizer) {
-        if (sender.state == .Ended && self.cellDidTapBlock != nil) {
-            self.cellDidTapBlock(self)
+        if sender.state == .Ended {
+            if let block = cellDidTapBlock {
+                block(self)
+            }
         }
     }
+    
     @IBAction func handleLongPressGR(sender: UILongPressGestureRecognizer) {
-        if (sender.state == .Began && self.cellDidLongPressBlock != nil) {
-            self.cellDidLongPressBlock(self)
+        if sender.state == .Began  {
+            if let block = self.cellDidLongPressBlock {
+                block(self)
+            }
         }
     }
     
