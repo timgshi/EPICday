@@ -22,7 +22,7 @@ class IntroViewController: UIViewController {
                         print("Login failed.");
                     } else {
                         print("Logged in!");
-                        let cachedUserProfile = authData.providerData["cachedUserProfile"] as AnyObject!;
+                        let cachedUserProfile = authData.providerData["cachedUserProfile"] as! [NSObject: AnyObject];
                         let newUser =
                             [
                                 "provider": authData.provider,

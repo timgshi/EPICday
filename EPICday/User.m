@@ -28,9 +28,11 @@
     User *user = [self new];
     user.ref = ref;
     [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        user.displayName = snapshot.value[@"display_name"];
-        user.avatarUrl = [NSURL URLWithString:snapshot.value[@"profile_image_url"]];
-        [taskSource trySetResult:user];
+        if (![snapshot.value isKindOfClass:[NSNull class]]) {
+            user.displayName = snapshot.value[@"display_name"];
+            user.avatarUrl = [NSURL URLWithString:snapshot.value[@"profile_image_url"]];
+            [taskSource trySetResult:user];
+        }
     }];
     return taskSource.task;
 }
