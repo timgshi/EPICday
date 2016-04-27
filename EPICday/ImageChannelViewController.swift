@@ -41,10 +41,6 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
     
     @IBOutlet weak var cameraButton: UIButton!
     
-    let imageData = imageDataSource().DataSetted
-    let userDataStore = userDataSource().DataSetted
-    let screenSize: CGRect = UIScreen.mainScreen().bounds
-    
     var dataSource: ChannelStreamDataSource?
     var selectedChannel: Channel?
     
@@ -65,12 +61,7 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //print(imageData)
-        
-//        let storeChannelNameLabelTopConstraint = channelNameLabelTopConstraint.constant
-//        let storeChannelNameLabelLeftConstaint = channelNameLabelLeftConstaint.constant
-//        let storeChannelDateLabelTopConstraint = channelDateLabelTopConstraint.constant
-//        let storeAllUsersCollectionViewTopConstraint = allUsersCollectionViewTopConstraint.constant
+
         //store Constraint
 
         // Paint Work
@@ -85,15 +76,7 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         navigationBar.shadowImage = UIImage()
         navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
         
-        
-            //imageData.populateData()
-        
-        // Attach imageCollectionView datasource and delegate
-//        imageCollectionView.dataSource  = self
         imageCollectionView.delegate = self
-         //
-        
-
         
         //Layout setup
         setupCollectionView()
@@ -104,7 +87,7 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         let channelInitialLoadTaskSource = BFTaskCompletionSource()
         
         let baseRef = Firebase(url:"https://incandescent-inferno-9043.firebaseio.com/")
-        let channelRef = baseRef.childByAppendingPath("channels/-KC9ab7YPlnvcydfGk-Q")
+        let channelRef = baseRef.childByAppendingPath("channels/-KA-1sbul1bQREXo6_sa")
         channelRef.observeAuthEventWithBlock { (authData) -> Void in
             if authData == nil {
                 print("user was logged out")
@@ -118,7 +101,6 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         self.dataSource?.populateCell = { blockCell, photo in
             
             let imageCell = blockCell as! imageUICollectionViewCell
-//            imageCell.image.sd_setImageWithPreviousCachedImageWithURL(photo.imageUrl, placeholderImage: nil, options: SDWebImageOptions.HighPriority, progress: nil, completed: nil)
             if (photo.thumbnail != nil) {
                 imageCell.image.sd_setImageWithURL(photo.imageUrl, placeholderImage: photo.thumbnail)
             } else {
@@ -177,25 +159,13 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         self.fullScreenImageView.hidden = true
         self.fullScreenImageView.userInteractionEnabled = true
         self.view.addSubview(self.fullScreenImageView)
-        self.fullScreenImagePanGR = UIPanGestureRecognizer(target: self, action: "handleFullScreenImageDrag:")
+        self.fullScreenImagePanGR = UIPanGestureRecognizer(target: self, action: #selector(handleFullScreenImageDrag))
         self.fullScreenImagePanGR!.enabled = false
         self.fullScreenImageView.addGestureRecognizer(self.fullScreenImagePanGR!)
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-//        var urls = [NSURL]()
-//        for i in 1...20 {
-//            urls.append(NSURL(string:"https://lorempixel.com/400/400/people/\(i)/")!)
-//        }
-//        
-//        allUserView.usersThumbURLs = urls
-        
-        
-        
-        
-        
         
         UIView.animateWithDuration(0.3, delay: 0.0, options: .CurveLinear, animations: {
             self.channelNameLabel.alpha = 1
@@ -207,8 +177,7 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         UIView.animateWithDuration(0.3, delay: 0.4, options: .CurveLinear, animations: {
             self.imageCollectionView.alpha = 1
             }, completion: nil)
-        
-    }
+            }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "EPICCaptureSegue") {
@@ -232,17 +201,6 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
         let fromNavBarShadowTopConstraint: CGFloat = 144
@@ -254,10 +212,10 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         let fromChannelNameLabelKernValue: CGFloat = 0.8
         let toChannelNameLabelKernValue: CGFloat = 0.3
         
-        let fromChannelNameLabelLeftConstaint: CGFloat = 64//self.storeChannelNameLabelLeftConstaint
-        let toChannelNameLabelLeftConstaint: CGFloat = 28 // self.screenSize.width / 2 - channelNameLabel.frame.size.width / 2 // when it has the icon to the menu change it to 48
+        let fromChannelNameLabelLeftConstaint: CGFloat = 64
+        let toChannelNameLabelLeftConstaint: CGFloat = 28
         
-        let fromChannelNameLabelTopConstaint: CGFloat = 168//self.storeChannelNameLabelTopConstraint
+        let fromChannelNameLabelTopConstaint: CGFloat = 168
         let toChannelNameLabelTopConstaint: CGFloat = 48
         
         let fromNavBarShadowStartFade: CGFloat = 144
@@ -267,7 +225,7 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         
         let fontsizeFactorMultiple: CGFloat = (fromChannelNameLabelFontSize-toChannelNameLabelFontSize)/scrollPositionTouchNav
         let kernValueFactorMultiple: CGFloat = (fromChannelNameLabelKernValue-toChannelNameLabelKernValue)/scrollPositionTouchNav
-        let channelNameLabelLeftMultiple: CGFloat = (fromChannelNameLabelLeftConstaint-toChannelNameLabelLeftConstaint)/scrollPositionTouchNav//((self.screenSize.width / 2 - channelNameLabel.frame.size.width / 2) - CGFloat(fromChannelNameLabelLeftConstaint) ) /  scrollPositionTouchNav
+        let channelNameLabelLeftMultiple: CGFloat = (fromChannelNameLabelLeftConstaint-toChannelNameLabelLeftConstaint)/scrollPositionTouchNav
         let NavBarShadowTopConstraintMultiple: CGFloat = (fromNavBarShadowTopConstraint-toNavBarShadowTopConstraint)/scrollPositionTouchNav
         
         channelDateLabelTopConstraint.constant = 192 - ( scrollView.contentOffset.y  ) * (0.66)
@@ -356,36 +314,6 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         
     }
     
-    
-    
-    
-    //MARK: - CollectionView Delegate Methods
-    
-    //** Number of Cells in the CollectionView */
-//    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        if (collectionView == imageCollectionView){
-//            return imageData.count
-//        }
-//        return 0
-//    }
-//    
-//    
-//    //** Create a basic CollectionView Cell */
-//    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-//  
-//            // Create the cell and return the cell
-//            let subCell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! imageUICollectionViewCell
-//        
-//            // Add image to cell
-//            subCell.image.image = UIImage(named: imageData[indexPath.row].imageName)
-//            //cell.author.text = imageData[indexPath.row].author
-//            subCell.author.attributedText =  NSAttributedString(string: imageData[indexPath.row].author, attributes:  NSDictionary.headerSmallAttributes(UIColor.colorEpicWhite(), alignmentValue: NSTextAlignment.Natural))
-//            
-//            return subCell
-//
-//        
-//    }
-    
     // MARK: WaterfallLayoutDelegate
     
     func collectionView(collectionView: UICollectionView, layout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
@@ -394,21 +322,10 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         if (collectionView == imageCollectionView) {
             let photo = self.dataSource?.photoAtIndexPath(indexPath)
             cellSize = (photo?.size)!
-//            let getImage : UIImage = UIImage(named: imageData[indexPath.row].imageName)!
-//            let imageSize = getImage.size
-//                cellSize = imageSize
             
         }
         return cellSize
     }
-
-    
-    
-    ///////////////////////////
-    
-    
-    
-    
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         
@@ -422,11 +339,6 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         
         
     }
-    
-    
-    ////////////////////
-    
-    
     
     func centerPointWithSizeToFrame(point: CGPoint, size: CGSize) -> CGRect {
         return CGRectMake(point.x - (size.width/2), point.y - (size.height/2), size.width, size.height)
@@ -472,6 +384,4 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
             }
         }
     }
-    
-    
 }

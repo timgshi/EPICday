@@ -59,7 +59,6 @@
 		22EE1A081C8674E100FE7862 /* imageUICollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22EE19FE1C8674E100FE7862 /* imageUICollectionViewCell.xib */; };
 		22EE1A091C8674E100FE7862 /* imageUICollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE19FF1C8674E100FE7862 /* imageUICollectionViewCell.swift */; };
 		22EE1A0A1C8674E100FE7862 /* ImageChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A001C8674E100FE7862 /* ImageChannelViewController.swift */; };
-		22EE1A0B1C8674E100FE7862 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A011C8674E100FE7862 /* DataSource.swift */; };
 		22EE1A0C1C8674E100FE7862 /* allUsersCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A021C8674E100FE7862 /* allUsersCollectionViewLayout.swift */; };
 		22EE1A0D1C8674E100FE7862 /* CollectionViewWaterfallLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A031C8674E100FE7862 /* CollectionViewWaterfallLayout.swift */; };
 		22EE1A0E1C8674E100FE7862 /* AllUserDelegateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE1A041C8674E100FE7862 /* AllUserDelegateController.swift */; };
@@ -170,7 +169,6 @@
 		22EE19FE1C8674E100FE7862 /* imageUICollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = imageUICollectionViewCell.xib; sourceTree = "<group>"; };
 		22EE19FF1C8674E100FE7862 /* imageUICollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = imageUICollectionViewCell.swift; sourceTree = "<group>"; };
 		22EE1A001C8674E100FE7862 /* ImageChannelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageChannelViewController.swift; sourceTree = "<group>"; };
-		22EE1A011C8674E100FE7862 /* DataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
 		22EE1A021C8674E100FE7862 /* allUsersCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = allUsersCollectionViewLayout.swift; sourceTree = "<group>"; };
 		22EE1A031C8674E100FE7862 /* CollectionViewWaterfallLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewWaterfallLayout.swift; sourceTree = "<group>"; };
 		22EE1A041C8674E100FE7862 /* AllUserDelegateController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllUserDelegateController.swift; sourceTree = "<group>"; };
@@ -369,7 +367,6 @@
 				22EE19FE1C8674E100FE7862 /* imageUICollectionViewCell.xib */,
 				22EE19FF1C8674E100FE7862 /* imageUICollectionViewCell.swift */,
 				22EE1A001C8674E100FE7862 /* ImageChannelViewController.swift */,
-				22EE1A011C8674E100FE7862 /* DataSource.swift */,
 				22EE1A021C8674E100FE7862 /* allUsersCollectionViewLayout.swift */,
 				22EE1A031C8674E100FE7862 /* CollectionViewWaterfallLayout.swift */,
 				22EE1A041C8674E100FE7862 /* AllUserDelegateController.swift */,
@@ -538,7 +535,7 @@
 				TargetAttributes = {
 					4B7D39FD1C543E1A00E170FB = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = QUDK66W5DF;
+						DevelopmentTeam = 5ZZ7W4SB26;
 					};
 					4B7D3A161C543E1A00E170FB = {
 						CreatedOnToolsVersion = 7.2;
@@ -693,7 +690,6 @@
 				22B4BBBC1C7EDD7400274E58 /* IntroParallaxView.swift in Sources */,
 				22083C121C6947D7002C947A /* NSIndexSet+Convenience.m in Sources */,
 				22B4BBC01C7EDDBD00274E58 /* MotionManager.swift in Sources */,
-				22EE1A0B1C8674E100FE7862 /* DataSource.swift in Sources */,
 				22B4BBC61C7EE0E500274E58 /* UIColorExtension.swift in Sources */,
 				4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */,
 				22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */,
@@ -866,7 +862,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.epicurrence.EPICday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b5348919-b348-41a1-bd50-3d6048432a3b";
 				SWIFT_OBJC_BRIDGING_HEADER = "EPICday/EPICday-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -891,7 +887,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.epicurrence.EPICday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "fe43f680-f9fb-4cf1-8c19-e60cdd6e884b";
 				SWIFT_OBJC_BRIDGING_HEADER = "EPICday/EPICday-Bridging-Header.h";
 			};
 			name = Release;
