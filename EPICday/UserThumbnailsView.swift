@@ -66,7 +66,7 @@ public final class UserThumbnailsView: UIView {
             var needToExit = false
             
             var view: ThumbView!
-            ++count
+            count = count + 1
             if count > maxItem - 1  && (usersThumbURLs.count - count != 0){
                 let v = LabelThumbView(frame: CGRect(origin: CGPointZero, size: CGSize(width: height, height: height)),shadowRadius: shadowRadius,borderSize: borderSize)
                 v.titleLabel.text = "\(usersThumbURLs.count - count + 1)"
@@ -109,38 +109,27 @@ public final class UserThumbnailsView: UIView {
         }
         
         layoutIfNeeded()
-        
-//        UIView.animateWithDuration(1, delay: 0, options: .CurveEaseOut, animations: {
-            var i = 0
-            self.leadingThumbs.forEach{
-                print(self.leadingThumbs.indexOf($0)!)
-                if self.leadingThumbs.indexOf($0) == 0 {
-                    //$0.constant = -self.shadowRadius
-                    UIView.animateWithDuration(0.2, delay: Double(i) * 0.05, options: .CurveEaseOut, animations: {
-                        self.leadingThumbs[i].constant = -self.shadowRadius
-                        self.subviews[i].alpha = 1
-                        self.layoutIfNeeded()
+    
+        var i = 0
+        self.leadingThumbs.forEach{
+            print(self.leadingThumbs.indexOf($0)!)
+            if self.leadingThumbs.indexOf($0) == 0 {
+                //$0.constant = -self.shadowRadius
+                UIView.animateWithDuration(0.2, delay: Double(i) * 0.05, options: .CurveEaseOut, animations: {
+                    self.leadingThumbs[i].constant = -self.shadowRadius
+                    self.subviews[i].alpha = 1
+                    self.layoutIfNeeded()
+                }, completion: nil)
+            }else{
+                //$0.constant = self.space
+                UIView.animateWithDuration(0.2, delay: Double(i) * 0.05, options: .CurveEaseOut, animations: {
+                    self.leadingThumbs[i].constant = self.space
+                    self.subviews[i].alpha = 1
+                    self.layoutIfNeeded()
                     }, completion: nil)
-                }else{
-                    //$0.constant = self.space
-                    UIView.animateWithDuration(0.2, delay: Double(i) * 0.05, options: .CurveEaseOut, animations: {
-                        self.leadingThumbs[i].constant = self.space
-                        self.subviews[i].alpha = 1
-                        self.layoutIfNeeded()
-                        }, completion: nil)
-                }
-                i++
             }
-            
-//            self.subviews.forEach {
-//                $0.alpha = 1
-//            }
-//            self.layoutIfNeeded()
-//        }, completion: nil)
-        
-
-
-
+            i = i + 1
+        }
     }
 }
 

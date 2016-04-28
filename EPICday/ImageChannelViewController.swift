@@ -14,7 +14,7 @@ import SDWebImage
 import ReactiveCocoa
 import NYTPhotoViewer
 
-class ImageChannelViewController: UIViewController, UICollectionViewDelegate, CollectionViewWaterfallLayoutDelegate, allUsersCollectionViewLayoutDelegate {
+class ImageChannelViewController: UIViewController, UICollectionViewDelegate, CollectionViewWaterfallLayoutDelegate {
 
     //outlet Constraints
     @IBOutlet weak var channelNameLabelTopConstraint: NSLayoutConstraint!

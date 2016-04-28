@@ -432,7 +432,6 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     // see also the documentation of AVCaptureSessionInterruptionReason. Add observers to handle these session interruptions
     // and show a preview is paused message. See the documentation of AVCaptureSessionWasInterruptedNotification for other
     // interruption reasons.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionWasInterrupted:) name:AVCaptureSessionWasInterruptedNotification object:self.session];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionInterruptionEnded:) name:AVCaptureSessionInterruptionEndedNotification object:self.session];
 }
 
@@ -459,7 +458,6 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
         }
     }
     else if ( context == SessionRunningContext ) {
-        BOOL isSessionRunning = [change[NSKeyValueChangeNewKey] boolValue];
         
         dispatch_async( dispatch_get_main_queue(), ^{
             // Only enable the ability to change camera if the device has more than one camera.
@@ -501,48 +499,6 @@ typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     }
     else {
 //        self.resumeButton.hidden = NO;
-    }
-}
-
-- (void)sessionWasInterrupted:(NSNotification *)notification
-{
-    // In some scenarios we want to enable the user to resume the session running.
-    // For example, if music playback is initiated via control center while using AVCam,
-    // then the user can let AVCam resume the session running, which will stop music playback.
-    // Note that stopping music playback in control center will not automatically resume the session running.
-    // Also note that it is not always possible to resume, see -[resumeInterruptedSession:].
-    BOOL showResumeButton = NO;
-    
-    // In iOS 9 and later, the userInfo dictionary contains information on why the session was interrupted.
-    if ( &AVCaptureSessionInterruptionReasonKey ) {
-        AVCaptureSessionInterruptionReason reason = [notification.userInfo[AVCaptureSessionInterruptionReasonKey] integerValue];
-        NSLog( @"Capture session was interrupted with reason %ld", (long)reason );
-        
-        if ( reason == AVCaptureSessionInterruptionReasonAudioDeviceInUseByAnotherClient ||
-            reason == AVCaptureSessionInterruptionReasonVideoDeviceInUseByAnotherClient ) {
-            showResumeButton = YES;
-        }
-        else if ( reason == AVCaptureSessionInterruptionReasonVideoDeviceNotAvailableWithMultipleForegroundApps ) {
-            // Simply fade-in a label to inform the user that the camera is unavailable.
-//            self.cameraUnavailableLabel.hidden = NO;
-//            self.cameraUnavailableLabel.alpha = 0.0;
-//            [UIView animateWithDuration:0.25 animations:^{
-//                self.cameraUnavailableLabel.alpha = 1.0;
-//            }];
-        }
-    }
-    else {
-        NSLog( @"Capture session was interrupted" );
-        showResumeButton = ( [UIApplication sharedApplication].applicationState == UIApplicationStateInactive );
-    }
-    
-    if ( showResumeButton ) {
-        // Simply fade-in a button to enable the user to try to resume the session running.
-//        self.resumeButton.hidden = NO;
-//        self.resumeButton.alpha = 0.0;
-//        [UIView animateWithDuration:0.25 animations:^{
-//            self.resumeButton.alpha = 1.0;
-//        }];
     }
 }
 
