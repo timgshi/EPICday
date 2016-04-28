@@ -181,91 +181,61 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         // Dispose of any resources that can be recreated.
     }
     
-
+    
+    let fromNavBarShadowTopConstraint: CGFloat = 144
+    let toNavBarShadowTopConstraint: CGFloat = 0
+    let fromChannelNameLabelFontSize: CGFloat = 24
+    let toChannelNameLabelFontSize: CGFloat = 18
+    let fromChannelNameLabelKernValue: CGFloat = 0.8
+    let toChannelNameLabelKernValue: CGFloat = 0.3
+    let fromChannelNameLabelLeftConstaint: CGFloat = 64
+    let toChannelNameLabelLeftConstaint: CGFloat = 28
+    let fromChannelNameLabelTopConstaint: CGFloat = 168
+    let toChannelNameLabelTopConstaint: CGFloat = 48
+    let fromNavBarShadowStartFade: CGFloat = 144
+    let scrollPositionTouchNav: CGFloat = 216
+    
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
-        let fromNavBarShadowTopConstraint: CGFloat = 144
-        let toNavBarShadowTopConstraint: CGFloat = 0
-        
-        let fromChannelNameLabelFontSize: CGFloat = 24
-        let toChannelNameLabelFontSize: CGFloat = 18
-        
-        let fromChannelNameLabelKernValue: CGFloat = 0.8
-        let toChannelNameLabelKernValue: CGFloat = 0.3
-        
-        let fromChannelNameLabelLeftConstaint: CGFloat = 64
-        let toChannelNameLabelLeftConstaint: CGFloat = 28
-        
-        let fromChannelNameLabelTopConstaint: CGFloat = 168
-        let toChannelNameLabelTopConstaint: CGFloat = 48
-        
-        let fromNavBarShadowStartFade: CGFloat = 144
-        
-        let scrollPositionTouchNav: CGFloat = 216
-        
-        
-        let fontsizeFactorMultiple: CGFloat = (fromChannelNameLabelFontSize-toChannelNameLabelFontSize)/scrollPositionTouchNav
-        let kernValueFactorMultiple: CGFloat = (fromChannelNameLabelKernValue-toChannelNameLabelKernValue)/scrollPositionTouchNav
         let channelNameLabelLeftMultiple: CGFloat = (fromChannelNameLabelLeftConstaint-toChannelNameLabelLeftConstaint)/scrollPositionTouchNav
         let NavBarShadowTopConstraintMultiple: CGFloat = (fromNavBarShadowTopConstraint-toNavBarShadowTopConstraint)/scrollPositionTouchNav
-        
+
         channelDateLabelTopConstraint.constant = 192 - ( scrollView.contentOffset.y  ) * (0.66)
         allUsersCollectionViewTopConstraint.constant = 208 - ( scrollView.contentOffset.y  ) * (0.75)
         
-        
-        //print(scrollView.contentOffset.y)
         if (scrollView.contentOffset.y >= fromNavBarShadowStartFade) {
-            if(scrollView.contentOffset.y < scrollPositionTouchNav) {
+            if (scrollView.contentOffset.y < scrollPositionTouchNav) {
                 navBarShadowImage.alpha = (1 / (scrollPositionTouchNav - fromNavBarShadowStartFade)) *  ( scrollView.contentOffset.y   - fromNavBarShadowStartFade)
-            }else{
+            } else {
                 navBarShadowImage.alpha = 1
             }
         } else {
             navBarShadowImage.alpha = 0
         }
         
-
-            //allUsersCollectionViewTopConstraint.constant = 144 - ( scrollView.contentOffset.y + 64 )
-            //channelNameLabelTopConstraint.constant = 168 - ( scrollView.contentOffset.y )
-        
         let offsetY = max(0 , scrollView.contentOffset.y)
         allUserView.alpha = 1 - (offsetY * 0.01)
         viewAllUsersButton.alpha = 1 - (offsetY * 0.01)
         channelDateLabel.alpha = 1 - (offsetY * 0.02)
-        
 
-        if (scrollView.contentOffset.y < scrollPositionTouchNav)
-        {
+        if (scrollView.contentOffset.y < scrollPositionTouchNav) {
+            
             channelNameLabelTopConstraint.constant = fromChannelNameLabelTopConstaint - ( scrollView.contentOffset.y  ) * (0.56)
-            if(scrollView.contentOffset.y > 0)
-            {
-                channelNameLabel.attributedText = NSAttributedString(string: channelNameLabel.text!, attributes: NSDictionary.headerExtraLargeScalableAttributes(UIColor.colorEpicBlack(),
-                    alignmentValue: NSTextAlignment.Left,
-                    fontSize: fromChannelNameLabelFontSize - (scrollView.contentOffset.y * fontsizeFactorMultiple),
-                    kernValue: fromChannelNameLabelKernValue - (scrollView.contentOffset.y * kernValueFactorMultiple)
-                    ))
+            
+            if(scrollView.contentOffset.y > 0) {
                 channelNameLabelLeftConstaint.constant =  fromChannelNameLabelLeftConstaint - (channelNameLabelLeftMultiple * scrollView.contentOffset.y)
                 navBarShadowTopConstraint.constant = fromNavBarShadowTopConstraint - (NavBarShadowTopConstraintMultiple * scrollView.contentOffset.y)
             } else {
-                channelNameLabel.attributedText = NSAttributedString(string: channelNameLabel.text!, attributes: NSDictionary.headerExtraLargeScalableAttributes(UIColor.colorEpicBlack(),
-                    alignmentValue: NSTextAlignment.Left,
-                    fontSize: fromChannelNameLabelFontSize ,
-                    kernValue: fromChannelNameLabelKernValue// - scrollView.contentOffset.y * 0.025
-                    )
-                )
                 channelNameLabelLeftConstaint.constant = fromChannelNameLabelLeftConstaint
                 navBarShadowTopConstraint.constant = fromNavBarShadowTopConstraint
             }
             
         } else {
-            channelNameLabel.attributedText = NSAttributedString(string: channelNameLabel.text!, attributes: NSDictionary.headerExtraLargeScalableAttributes(UIColor.colorEpicBlack(), alignmentValue: NSTextAlignment.Left, fontSize: toChannelNameLabelFontSize, kernValue: toChannelNameLabelKernValue))
             channelNameLabelLeftConstaint.constant = toChannelNameLabelLeftConstaint
             channelNameLabelTopConstraint.constant = toChannelNameLabelTopConstaint
             navBarShadowTopConstraint.constant = toNavBarShadowTopConstraint
         }
     }
-    
-    
     
     //MARK: - CollectionView UI Setup
     func setupCollectionView(){
@@ -273,12 +243,14 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         // Do any additional setup after loading the view.
         
         let layout = CollectionViewWaterfallLayout()
+        
         layout.sectionInset = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
         layout.headerInset = UIEdgeInsetsMake(20, 0, 0, 0)
         layout.headerHeight = 264
         layout.footerHeight = 96
         layout.minimumColumnSpacing = 4
         layout.minimumInteritemSpacing = 4
+        
         
         imageCollectionView.collectionViewLayout = layout
         imageCollectionView.registerClass(UICollectionReusableView.self, forSupplementaryViewOfKind: CollectionViewWaterfallElementKindSectionHeader, withReuseIdentifier: "Header")
@@ -302,22 +274,9 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         var cellSize = CGSize(width: 16, height: 16)
         if (collectionView == imageCollectionView) {
             let photo = self.dataSource?.photoAtIndexPath(indexPath)
-            cellSize = (photo?.size)!
-            
+            cellSize = (photo?.size)!            
         }
         return cellSize
-    }
-    
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        cell.contentView.alpha = 0
-        
-        UIView.animateWithDuration(0.4) {
-            cell.contentView.alpha = 1
-        }
-    }
-    
-    func centerPointWithSizeToFrame(point: CGPoint, size: CGSize) -> CGRect {
-        return CGRectMake(point.x - (size.width/2), point.y - (size.height/2), size.width, size.height)
     }
     
     func showFullScreenImageViewFromCell(cell: ImageCell, photo: Photo) {
