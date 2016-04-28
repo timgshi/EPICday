@@ -12,6 +12,7 @@ import Firebase
 import Bolts
 import SDWebImage
 import ReactiveCocoa
+import NYTPhotoViewer
 
 class ImageChannelViewController: UIViewController, UICollectionViewDelegate, CollectionViewWaterfallLayoutDelegate, allUsersCollectionViewLayoutDelegate {
 
@@ -44,11 +45,7 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
     var dataSource: ChannelStreamDataSource?
     var selectedChannel: Channel?
     
-    let transition = QZCircleSegue()
-    
-    let fullScreenImageView = UIImageView()
-    var fullScreenImagePanGR: UIPanGestureRecognizer?
-    var originalThumbFrame = CGRectZero
+    let cameraTransition = QZCircleSegue()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -148,15 +145,6 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
         cameraButton.layer.shadowColor = UIColor.blackColor().CGColor
         cameraButton.layer.shadowOpacity = 0.5
         cameraButton.layer.shadowRadius = 12.0
-        
-        self.fullScreenImageView.backgroundColor = UIColor.clearColor()
-        self.fullScreenImageView.contentMode = .ScaleAspectFit
-        self.fullScreenImageView.hidden = true
-        self.fullScreenImageView.userInteractionEnabled = true
-        self.view.addSubview(self.fullScreenImageView)
-        self.fullScreenImagePanGR = UIPanGestureRecognizer(target: self, action: #selector(handleFullScreenImageDrag))
-        self.fullScreenImagePanGR!.enabled = false
-        self.fullScreenImageView.addGestureRecognizer(self.fullScreenImagePanGR!)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -176,18 +164,16 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "EPICCaptureSegue") {
-            /* Send the button to your transition manager */
-            self.transition.animationChild = cameraButton
-            /* Set the color to your transition manager*/
-            self.transition.animationColor = UIColor(red: 0/255, green: 217/255, blue: 144/255, alpha: 1.0)
+            self.cameraTransition.animationChild = cameraButton
+            self.cameraTransition.animationColor = UIColor(red: 0/255, green: 217/255, blue: 144/255, alpha: 1.0)
         }
+        
         let toViewController = segue.destinationViewController as! FilteredCaptureViewController
         toViewController.selectedChannel = self.selectedChannel
-        /* Set both, the origin and destination to your transition manager*/
-        self.transition.fromViewController = self
-        self.transition.toViewController = toViewController
+        self.cameraTransition.fromViewController = self
+        self.cameraTransition.toViewController = toViewController
         /* Add the transition manager to your transitioningDelegate View Controller*/
-        toViewController.transitioningDelegate = transition
+        toViewController.transitioningDelegate = self.cameraTransition
     }
 
     override func didReceiveMemoryWarning() {
@@ -335,45 +321,25 @@ class ImageChannelViewController: UIViewController, UICollectionViewDelegate, Co
     }
     
     func showFullScreenImageViewFromCell(cell: ImageCell, photo: Photo) {
-        self.fullScreenImageView.sd_setImageWithURL(photo.imageUrl, placeholderImage: photo.thumbnail)
-        let convertedFrame = self.imageCollectionView.convertRect(cell.frame, toView: self.view)
-        self.originalThumbFrame = convertedFrame
-        self.fullScreenImageView.frame = convertedFrame
-        self.fullScreenImageView.hidden = false
-        UIView.animateWithDuration(0.3) { () -> Void in
-            self.fullScreenImageView.frame = self.view.bounds
-            self.fullScreenImageView.backgroundColor = UIColor.blackColor()
-            self.fullScreenImagePanGR?.enabled = true
-        }
+        let photoViewController = NYTPhotosViewController(photos: [PhotoProvider(image: cell.image)])
+        photoViewController.leftBarButtonItem = nil;
+        photoViewController.rightBarButtonItem = nil;
+        self.presentViewController(photoViewController, animated: true, completion: nil)
+    }
+}
+
+class PhotoProvider: NSObject, NYTPhoto {
+    var image: UIImage?
+    
+    init (image: UIImage?) {
+        self.image = image
     }
     
-    func hideFullScreenImageView() {
-        self.fullScreenImagePanGR?.enabled = false
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
-            self.fullScreenImageView.frame = self.originalThumbFrame
-            self.fullScreenImageView.backgroundColor = UIColor.clearColor()
-            }) { (finished) -> Void in
-                self.fullScreenImageView.hidden = true
-                self.fullScreenImageView.image = nil
-                self.originalThumbFrame = CGRectZero
-        }
-    }
-    
-    func handleFullScreenImageDrag(sender:UIPanGestureRecognizer) {
-        let translation = sender.translationInView(self.view)
-        if (sender.state == .Began || sender.state == .Changed) {
-            var transform = CGAffineTransformMakeScale(0.8, 0.8)
-            transform = CGAffineTransformTranslate(transform, translation.x, translation.y)
-            self.fullScreenImageView.transform = transform
-        } else if (sender.state == .Ended) {
-            let maxTranslation = max(translation.x, translation.y)
-            if (maxTranslation >= 50) {
-                self.hideFullScreenImageView()
-            } else {
-                self.fullScreenImageView.transform = CGAffineTransformIdentity
-            }
-        }
-    }
+    var imageData: NSData? = nil
+    var placeholderImage: UIImage? = nil
+    var attributedCaptionTitle: NSAttributedString? = nil
+    var attributedCaptionCredit: NSAttributedString? = nil
+    var attributedCaptionSummary: NSAttributedString? = nil
 }
 
 extension ImageChannelViewController: ImageCellDelegate {

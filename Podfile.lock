@@ -32,6 +32,7 @@ PODS:
   - Firebase (2.5.1)
   - FirebaseUI/Core (0.3.2):
     - Firebase (~> 2.2)
+  - FLAnimatedImage (1.0.12)
   - FormatterKit (1.8.1):
     - FormatterKit/AddressFormatter (= 1.8.1)
     - FormatterKit/ArrayFormatter (= 1.8.1)
@@ -64,6 +65,13 @@ PODS:
     - FormatterKit/Resources
   - GPUImage (0.1.7)
   - Masonry (0.6.4)
+  - NYTPhotoViewer (1.1.0):
+    - NYTPhotoViewer/AnimatedGifSupport (= 1.1.0)
+    - NYTPhotoViewer/Core (= 1.1.0)
+  - NYTPhotoViewer/AnimatedGifSupport (1.1.0):
+    - FLAnimatedImage (~> 1.0.8)
+    - NYTPhotoViewer/Core
+  - NYTPhotoViewer/Core (1.1.0)
   - Parse (1.13.0):
     - Bolts/Tasks (~> 1.6)
   - ParseFacebookUtilsV4 (1.11.1):
@@ -99,6 +107,7 @@ DEPENDENCIES:
   - FormatterKit (~> 1.8)
   - GPUImage (~> 0.1)
   - Masonry (~> 0.6)
+  - NYTPhotoViewer (~> 1.1.0)
   - ParseFacebookUtilsV4 (~> 1.11)
   - ReactiveCocoa (~> 4.0)
   - Reveal-iOS-SDK
@@ -114,9 +123,11 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
   Firebase: 3565ea88b830f28f2c77ecc524622bc71a20d085
   FirebaseUI: 95621dce04f0313495c86e1fba503254e0ec48b1
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FormatterKit: 11ad17b983200629246a5a466f6f1bfa2df823cb
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
   Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
+  NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
   Parse: f51c24d2feb412e4b2d6cc73d37cb24e8d0089bc
   ParseFacebookUtilsV4: 2f30c2b7021c8005d3042781da7ef87d06589421
   ReactiveCocoa: d70004d7a366a7b8e87e60ce2347182c77701949

@@ -15,5 +15,6 @@ target 'EPICday' do
   pod 'GPUImage', '~> 0.1'
   pod 'FormatterKit', '~> 1.8'
   pod 'Reveal-iOS-SDK'
+  pod 'NYTPhotoViewer', '~> 1.1.0'
 end
 

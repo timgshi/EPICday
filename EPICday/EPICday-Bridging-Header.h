@@ -15,3 +15,4 @@
 #import "ChannelStreamDataSource.h"
 #import "FilteredCaptureViewController.h"
 #import <FirebaseUI/FirebaseCollectionViewDataSource.h>
+#import <NYTPhotoViewer/NYTPhotosViewController.h>
