@@ -72,7 +72,7 @@ public final class UserThumbnailsView: UIView {
                 v.titleLabel.text = "\(usersThumbURLs.count - count + 1)"
                 needToExit = true
                 view = v
-            }else{
+            } else {
                 let v = ImageThumbView(frame: CGRect(origin: CGPointZero, size: CGSize(width: height, height: height)),shadowRadius: shadowRadius,borderSize: borderSize)
                 v.imageView.sd_setImageWithURL(imageURL, placeholderImage: UIImage(), options: [.ProgressiveDownload,.TransformAnimatedImage])
                 view = v
