@@ -29,7 +29,7 @@ class ImageCell: UICollectionViewCell {
     
     var photo: Photo? {
         didSet (newValue) {
-            self.imageView.sd_setImageWithURL(photo?.imageUrl, placeholderImage: photo?.thumbnail)
+            self.imageView.image = photo?.thumbnail
         }
     }
     
@@ -76,8 +76,12 @@ class ImageCell: UICollectionViewCell {
     }
     
     func setTimeAgoTextFromDate(date: NSDate!) {
-        let timeAgoText = ImageCell.timeAgoFormatter.stringForTimeIntervalFromDate(NSDate(), toDate: date)
-        self.timeAgoLabel.text = timeAgoText
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { 
+            let timeAgoText = ImageCell.timeAgoFormatter.stringForTimeIntervalFromDate(NSDate(), toDate: date)
+            dispatch_async(dispatch_get_main_queue(), { 
+                self.timeAgoLabel.text = timeAgoText
+            })
+        }
     }
     @IBAction func handleTapGR(sender: UITapGestureRecognizer) {
         if sender.state == .Ended {

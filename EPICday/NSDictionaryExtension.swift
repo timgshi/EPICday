@@ -480,5 +480,55 @@ extension NSDictionary {
 		]
 	}
 
-
+    // TODO: Figure out how to reconcile these with the others
+    static func descriptionBodyAttributes() -> [String: AnyObject]? {
+        guard let font = UIFont(name: "FuturaLT-Book", size: 18) else {
+            fatalError("Can't load font")
+        }
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.minimumLineHeight = 24
+        paragraph.alignment = .Left
+        paragraph.paragraphSpacing = 8
+        let color = UIColor(red: 90/255, green: 90/255, blue: 90/255, alpha: 1.0)
+        let kern = 0
+        return [NSFontAttributeName: font,
+                NSKernAttributeName: kern,
+                NSForegroundColorAttributeName: color,
+                NSParagraphStyleAttributeName: paragraph,
+        ]
+    }
+    
+    static func descriptionChannelNameAttributes() -> [String: AnyObject] {
+        guard let font = UIFont(name: "FuturaLT-Heavy", size: 18) else {
+            fatalError("Can't load font")
+        }
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.minimumLineHeight = 24
+        paragraph.alignment = .Left
+        paragraph.paragraphSpacing = 8
+        let color = UIColor.blackColor()
+        let kern = 0
+        return [NSFontAttributeName: font,
+                NSKernAttributeName: kern,
+                NSForegroundColorAttributeName: color,
+                NSParagraphStyleAttributeName: paragraph,
+        ]
+    }
+    
+    static func descriptionCreatorNameAttributes() -> [String: AnyObject] {
+        guard let font = UIFont(name: "FuturaLT-Heavy", size: 18) else {
+            fatalError("Can't load font")
+        }
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.minimumLineHeight = 24
+        paragraph.alignment = .Left
+        paragraph.paragraphSpacing = 8
+        let color = UIColor(red: 0.0, green: 217/255, blue: 144/255, alpha: 1.0)
+        let kern = 0
+        return [NSFontAttributeName: font,
+                NSKernAttributeName: kern,
+                NSForegroundColorAttributeName: color,
+                NSParagraphStyleAttributeName: paragraph,
+        ]
+    }
 }

@@ -47,19 +47,10 @@
         photo.dimensions = valuesDict[@"dimensions"];
         photo.imageUrl = [NSURL URLWithString:valuesDict[@"imageUrl"]];
         photo.thumbnailDataString = valuesDict[@"thumbnailBase64"];
+        [photo createThumbnailFromDataString];
         [taskSource trySetResult:photo];
     }];
     return taskSource.task;
-}
-
-- (UIImage *)thumbnail {
-    if (!_thumbnail) {
-        if (self.thumbnailDataString) {
-            NSData *thumbnailData = [[NSData alloc] initWithBase64EncodedString:self.thumbnailDataString options:0];
-            _thumbnail = [UIImage imageWithData:thumbnailData];
-        }
-    }
-    return _thumbnail;
 }
 
 - (NSString *)objectId {
@@ -80,6 +71,12 @@
         return [p2.objectId isEqualToString:self.objectId];
     }
     return NO;
+}
+
+- (void)createThumbnailFromDataString
+{
+    NSData *thumbnailData = [[NSData alloc] initWithBase64EncodedString:self.thumbnailDataString options:0];
+    self.thumbnail = [UIImage imageWithData:thumbnailData];
 }
 
 @end

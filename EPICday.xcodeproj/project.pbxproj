@@ -74,6 +74,8 @@
 		4B7D3A271C543E1A00E170FB /* EPICdayUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A261C543E1A00E170FB /* EPICdayUITests.m */; };
 		4B7D3A361C54468F00E170FB /* ChannelStreamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */; };
 		4BB7EB3E1C8A7E3200AD6C83 /* QZCircleSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */; };
+		50A9CAC41CD2E38E005EBDD2 /* TradeGothic-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 50A9CAC31CD2E38E005EBDD2 /* TradeGothic-Bold.otf */; };
+		50A9CAC61CD2E578005EBDD2 /* PhotoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9CAC51CD2E578005EBDD2 /* PhotoProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -192,6 +194,8 @@
 		4B7D3A341C54468F00E170FB /* ChannelStreamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelStreamViewController.h; sourceTree = "<group>"; };
 		4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelStreamViewController.m; sourceTree = "<group>"; };
 		4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QZCircleSegue.swift; sourceTree = "<group>"; };
+		50A9CAC31CD2E38E005EBDD2 /* TradeGothic-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TradeGothic-Bold.otf"; sourceTree = "<group>"; };
+		50A9CAC51CD2E578005EBDD2 /* PhotoProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoProvider.swift; sourceTree = "<group>"; };
 		A094ED59DDEBB334E8CBE3DC /* Pods_EPICday.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EPICday.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF35F7CA9648ED7E533241A5 /* Pods-EPICday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EPICday.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EPICday/Pods-EPICday.debug.xcconfig"; sourceTree = "<group>"; };
 		FE997C1BCE6A49E12F40752D /* Pods-EPICday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EPICday.release.xcconfig"; path = "Pods/Target Support Files/Pods-EPICday/Pods-EPICday.release.xcconfig"; sourceTree = "<group>"; };
@@ -236,6 +240,7 @@
 		22083C061C693F33002C947A /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				50A9CAC31CD2E38E005EBDD2 /* TradeGothic-Bold.otf */,
 				22083C071C69426D002C947A /* FuturaBTBook.otf */,
 				22083C091C6942CF002C947A /* FuturaBTHeavy.otf */,
 				22B4BBC71C7EE12800274E58 /* FuturaLT-CondensedLight.ttf */,
@@ -352,6 +357,7 @@
 				221D7EC91C56E05F0090A542 /* Photo.m */,
 				229532331C63280900C6124F /* User.h */,
 				229532341C63280900C6124F /* User.m */,
+				50A9CAC51CD2E578005EBDD2 /* PhotoProvider.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -590,6 +596,7 @@
 				22B4BBDF1C7EE12D00274E58 /* FuturaLT-Light.ttf in Resources */,
 				22B4BBDA1C7EE12D00274E58 /* FuturaLT-Condensed.ttf in Resources */,
 				22B4BBD81C7EE12D00274E58 /* FuturaLT-CondensedLight.ttf in Resources */,
+				50A9CAC41CD2E38E005EBDD2 /* TradeGothic-Bold.otf in Resources */,
 				22B4BBDC1C7EE12D00274E58 /* FuturaLT-CondensedBold.ttf in Resources */,
 				4B7D3A0C1C543E1A00E170FB /* Main.storyboard in Resources */,
 			);
@@ -685,6 +692,7 @@
 				22B4BBC01C7EDDBD00274E58 /* MotionManager.swift in Sources */,
 				22B4BBC61C7EE0E500274E58 /* UIColorExtension.swift in Sources */,
 				4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */,
+				50A9CAC61CD2E578005EBDD2 /* PhotoProvider.swift in Sources */,
 				22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */,
 				22B4BBBD1C7EDD7400274E58 /* CharPageControl.swift in Sources */,
 				4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */,
@@ -843,6 +851,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = EPICday/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
