@@ -1,21 +1,4 @@
 PODS:
-  - AFNetworking (3.1.0):
-    - AFNetworking/NSURLSession (= 3.1.0)
-    - AFNetworking/Reachability (= 3.1.0)
-    - AFNetworking/Security (= 3.1.0)
-    - AFNetworking/Serialization (= 3.1.0)
-    - AFNetworking/UIKit (= 3.1.0)
-  - AFNetworking/NSURLSession (3.1.0):
-    - AFNetworking/Reachability
-    - AFNetworking/Security
-    - AFNetworking/Serialization
-  - AFNetworking/Reachability (3.1.0)
-  - AFNetworking/Security (3.1.0)
-  - AFNetworking/Serialization (3.1.0)
-  - AFNetworking/UIKit (3.1.0):
-    - AFNetworking/NSURLSession
-  - AWSCognito (2.4.0):
-    - AWSCore (= 2.4.0)
   - AWSCore (2.4.0)
   - AWSS3 (2.4.0):
     - AWSCore (= 2.4.0)
@@ -25,13 +8,9 @@ PODS:
   - Bolts/AppLinks (1.7.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.7.0)
-  - FBSDKCoreKit (4.10.1):
-    - Bolts (~> 1.5)
-  - FBSDKLoginKit (4.11.0):
-    - FBSDKCoreKit
+  - FBSDKCoreKit (4.11.0):
+    - Bolts (~> 1.7)
   - Firebase (2.5.1)
-  - FirebaseUI/Core (0.3.2):
-    - Firebase (~> 2.2)
   - FLAnimatedImage (1.0.12)
   - FormatterKit (1.8.1):
     - FormatterKit/AddressFormatter (= 1.8.1)
@@ -64,7 +43,6 @@ PODS:
   - FormatterKit/URLRequestFormatter (1.8.1):
     - FormatterKit/Resources
   - GPUImage (0.1.7)
-  - Masonry (0.6.4)
   - NYTPhotoViewer (1.1.0):
     - NYTPhotoViewer/AnimatedGifSupport (= 1.1.0)
     - NYTPhotoViewer/Core (= 1.1.0)
@@ -72,14 +50,6 @@ PODS:
     - FLAnimatedImage (~> 1.0.8)
     - NYTPhotoViewer/Core
   - NYTPhotoViewer/Core (1.1.0)
-  - Parse (1.13.0):
-    - Bolts/Tasks (~> 1.6)
-  - ParseFacebookUtilsV4 (1.11.1):
-    - Bolts/Tasks (>= 1.6)
-    - FBSDKCoreKit (~> 4.10)
-    - FBSDKLoginKit (~> 4.10)
-    - FBSDKTVOSKit (~> 4.10)
-    - Parse (~> 1.12)
   - ReactiveCocoa (4.1.0):
     - ReactiveCocoa/UI (= 4.1.0)
     - Result (~> 2.0)
@@ -98,38 +68,26 @@ PODS:
   - SDWebImage/Core (3.7.5)
 
 DEPENDENCIES:
-  - AFNetworking (~> 3.0)
-  - AWSCognito
   - AWSS3
   - FBSDKCoreKit (~> 4.9)
   - Firebase
-  - FirebaseUI/Core
   - FormatterKit (~> 1.8)
   - GPUImage (~> 0.1)
-  - Masonry (~> 0.6)
   - NYTPhotoViewer (~> 1.1.0)
-  - ParseFacebookUtilsV4 (~> 1.11)
   - ReactiveCocoa (~> 4.0)
   - Reveal-iOS-SDK
   - SDWebImage (~> 3.7)
 
 SPEC CHECKSUMS:
-  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  AWSCognito: 1d96bd3ccda48918b00862895561dcb2a6080acf
   AWSCore: 7e0da755786280a76ed4ab4ed8c1d38ced09b460
   AWSS3: dc00e788fb6733853ecd615a45f9d7dd6ce25823
   Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
-  FBSDKCoreKit: d2aaed5e9ab7d8d6301c533376a1fbff1cf3deb5
-  FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
+  FBSDKCoreKit: 686ac982723a14ec9ddb85e2f81235d7706c891b
   Firebase: 3565ea88b830f28f2c77ecc524622bc71a20d085
-  FirebaseUI: 95621dce04f0313495c86e1fba503254e0ec48b1
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FormatterKit: 11ad17b983200629246a5a466f6f1bfa2df823cb
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
-  Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
-  Parse: f51c24d2feb412e4b2d6cc73d37cb24e8d0089bc
-  ParseFacebookUtilsV4: 2f30c2b7021c8005d3042781da7ef87d06589421
   ReactiveCocoa: d70004d7a366a7b8e87e60ce2347182c77701949
   Result: 9e75e1111c774c6ac594e14907b15057053a7959
   Reveal-iOS-SDK: e2250b3c155bcfac53ae223ddc1f76d08f206c33

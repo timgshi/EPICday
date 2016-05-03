@@ -11,7 +11,6 @@
 #import "Channel.h"
 #import "Photo.h"
 #import "Post.h"
-#import "PostCollectionViewHeader.h"
 
 #import <Bolts/Bolts.h>
 #import <Firebase/Firebase.h>
@@ -52,9 +51,6 @@
     dataSource.reuseIdentifier = reuseIdentifier;
     [collectionView registerClass:cellClass
        forCellWithReuseIdentifier:reuseIdentifier];
-    [collectionView registerClass:[PostCollectionViewHeader class]
-       forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-              withReuseIdentifier:[PostCollectionViewHeader defaultIdentifier]];
     return dataSource;
 }
 
