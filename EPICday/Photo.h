@@ -30,6 +30,10 @@
 
 @property (nonatomic, strong) Firebase *ref;
 
+//- (void)thumbnailWithCompletion:(void (^)(UIImage *thumbnail))completion;
+
+- (void)loadThumbnail;
+
 + (instancetype)photoFromRef:(Firebase *)ref inPost:(Post *)post withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource;
 + (BFTask *)photoFromRef:(Firebase *)ref inPost:(Post *)post;
 

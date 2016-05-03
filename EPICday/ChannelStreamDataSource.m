@@ -15,6 +15,8 @@
 #import <Bolts/Bolts.h>
 #import <Firebase/Firebase.h>
 
+const NSInteger PAGE_LIMIT = 50;
+
 @interface ChannelStreamDataSource ()
 
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -23,6 +25,8 @@
 @property (nonatomic, strong) NSMutableArray *allPhotos;
 
 @property (nonatomic, strong) NSTimer *debounceTimer;
+@property (nonatomic, assign) BOOL isLoading;
+@property (nonatomic, assign) BOOL shouldFlipLoadingFlagOnNextReload;
 
 @end
 
@@ -36,21 +40,6 @@
     dataSource.collectionView = collectionView;
     collectionView.dataSource = dataSource;
     dataSource.reuseIdentifier = reuseIdentifier;
-    return dataSource;
-}
-
-+ (instancetype)dataSourceWithChannel:(Channel *)channel
-                     inCollectionView:(UICollectionView *)collectionView
-                        withCellClass:(Class)cellClass
-                   andReuseIdentifier:(NSString *)reuseIdentifier {
-    ChannelStreamDataSource *dataSource = [self new];
-    dataSource.channel = channel;
-    dataSource.collectionView = collectionView;
-    collectionView.dataSource = dataSource;
-    dataSource.cellClass = cellClass;
-    dataSource.reuseIdentifier = reuseIdentifier;
-    [collectionView registerClass:cellClass
-       forCellWithReuseIdentifier:reuseIdentifier];
     return dataSource;
 }
 
@@ -74,24 +63,66 @@
 }
 
 - (void)setupListeners {
-    [[self.channel.ref childByAppendingPath:@"posts"] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-        Firebase *postRef = [[[self.channel.ref root] childByAppendingPath:@"posts"] childByAppendingPath:snapshot.key];
-        [[Post postFromRef:postRef inChannel:self.channel] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-            Post *post = task.result;
-            NSDictionary *postDict = @{@"post": post, @"photos": @[].mutableCopy};
-            NSInteger index = [self.posts indexOfObject:postDict inSortedRange:NSMakeRange(0, self.posts.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(NSDictionary *p1Dict, NSDictionary *p2Dict) {
-                Post *p1 = p1Dict[@"post"];
-                Post *p2 = p2Dict[@"post"];
-                return [p2.timestamp compare:p1.timestamp];
-            }];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.posts insertObject:postDict atIndex:index];
-//                [self.collectionView reloadData];
-//                [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:index]];
-            });
-            [self setupListenersForPostDict:postDict];
-            return nil;
+    FQuery *initialQuery = [[self.channel.ref childByAppendingPath:@"posts"] queryLimitedToLast:PAGE_LIMIT];
+    [self loadPageWithQuery:initialQuery removeObserverWhenLimitReached:NO];
+}
+
+- (void)loadNextPage {
+    if (self.isLoading || self.posts.count == 0) {
+        return;
+    }
+    
+    NSLog(@"Loading next page");
+    
+    Post *lastPost = self.posts.lastObject[@"post"];
+    NSString *lastKey = lastPost.objectId;
+    FQuery *query = [[[[self.channel.ref childByAppendingPath:@"posts"] queryOrderedByKey] queryEndingAtValue:lastKey] queryLimitedToLast:PAGE_LIMIT];
+    [self loadPageWithQuery:query removeObserverWhenLimitReached:YES];
+}
+
+- (void)loadPageWithQuery:(FQuery *)query removeObserverWhenLimitReached:(BOOL)shouldRemove {
+    self.isLoading = YES;
+    __block NSInteger count = 0;
+    [query observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        [self handleNewPostWithSnapshot:snapshot];
+        
+        count++;
+        if (count >= PAGE_LIMIT - 1) {
+            self.shouldFlipLoadingFlagOnNextReload = YES;
+            
+            if (shouldRemove) {
+                [query removeAllObservers];
+            }
+        }
+    }];
+}
+
+- (void)handleNewPostWithSnapshot:(FDataSnapshot *)snapshot {
+    Firebase *postRef = [[[self.channel.ref root] childByAppendingPath:@"posts"] childByAppendingPath:snapshot.key];
+    [[Post postFromRef:postRef inChannel:self.channel] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+        Post *post = task.result;
+        NSDictionary *postDict = @{@"post": post, @"photos": @[].mutableCopy};
+        NSString *objectID = post.objectId;
+        NSUInteger existingIndex = [self.posts indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *testPostDict = (NSDictionary *)obj;
+            Post *testPost = testPostDict[@"post"];
+            return [testPost.objectId isEqualToString:objectID];
         }];
+        
+        if (existingIndex != NSNotFound) {
+            return nil;
+        }
+        
+        NSInteger index = [self.posts indexOfObject:postDict inSortedRange:NSMakeRange(0, self.posts.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(NSDictionary *p1Dict, NSDictionary *p2Dict) {
+            Post *p1 = p1Dict[@"post"];
+            Post *p2 = p2Dict[@"post"];
+            return [p2.timestamp compare:p1.timestamp];
+        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.posts insertObject:postDict atIndex:index];
+        });
+        [self setupListenersForPostDict:postDict];
+        return nil;
     }];
 }
 
@@ -112,12 +143,6 @@
                 [photosArray insertObject:photo atIndex:index];
                 [self.allPhotos insertObject:photo atIndex:allPhotosIndex];
                 [self debouncedReload];
-//                [self.collectionView performBatchUpdates:^{
-//                    [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:allPhotosIndex inSection:0]]];
-//                } completion:nil];
-//                NSInteger sectionIndex = [self.posts indexOfObject:postDict];
-//                [self.collectionView reloadData];
-//                [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:sectionIndex]]];
             });
             return nil;
         }];
@@ -126,17 +151,16 @@
 
 - (void)debouncedReload {
     [self.debounceTimer invalidate];
-    self.debounceTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self.collectionView selector:@selector(reloadData) userInfo:nil repeats:NO];
+    self.debounceTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(reloadData) userInfo:nil repeats:NO];
 }
 
-//- (Post *)postForSection:(NSInteger)section {
-//    return self.posts[section][@"post"];
-//}
-//
-//- (Photo *)photoAtIndexPath:(NSIndexPath *)indexPath {
-//    NSArray *photos = self.posts[indexPath.section][@"photos"];
-//    return photos[indexPath.item];
-//}
+- (void)reloadData {
+    [self.collectionView reloadData];
+    if (self.shouldFlipLoadingFlagOnNextReload) {
+        self.isLoading = NO;
+        self.shouldFlipLoadingFlagOnNextReload = NO;
+    }
+}
 
 - (Photo *)photoAtIndexPath:(NSIndexPath *)indexPath {
     return self.allPhotos[indexPath.item];
@@ -145,13 +169,10 @@
 #pragma mark - UICollectionViewDataSource Methods
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-//    return self.posts.count;
     return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-//    NSArray *photos = self.posts[section][@"photos"];
-//    return photos.count;
     return self.allPhotos.count;
 }
 
@@ -165,14 +186,5 @@
     
     return cell;
 }
-
-//- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-//    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-//        PostCollectionViewHeader *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[PostCollectionViewHeader defaultIdentifier] forIndexPath:indexPath];
-//        header.post = [self postForSection:indexPath.section];
-//        return header;
-//    }
-//    return nil;
-//}
 
 @end

@@ -1,8 +1,8 @@
 
 import UIKit
 import Firebase
-import FBSDKLoginKit
 import FBSDKCoreKit
+import FBSDKLoginKit
 
 class IntroViewController: UIViewController {
 

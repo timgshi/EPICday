@@ -25,13 +25,12 @@ class ImageCell: UICollectionViewCell {
         get {
             return self.imageView.image
         }
-    }
-    
-    var photo: Photo? {
-        didSet (newValue) {
-            self.imageView.image = photo?.thumbnail
+        set {
+            self.imageView.image = newValue
         }
     }
+    
+    var photo: Photo?
     
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet weak var authorLabel: UILabel!

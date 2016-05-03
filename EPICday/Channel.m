@@ -36,33 +36,6 @@ NSString * const EPICChannelDidUpdatePostsNotification = @"EPICChannelDidUpdateP
         channel.memberThumbUrls = nil;
         channel.purpose = valuesDict[@"purpose"] ?: @"";
         [taskSource trySetResult:channel];
-//        NSMutableArray *postsInitialLoadTasks = @[].mutableCopy;
-//        NSDictionary *snapshotPosts = snapshot.value[@"posts"];
-//        [snapshotPosts enumerateKeysAndObjectsUsingBlock:^(NSString *key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-//            BFTaskCompletionSource *postTaskSource = nil;
-//            if (taskSource && !taskSource.task.completed) {
-//                postTaskSource = [BFTaskCompletionSource taskCompletionSource];
-//                [postsInitialLoadTasks addObject:postTaskSource.task];
-//            }
-//            Firebase *postRef = [[[ref root] childByAppendingPath:@"posts"] childByAppendingPath:key];
-//            Post *post = [Post postFromRef:postRef inChannel:channel withInitialLoadTaskSource:postTaskSource];
-//            [channel.posts addObject:post];
-//        }];
-//        if (taskSource && !taskSource.task.completed) {
-//            [[BFTask taskForCompletionOfAllTasks:postsInitialLoadTasks] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-//                [channel.posts sortUsingComparator:^NSComparisonResult(Post *p1, Post *p2) {
-//                    return [p2.timestamp compare:p1.timestamp];
-//                }];
-//                [taskSource trySetResult:@YES];
-//                return nil;
-//            }];
-//        } else {
-//            [channel.posts sortUsingComparator:^NSComparisonResult(Post *p1, Post *p2) {
-//                return [p2.timestamp compare:p1.timestamp];
-//            }];
-//            [[NSNotificationCenter defaultCenter] postNotificationName:EPICChannelDidUpdatePostsNotification
-//                                                                object:self];
-//        }
     }];
     return channel;
 }

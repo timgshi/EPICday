@@ -18,14 +18,13 @@
 @property (nonatomic) Class cellClass;
 @property (nonatomic, copy) NSString *reuseIdentifier;
 @property(strong, nonatomic) void (^populateCell)(UICollectionViewCell *cell, Photo *photo);
+@property (nonatomic, readonly) BOOL isLoading;
 
 + (instancetype)dataSourceWithChannel:(Channel *)channel
                      inCollectionView:(UICollectionView *)collectionView
                    andReuseIdentifier:(NSString *)reuseIdentifier;
-+ (instancetype)dataSourceWithChannel:(Channel *)channel
-                     inCollectionView:(UICollectionView *)collectionView
-                        withCellClass:(Class)cellClass
-                   andReuseIdentifier:(NSString *)reuseIdentifier;
+
+- (void)loadNextPage;
 
 - (Photo *)photoAtIndexPath:(NSIndexPath *)indexPath;
 

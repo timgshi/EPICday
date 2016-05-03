@@ -1,4 +1,6 @@
 PODS:
+  - AWSCognito (2.4.0):
+    - AWSCore (= 2.4.0)
   - AWSCore (2.4.0)
   - AWSS3 (2.4.0):
     - AWSCore (= 2.4.0)
@@ -10,6 +12,8 @@ PODS:
   - Bolts/Tasks (1.7.0)
   - FBSDKCoreKit (4.11.0):
     - Bolts (~> 1.7)
+  - FBSDKLoginKit (4.11.0):
+    - FBSDKCoreKit
   - Firebase (2.5.1)
   - FLAnimatedImage (1.0.12)
   - FormatterKit (1.8.1):
@@ -68,8 +72,10 @@ PODS:
   - SDWebImage/Core (3.7.5)
 
 DEPENDENCIES:
+  - AWSCognito
   - AWSS3
   - FBSDKCoreKit (~> 4.9)
+  - FBSDKLoginKit
   - Firebase
   - FormatterKit (~> 1.8)
   - GPUImage (~> 0.1)
@@ -79,10 +85,12 @@ DEPENDENCIES:
   - SDWebImage (~> 3.7)
 
 SPEC CHECKSUMS:
+  AWSCognito: 1d96bd3ccda48918b00862895561dcb2a6080acf
   AWSCore: 7e0da755786280a76ed4ab4ed8c1d38ced09b460
   AWSS3: dc00e788fb6733853ecd615a45f9d7dd6ce25823
   Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
   FBSDKCoreKit: 686ac982723a14ec9ddb85e2f81235d7706c891b
+  FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
   Firebase: 3565ea88b830f28f2c77ecc524622bc71a20d085
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FormatterKit: 11ad17b983200629246a5a466f6f1bfa2df823cb

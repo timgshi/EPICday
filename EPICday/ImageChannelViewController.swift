@@ -98,6 +98,12 @@ class ImageChannelViewController: UIViewController {
                     (next:AnyObject!) -> () in
                     imageCell.setTimeAgoTextFromDate(photo.timestamp)
             }
+            photo.loadThumbnail()
+            photo.rac_valuesForKeyPath("thumbnail", observer: photo)
+                .takeUntil(imageCell.rac_prepareForReuseSignal)
+                .subscribeNext({ (next: AnyObject!) -> () in
+                    imageCell.image = photo.thumbnail
+                })
             imageCell.cellDidTapBlock = {
                 (blockCell:ImageCell) in
                 self.showFullScreenImageViewFromCell(blockCell, photo: photo)
@@ -244,7 +250,7 @@ extension ImageChannelViewController: UICollectionViewDelegate, CollectionViewWa
         var cellSize = CGSize(width: 16, height: 16)
         if (collectionView == imageCollectionView) {
             let photo = self.dataSource?.photoAtIndexPath(indexPath)
-            cellSize = (photo?.thumbnail.size)!
+            cellSize = (photo?.size)!
         }
         return cellSize
     }
@@ -277,6 +283,11 @@ extension ImageChannelViewController: UICollectionViewDelegate, CollectionViewWa
         }
         
         channelNameLabel.alpha = 1 - headerContainerView.alpha
+        
+        print(offset, scrollView.contentSize.height - self.view.frame.height - 300)
+        if offset > (scrollView.contentSize.height - (self.view.frame.height * 2))  && !(self.dataSource?.isLoading ?? true) {
+            self.dataSource?.loadNextPage()
+        }
     }
 }
 

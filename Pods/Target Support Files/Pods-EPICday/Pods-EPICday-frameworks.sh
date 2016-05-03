@@ -84,10 +84,12 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods-EPICday/AWSCognito.framework"
   install_framework "Pods-EPICday/AWSCore.framework"
   install_framework "Pods-EPICday/AWSS3.framework"
   install_framework "Pods-EPICday/Bolts.framework"
   install_framework "Pods-EPICday/FBSDKCoreKit.framework"
+  install_framework "Pods-EPICday/FBSDKLoginKit.framework"
   install_framework "Pods-EPICday/FLAnimatedImage.framework"
   install_framework "Pods-EPICday/Firebase.framework"
   install_framework "Pods-EPICday/FormatterKit.framework"
@@ -98,10 +100,12 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-EPICday/SDWebImage.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods-EPICday/AWSCognito.framework"
   install_framework "Pods-EPICday/AWSCore.framework"
   install_framework "Pods-EPICday/AWSS3.framework"
   install_framework "Pods-EPICday/Bolts.framework"
   install_framework "Pods-EPICday/FBSDKCoreKit.framework"
+  install_framework "Pods-EPICday/FBSDKLoginKit.framework"
   install_framework "Pods-EPICday/FLAnimatedImage.framework"
   install_framework "Pods-EPICday/Firebase.framework"
   install_framework "Pods-EPICday/FormatterKit.framework"

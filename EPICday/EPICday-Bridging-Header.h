@@ -3,15 +3,12 @@
 //
 
 #import <Bolts/Bolts.h>
-#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <Firebase/Firebase.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <FormatterKit/TTTTimeIntervalFormatter.h>
 
 #import "Models.h"
 #import "ChannelStreamDataSource.h"
-#import <FirebaseUI/FirebaseCollectionViewDataSource.h>
 #import <NYTPhotoViewer/NYTPhotosViewController.h>
 #import "PostUploadManager.h"
