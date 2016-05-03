@@ -259,12 +259,19 @@ extension ImageChannelViewController: UICollectionViewDelegate, CollectionViewWa
         descriptionLabelTopConstraint.constant = (1 - (offset / (descriptionLabelTopConstraintInitialValue * descriptionMultiplier))) * descriptionLabelTopConstraintInitialValue
         usersContainerTopConstraint.constant = (1 - (offset / (usersContainerTopConstraintInitialValue * usersMultiplier))) * usersContainerTopConstraintInitialValue
         
-        let transitionPercent = (offset / (headerContainerViewInitialMaxY - 64));
+        let transitionPercent = ((offset * (offset / 300)) / (headerContainerViewInitialMaxY - 64));
         headerContainerView.alpha = 1 - transitionPercent
         
         if (offset > 0) {
-            headerContainerView.transform = CGAffineTransformMakeScale(1 - (transitionPercent * 0.2), 1 - (transitionPercent * 0.2))
+            let headerScale = 1 - (transitionPercent * 0.2)
+            headerContainerView.transform = CGAffineTransformMakeScale(headerScale, headerScale)
         }
+        
+        if transitionPercent <= 1 {
+            let titleScale = 1 - ((1 - transitionPercent) * 0.1)
+            channelNameLabel.transform = CGAffineTransformMakeScale(titleScale, titleScale)
+        }
+        
         channelNameLabel.alpha = 1 - headerContainerView.alpha
     }
 }
