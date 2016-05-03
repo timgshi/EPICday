@@ -129,6 +129,13 @@ class CameraViewController: UIViewController {
         self.initializeCameraWithDevicePosition(newPosition)
     }
     
+    @IBAction func chooseFromLibraryTapped(sender: AnyObject) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .PhotoLibrary
+        presentViewController(picker, animated: true, completion: nil)
+    }
+    
     @IBAction func captureFrame(sender: AnyObject) {
         if self.status == .Preview {
             captureButton.userInteractionEnabled = false
@@ -181,5 +188,21 @@ class CameraViewController: UIViewController {
                 self.cameraStillView.image = nil;
             })
         }
+    }
+}
+
+extension CameraViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        picker.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage,
+            data = UIImageJPEGRepresentation(image, 0.7) else {
+            return
+        }
+        
+        PostUploadManager.sharedManager().postPhotosFromUnfilteredGalleryImageAsData([data], inSelectedChannel: self.selectedChannel)
+        picker.dismissViewControllerAnimated(true, completion: nil)
     }
 }

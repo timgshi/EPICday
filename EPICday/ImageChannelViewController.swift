@@ -138,6 +138,10 @@ class ImageChannelViewController: UIViewController {
         self.setupInitialConstraintValues()
     }
     
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.Portrait
+    }
+    
     @IBAction func cameraButtonTapped(sender: AnyObject?) {
         CameraAccessRequester().runWithCameraAccessRequestIfNecessary { (authorized) in
             if (authorized) {

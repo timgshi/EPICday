@@ -240,6 +240,9 @@
                                     <constraint firstAttribute="height" constant="48" id="ROx-fc-dt5"/>
                                 </constraints>
                                 <state key="normal" image="cameraAlbumBtn"/>
+                                <connections>
+                                    <action selector="chooseFromLibraryTapped:" destination="P1g-O3-uAj" eventType="touchUpInside" id="TYd-mV-YTW"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ClL-Z7-6LJ">
                                 <rect key="frame" x="536" y="512" width="48" height="48"/>
