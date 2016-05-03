@@ -138,19 +138,35 @@ class ImageChannelViewController: UIViewController {
         self.setupInitialConstraintValues()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if (segue.identifier == "EPICCaptureSegue") {
-            self.cameraTransition.animationChild = cameraButton
-            self.cameraTransition.animationColor = UIColor(red: 0/255, green: 217/255, blue: 144/255, alpha: 1.0)
+    @IBAction func cameraButtonTapped(sender: AnyObject?) {
+        CameraAccessRequester().runWithCameraAccessRequestIfNecessary { (authorized) in
+            if (authorized) {
+                self.showCamera()
+            } else {
+                self.showCameraAccessErrorMessage()
+            }
+        }
+    }
+    
+    func showCamera () {
+        cameraTransition.animationChild = cameraButton
+        cameraTransition.animationColor = UIColor(red: 0/255, green: 217/255, blue: 144/255, alpha: 1.0)
+        
+        guard let cameraViewController = self.storyboard?.instantiateViewControllerWithIdentifier("CameraViewController") as? CameraViewController else {
+            fatalError("Could not load camera view controller")
         }
         
-        if let toViewController = segue.destinationViewController as? CameraViewController {
-            toViewController.selectedChannel = self.selectedChannel
-            self.cameraTransition.fromViewController = self
-            self.cameraTransition.toViewController = toViewController
-            /* Add the transition manager to your transitioningDelegate View Controller*/
-            toViewController.transitioningDelegate = self.cameraTransition
-        }
+        cameraViewController.selectedChannel = selectedChannel
+        cameraTransition.fromViewController = self
+        cameraTransition.toViewController = cameraViewController
+        cameraViewController.transitioningDelegate = cameraTransition
+        presentViewController(cameraViewController, animated: true, completion: nil)
+    }
+    
+    func showCameraAccessErrorMessage () {
+        let alertController = UIAlertController(title: "Bummer!", message: "EPICday doesn't have permission to use the camera. Please go to the Settings app and grant access", preferredStyle: .Alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+        presentViewController(alertController, animated: true, completion: nil)
     }
     
     //MARK: - Description Attributed String

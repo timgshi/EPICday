@@ -19,7 +19,9 @@ class CameraAccessRequester {
             completion(authorized: true)
             break
         case .NotDetermined:
-            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: completion)
+            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) { authorized in
+                completion(authorized: authorized)
+            }
             break
         default:
             completion(authorized: false)

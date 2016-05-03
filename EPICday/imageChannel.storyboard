@@ -163,7 +163,7 @@
                                     <color key="titleColor" red="0.0" green="0.85098039219999999" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="P1g-O3-uAj" kind="presentation" identifier="EPICCaptureSegue" id="MJg-ib-V6o"/>
+                                    <action selector="cameraButtonTapped:" destination="YdO-Hv-jZu" eventType="touchUpInside" id="p4B-m8-S64"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -206,7 +206,7 @@
         <!--Camera View Controller-->
         <scene sceneID="2d8-NW-PdF">
             <objects>
-                <viewController id="P1g-O3-uAj" customClass="CameraViewController" customModule="EPICday" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CameraViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="P1g-O3-uAj" customClass="CameraViewController" customModule="EPICday" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="zEb-dt-Bqa"/>
                         <viewControllerLayoutGuide type="bottom" id="dgp-Y0-22p"/>
