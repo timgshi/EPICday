@@ -30,4 +30,6 @@ extern NSString * const EPICChannelDidUpdatePostsNotification;
 
 - (BFTask *)fetchMemberThumbUrls;
 
+- (Firebase *)createRefForNewPost;
+
 @end

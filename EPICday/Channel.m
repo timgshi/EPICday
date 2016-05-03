@@ -114,4 +114,16 @@ NSString * const EPICChannelDidUpdatePostsNotification = @"EPICChannelDidUpdateP
     return NO;
 }
 
+- (Firebase *)createRefForNewPost {
+    Firebase *ref = [[[self.ref root] childByAppendingPath:@"posts"] childByAutoId];
+    NSDictionary *postValues = @{
+                                 @"channel": self.ref.key,
+                                 @"timestamp": @([[NSDate date] timeIntervalSince1970]),
+                                 @"user": self.ref.authData.uid
+                                 };
+    [ref setValue:postValues];
+    [self.ref updateChildValues:@{[NSString stringWithFormat:@"posts/%@", ref.key]: @YES}];
+    return ref;
+}
+
 @end

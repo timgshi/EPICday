@@ -31,6 +31,7 @@ class ImageChannelViewController: UIViewController {
     private var headerContainerTopConstraintInitialValue: CGFloat = 0.0
     private var descriptionLabelTopConstraintInitialValue: CGFloat = 0.0
     private var usersContainerTopConstraintInitialValue: CGFloat = 0.0
+    private var headerContainerViewInitialMaxY: CGFloat = 0.0
     
     var dataSource: ChannelStreamDataSource?
     var selectedChannel: Channel?
@@ -143,12 +144,13 @@ class ImageChannelViewController: UIViewController {
             self.cameraTransition.animationColor = UIColor(red: 0/255, green: 217/255, blue: 144/255, alpha: 1.0)
         }
         
-        let toViewController = segue.destinationViewController as! FilteredCaptureViewController
-        toViewController.selectedChannel = self.selectedChannel
-        self.cameraTransition.fromViewController = self
-        self.cameraTransition.toViewController = toViewController
-        /* Add the transition manager to your transitioningDelegate View Controller*/
-        toViewController.transitioningDelegate = self.cameraTransition
+        if let toViewController = segue.destinationViewController as? CameraViewController {
+            toViewController.selectedChannel = self.selectedChannel
+            self.cameraTransition.fromViewController = self
+            self.cameraTransition.toViewController = toViewController
+            /* Add the transition manager to your transitioningDelegate View Controller*/
+            toViewController.transitioningDelegate = self.cameraTransition
+        }
     }
     
     //MARK: - Description Attributed String
@@ -198,9 +200,12 @@ class ImageChannelViewController: UIViewController {
     }
     
     func setupInitialConstraintValues () {
-        headerContainerTopConstraintInitialValue = headerContainerTopConstraint.constant
-        descriptionLabelTopConstraintInitialValue = descriptionLabelTopConstraint.constant
-        usersContainerTopConstraintInitialValue = usersContainerTopConstraint.constant
+        if headerContainerTopConstraintInitialValue == 0.0 && descriptionLabelTopConstraintInitialValue == 0.0 && usersContainerTopConstraintInitialValue == 0.0 {
+            headerContainerTopConstraintInitialValue = headerContainerTopConstraint.constant
+            descriptionLabelTopConstraintInitialValue = descriptionLabelTopConstraint.constant
+            usersContainerTopConstraintInitialValue = usersContainerTopConstraint.constant
+            headerContainerViewInitialMaxY = headerContainerView.frame.maxY
+        }
     }
     
     // MARK: Interactions
@@ -219,7 +224,7 @@ extension ImageChannelViewController: UICollectionViewDelegate, CollectionViewWa
         var cellSize = CGSize(width: 16, height: 16)
         if (collectionView == imageCollectionView) {
             let photo = self.dataSource?.photoAtIndexPath(indexPath)
-            cellSize = (photo?.size)!
+            cellSize = (photo?.thumbnail.size)!
         }
         return cellSize
     }
@@ -227,16 +232,23 @@ extension ImageChannelViewController: UICollectionViewDelegate, CollectionViewWa
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
         
-        var multiplier: CGFloat = 5
-        if offset > 0 {
-            multiplier = 10
+        var descriptionMultiplier: CGFloat = 18
+        var usersMultiplier: CGFloat = 20
+        if offset < 0 {
+            descriptionMultiplier = 8
+            usersMultiplier = 10
         }
 
         headerContainerTopConstraint.constant = (1 - (offset / (headerContainerTopConstraintInitialValue * 1.5))) * headerContainerTopConstraintInitialValue
-        descriptionLabelTopConstraint.constant = (1 - (offset / (descriptionLabelTopConstraintInitialValue * multiplier))) * descriptionLabelTopConstraintInitialValue
-        usersContainerTopConstraint.constant = (1 - (offset / (usersContainerTopConstraintInitialValue * multiplier))) * usersContainerTopConstraintInitialValue
+        descriptionLabelTopConstraint.constant = (1 - (offset / (descriptionLabelTopConstraintInitialValue * descriptionMultiplier))) * descriptionLabelTopConstraintInitialValue
+        usersContainerTopConstraint.constant = (1 - (offset / (usersContainerTopConstraintInitialValue * usersMultiplier))) * usersContainerTopConstraintInitialValue
         
-        headerContainerView.alpha = 1 - (offset / 200)
+        let transitionPercent = (offset / (headerContainerViewInitialMaxY - 64));
+        headerContainerView.alpha = 1 - transitionPercent
+        
+        if (offset > 0) {
+            headerContainerView.transform = CGAffineTransformMakeScale(1 - (transitionPercent * 0.2), 1 - (transitionPercent * 0.2))
+        }
         channelNameLabel.alpha = 1 - headerContainerView.alpha
     }
 }

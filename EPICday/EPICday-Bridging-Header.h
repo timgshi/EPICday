@@ -16,3 +16,4 @@
 #import "FilteredCaptureViewController.h"
 #import <FirebaseUI/FirebaseCollectionViewDataSource.h>
 #import <NYTPhotoViewer/NYTPhotosViewController.h>
+#import "PostUploadManager.h"

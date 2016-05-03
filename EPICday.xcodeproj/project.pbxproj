@@ -74,6 +74,11 @@
 		4B7D3A271C543E1A00E170FB /* EPICdayUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A261C543E1A00E170FB /* EPICdayUITests.m */; };
 		4B7D3A361C54468F00E170FB /* ChannelStreamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */; };
 		4BB7EB3E1C8A7E3200AD6C83 /* QZCircleSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */; };
+		502C82471CD7D2F600425DB9 /* CheckMarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502C82461CD7D2F600425DB9 /* CheckMarkView.swift */; };
+		502C82491CD7D6B900425DB9 /* QCMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502C82481CD7D6B900425DB9 /* QCMethod.swift */; };
+		505601811CD7A77700D31716 /* CameraAccessRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505601801CD7A77700D31716 /* CameraAccessRequester.swift */; };
+		505963441CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505963431CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift */; };
+		50779A561CD7C72900F45972 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50779A551CD7C72900F45972 /* CameraViewController.swift */; };
 		50A9CAC41CD2E38E005EBDD2 /* TradeGothic-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 50A9CAC31CD2E38E005EBDD2 /* TradeGothic-Bold.otf */; };
 		50A9CAC61CD2E578005EBDD2 /* PhotoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9CAC51CD2E578005EBDD2 /* PhotoProvider.swift */; };
 /* End PBXBuildFile section */
@@ -194,6 +199,11 @@
 		4B7D3A341C54468F00E170FB /* ChannelStreamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelStreamViewController.h; sourceTree = "<group>"; };
 		4B7D3A351C54468F00E170FB /* ChannelStreamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelStreamViewController.m; sourceTree = "<group>"; };
 		4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QZCircleSegue.swift; sourceTree = "<group>"; };
+		502C82461CD7D2F600425DB9 /* CheckMarkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CheckMarkView.swift; path = Camera/CheckMarkView.swift; sourceTree = "<group>"; };
+		502C82481CD7D6B900425DB9 /* QCMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCMethod.swift; sourceTree = "<group>"; };
+		505601801CD7A77700D31716 /* CameraAccessRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CameraAccessRequester.swift; path = Camera/CameraAccessRequester.swift; sourceTree = "<group>"; };
+		505963431CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImageOrientation+UIDeviceOrientation.swift"; path = "Camera/UIImageOrientation+UIDeviceOrientation.swift"; sourceTree = "<group>"; };
+		50779A551CD7C72900F45972 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CameraViewController.swift; path = Camera/CameraViewController.swift; sourceTree = "<group>"; };
 		50A9CAC31CD2E38E005EBDD2 /* TradeGothic-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TradeGothic-Bold.otf"; sourceTree = "<group>"; };
 		50A9CAC51CD2E578005EBDD2 /* PhotoProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoProvider.swift; sourceTree = "<group>"; };
 		A094ED59DDEBB334E8CBE3DC /* Pods_EPICday.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EPICday.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -408,6 +418,7 @@
 				4B7D3A081C543E1A00E170FB /* WelcomeViewController.m */,
 				22B4BBE91C7EE34A00274E58 /* Intro from Prolific */,
 				22EE1A111C8674E800FE7862 /* Channel from Prolific */,
+				5056017F1CD7A70400D31716 /* Camera */,
 				22CE2D611C7FB0E700DE582D /* Channel Stream */,
 				22CE2D621C7FB0F200DE582D /* Gallery Picker */,
 				22254BB31C58A20C0031BBC0 /* BigCameraButton.h */,
@@ -454,6 +465,18 @@
 				4B7D3A281C543E1A00E170FB /* Info.plist */,
 			);
 			path = EPICdayUITests;
+			sourceTree = "<group>";
+		};
+		5056017F1CD7A70400D31716 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				505601801CD7A77700D31716 /* CameraAccessRequester.swift */,
+				50779A551CD7C72900F45972 /* CameraViewController.swift */,
+				502C82461CD7D2F600425DB9 /* CheckMarkView.swift */,
+				502C82481CD7D6B900425DB9 /* QCMethod.swift */,
+				505963431CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift */,
+			);
+			name = Camera;
 			sourceTree = "<group>";
 		};
 		D372DB2E72A675A223AB2BE8 /* Frameworks */ = {
@@ -675,6 +698,7 @@
 				221D7ECA1C56E05F0090A542 /* Photo.m in Sources */,
 				22EE1A091C8674E100FE7862 /* ImageCell.swift in Sources */,
 				22083C131C6947D7002C947A /* UICollectionView+Convenience.m in Sources */,
+				505963441CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift in Sources */,
 				22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */,
 				221D7ED31C56E3A30090A542 /* PhotoCollectionViewCell.m in Sources */,
 				22B4BBBB1C7EDD7400274E58 /* IntroViewController.swift in Sources */,
@@ -692,10 +716,12 @@
 				22B4BBC01C7EDDBD00274E58 /* MotionManager.swift in Sources */,
 				22B4BBC61C7EE0E500274E58 /* UIColorExtension.swift in Sources */,
 				4B7D3A091C543E1A00E170FB /* WelcomeViewController.m in Sources */,
+				50779A561CD7C72900F45972 /* CameraViewController.swift in Sources */,
 				50A9CAC61CD2E578005EBDD2 /* PhotoProvider.swift in Sources */,
 				22F15EAD1C59D71600B07F63 /* CaptureViewController.m in Sources */,
 				22B4BBBD1C7EDD7400274E58 /* CharPageControl.swift in Sources */,
 				4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */,
+				502C82491CD7D6B900425DB9 /* QCMethod.swift in Sources */,
 				22CE2D6A1C7FB2C100DE582D /* PostUploadManager.m in Sources */,
 				22254BB51C58A20C0031BBC0 /* BigCameraButton.m in Sources */,
 				22254BB21C5894A10031BBC0 /* PostCollectionViewHeader.m in Sources */,
@@ -704,8 +730,10 @@
 				221D7EC71C56E0540090A542 /* Channel.m in Sources */,
 				22EE1A0A1C8674E100FE7862 /* ImageChannelViewController.swift in Sources */,
 				22EE1A101C8674E100FE7862 /* ThumbView.swift in Sources */,
+				502C82471CD7D2F600425DB9 /* CheckMarkView.swift in Sources */,
 				4B7D3A031C543E1A00E170FB /* main.m in Sources */,
 				4BB7EB3E1C8A7E3200AD6C83 /* QZCircleSegue.swift in Sources */,
+				505601811CD7A77700D31716 /* CameraAccessRequester.swift in Sources */,
 				22083C1A1C694CC3002C947A /* ChannelGalleryPickerViewController.m in Sources */,
 				221D7ECD1C56E0680090A542 /* Post.m in Sources */,
 				22083C0D1C694771002C947A /* GalleryCollectionViewController.m in Sources */,
