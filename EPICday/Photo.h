@@ -7,7 +7,6 @@
 //
 
 #import "Channel.h"
-#import "Post.h"
 
 @class BFTask;
 @class BFTaskCompletionSource;
@@ -17,24 +16,17 @@
 
 @property (nonatomic, readonly) NSString *objectId;
 @property (nonatomic, strong) Channel *channel;
-@property (nonatomic, strong) Post *post;
 @property (nonatomic, strong) NSDate *timestamp;
 @property (nonatomic, strong) NSDictionary *dimensions;
 @property (nonatomic, strong) NSURL *imageUrl;
-@property (nonatomic, strong) UIImage *thumbnail;
-//@property (nonatomic, strong) PFUser *user;
-//@property (nonatomic, strong) PFGeoPoint *location;
-//@property (nonatomic, strong) NSArray *robbers;
+@property (nonatomic, strong) NSURL *thumbnailUrl;
 
 @property (nonatomic, readonly) CGSize size;
 
 @property (nonatomic, strong) Firebase *ref;
+@property (nonatomic, strong) Firebase *userRef;
 
-//- (void)thumbnailWithCompletion:(void (^)(UIImage *thumbnail))completion;
-
-- (void)loadThumbnail;
-
-+ (instancetype)photoFromRef:(Firebase *)ref inPost:(Post *)post withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource;
-+ (BFTask *)photoFromRef:(Firebase *)ref inPost:(Post *)post;
++ (instancetype)photoFromRef:(Firebase *)ref inChannel:(Channel *)channel withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource;
++ (BFTask *)photoFromRef:(Firebase *)ref inChannel:(Channel *)channel;
 
 @end

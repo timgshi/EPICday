@@ -11,7 +11,6 @@
 
 #import "Channel.h"
 #import "Photo.h"
-#import "Post.h"
 #import "User.h"
 
 #endif /* Models_h */

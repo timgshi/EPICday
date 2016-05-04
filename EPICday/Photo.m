@@ -13,43 +13,51 @@
 
 @interface Photo ()
 
-@property (nonatomic, copy) NSString *thumbnailDataString;
-
 @end
 
 @implementation Photo
 
-+ (instancetype)photoFromRef:(Firebase *)ref inPost:(Post *)post withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource {
++ (instancetype)photoFromRef:(Firebase *)ref inChannel:(Channel *)channel withInitialLoadTaskSource:(BFTaskCompletionSource *)taskSource {
     Photo *photo = [self new];
     photo.ref = ref;
+    photo.channel = channel;
     [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         NSDictionary *valuesDict = (NSDictionary *)snapshot.value;
-        photo.channel = post.channel;
-        photo.post = post;
-        photo.timestamp = [NSDate dateWithTimeIntervalSince1970:[valuesDict[@"timestamp"] doubleValue]];
-        photo.dimensions = valuesDict[@"dimensions"];
-        photo.imageUrl = [NSURL URLWithString:valuesDict[@"imageUrl"]];
+        [photo fillInValuesFromDictionary:valuesDict];
         [taskSource trySetResult:@YES];
     }];
     return photo;
 }
 
-+ (BFTask *)photoFromRef:(Firebase *)ref inPost:(Post *)post {
++ (instancetype)photoFromRef:(Firebase *)ref channel:(Channel *)channel valueDictionary:(NSDictionary *)dict
+{
+    Photo *photo = [Photo new];
+    photo.ref = ref;
+    photo.channel = channel;
+    [photo fillInValuesFromDictionary:dict];
+    return photo;
+}
+
++ (BFTask *)photoFromRef:(Firebase *)ref inChannel:(Channel *)channel {
     BFTaskCompletionSource *taskSource = [BFTaskCompletionSource taskCompletionSource];
     Photo *photo = [self new];
     photo.ref = ref;
+    photo.channel = channel;
     [ref observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         NSDictionary *valuesDict = (NSDictionary *)snapshot.value;
-        photo.post = post;
-        photo.channel = post.channel;
-        photo.post = post;
-        photo.timestamp = [NSDate dateWithTimeIntervalSince1970:[valuesDict[@"timestamp"] doubleValue]];
-        photo.dimensions = valuesDict[@"dimensions"];
-        photo.imageUrl = [NSURL URLWithString:valuesDict[@"imageUrl"]];
-        photo.thumbnailDataString = valuesDict[@"thumbnailBase64"];
+        [photo fillInValuesFromDictionary:valuesDict];
         [taskSource trySetResult:photo];
     }];
     return taskSource.task;
+}
+
+- (void)fillInValuesFromDictionary:(NSDictionary *)valuesDict
+{
+    self.timestamp = [NSDate dateWithTimeIntervalSince1970:[valuesDict[@"timestamp"] doubleValue]];
+    self.dimensions = valuesDict[@"dimensions"];
+    self.imageUrl = [NSURL URLWithString:valuesDict[@"imageUrl"]];
+    self.thumbnailUrl = [NSURL URLWithString:valuesDict[@"thumbnailUrl"]];
+    self.userRef = [[[self.ref root] childByAppendingPath:@"users"] childByAppendingPath:valuesDict[@"user"]];
 }
 
 - (NSString *)objectId {
@@ -70,24 +78,6 @@
         return [p2.objectId isEqualToString:self.objectId];
     }
     return NO;
-}
-
-- (void)loadThumbnail {
-    if (!self.thumbnail) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            [self createThumbnailFromDataString];
-        });
-    }
-}
-
-- (void)createThumbnailFromDataString
-{
-    NSData *thumbnailData = [[NSData alloc] initWithBase64EncodedString:self.thumbnailDataString options:0];
-    UIImage *image = [UIImage imageWithData:thumbnailData];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.thumbnail = image;
-    });
 }
 
 @end

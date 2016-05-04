@@ -67,7 +67,10 @@ class ImageChannelViewController: UIViewController {
         let channelInitialLoadTaskSource = BFTaskCompletionSource()
         
         let baseRef = Firebase(url:"https://incandescent-inferno-9043.firebaseio.com/")
-        let channelRef = baseRef.childByAppendingPath("channels/-KA-1sbul1bQREXo6_sa")
+        let channelRef = baseRef.childByAppendingPath("channels/-KGseIiuZPZga4D5OWkU")
+
+    //  uncomment to quickly make a new channel w/ auto ID
+    //  let channelRef = baseRef.childByAppendingPath("channels").childByAutoId()
         channelRef.observeAuthEventWithBlock { (authData) -> Void in
             if authData == nil {
                 print("user was logged out")
@@ -84,7 +87,7 @@ class ImageChannelViewController: UIViewController {
             imageCell.photo = photo
             imageCell.delegate = self
             
-            let userRef = photo.post.userRef
+            let userRef = photo.userRef
             let user = User(fromRef: userRef)
             let nameSignal = user.rac_valuesForKeyPath("displayName", observer: user)
                                 .takeUntil(imageCell.rac_prepareForReuseSignal)
@@ -98,11 +101,10 @@ class ImageChannelViewController: UIViewController {
                     (next:AnyObject!) -> () in
                     imageCell.setTimeAgoTextFromDate(photo.timestamp)
             }
-            photo.loadThumbnail()
-            photo.rac_valuesForKeyPath("thumbnail", observer: photo)
+            photo.rac_valuesForKeyPath("thumbnailUrl", observer: photo)
                 .takeUntil(imageCell.rac_prepareForReuseSignal)
-                .subscribeNext({ (next: AnyObject!) -> () in
-                    imageCell.image = photo.thumbnail
+                .subscribeNext({ (next) in
+                    imageCell.thumbnailURL = photo.thumbnailUrl
                 })
             imageCell.cellDidTapBlock = {
                 (blockCell:ImageCell) in
@@ -284,7 +286,6 @@ extension ImageChannelViewController: UICollectionViewDelegate, CollectionViewWa
         
         channelNameLabel.alpha = 1 - headerContainerView.alpha
         
-        print(offset, scrollView.contentSize.height - self.view.frame.height - 300)
         if offset > (scrollView.contentSize.height - (self.view.frame.height * 2))  && !(self.dataSource?.isLoading ?? true) {
             self.dataSource?.loadNextPage()
         }

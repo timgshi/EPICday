@@ -32,6 +32,12 @@ class ImageCell: UICollectionViewCell {
     
     var photo: Photo?
     
+    var thumbnailURL: NSURL? {
+        didSet {
+            self.imageView.sd_setImageWithURL(thumbnailURL)
+        }
+    }
+    
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet private weak var timeAgoLabel: UILabel!

@@ -14,7 +14,6 @@
 		22083C131C6947D7002C947A /* UICollectionView+Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 22083C111C6947D7002C947A /* UICollectionView+Convenience.m */; };
 		221D7EC71C56E0540090A542 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7EC61C56E0540090A542 /* Channel.m */; };
 		221D7ECA1C56E05F0090A542 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7EC91C56E05F0090A542 /* Photo.m */; };
-		221D7ECD1C56E0680090A542 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 221D7ECC1C56E0680090A542 /* Post.m */; };
 		22254BAC1C585A630031BBC0 /* UIColor+EPIC.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BAB1C585A630031BBC0 /* UIColor+EPIC.m */; };
 		22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */ = {isa = PBXBuildFile; fileRef = 22254BAE1C585B350031BBC0 /* UIFont+EPIC.m */; };
 		2244EDE11C643C860026BE70 /* ChannelStreamDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2244EDE01C643C860026BE70 /* ChannelStreamDataSource.m */; };
@@ -98,8 +97,6 @@
 		221D7EC61C56E0540090A542 /* Channel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Channel.m; sourceTree = "<group>"; };
 		221D7EC81C56E05F0090A542 /* Photo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photo.h; sourceTree = "<group>"; };
 		221D7EC91C56E05F0090A542 /* Photo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Photo.m; sourceTree = "<group>"; };
-		221D7ECB1C56E0680090A542 /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
-		221D7ECC1C56E0680090A542 /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
 		22254BAA1C585A630031BBC0 /* UIColor+EPIC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+EPIC.h"; sourceTree = "<group>"; };
 		22254BAB1C585A630031BBC0 /* UIColor+EPIC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+EPIC.m"; sourceTree = "<group>"; };
 		22254BAD1C585B350031BBC0 /* UIFont+EPIC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+EPIC.h"; sourceTree = "<group>"; };
@@ -277,8 +274,6 @@
 				22CE2D671C7FB19200DE582D /* Models.h */,
 				221D7EC51C56E0540090A542 /* Channel.h */,
 				221D7EC61C56E0540090A542 /* Channel.m */,
-				221D7ECB1C56E0680090A542 /* Post.h */,
-				221D7ECC1C56E0680090A542 /* Post.m */,
 				221D7EC81C56E05F0090A542 /* Photo.h */,
 				221D7EC91C56E05F0090A542 /* Photo.m */,
 				229532331C63280900C6124F /* User.h */,
@@ -634,7 +629,6 @@
 				4B7D3A031C543E1A00E170FB /* main.m in Sources */,
 				4BB7EB3E1C8A7E3200AD6C83 /* QZCircleSegue.swift in Sources */,
 				505601811CD7A77700D31716 /* CameraAccessRequester.swift in Sources */,
-				221D7ECD1C56E0680090A542 /* Post.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

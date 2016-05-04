@@ -46,8 +46,7 @@ class CameraViewController: UIViewController {
     private var camera: GPUImageStillCamera?
     private var status: Status = .Preview
     private let screenSize = UIScreen.mainScreen().bounds
-    private var currentPostRef: Firebase?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initializeCameraWithDevicePosition(.Back)
@@ -63,8 +62,6 @@ class CameraViewController: UIViewController {
         
         self.cameraPreviewView.frame = self.cameraPreviewContainerView.bounds
         self.cameraPreviewContainerView.addSubview(self.cameraPreviewView)
-        
-        self.currentPostRef = self.selectedChannel?.createRefForNewPost()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -151,7 +148,7 @@ class CameraViewController: UIViewController {
                 }
                 
                 let metadata = self.camera?.currentCaptureMetadata
-                PostUploadManager.sharedManager().postPhotoFromData(processedJPEG, withExifAttachments: metadata, inChannel: self.selectedChannel, withPostRef: self.currentPostRef)
+                PostUploadManager.sharedManager().postPhotoFromData(processedJPEG, withExifAttachments: metadata, inChannel: self.selectedChannel)
                 
                 self.cameraCaptureCheckMarkView.setupProperties()
                 self.cameraCaptureCheckMarkView.setupLayers()

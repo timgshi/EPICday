@@ -10,19 +10,20 @@
 
 #import "Channel.h"
 #import "Photo.h"
-#import "Post.h"
 
 #import <Bolts/Bolts.h>
 #import <Firebase/Firebase.h>
 
-const NSInteger PAGE_LIMIT = 50;
+const NSInteger PAGE_LIMIT = 20;
 
 @interface ChannelStreamDataSource ()
 
 @property (nonatomic, strong) UICollectionView *collectionView;
+//
+//@property (nonatomic, strong) NSMutableArray *posts;
+//@property (nonatomic, strong) NSMutableArray *allPhotos;
 
-@property (nonatomic, strong) NSMutableArray *posts;
-@property (nonatomic, strong) NSMutableArray *allPhotos;
+@property (nonatomic, strong) NSMutableArray *photos;
 
 @property (nonatomic, strong) NSTimer *debounceTimer;
 @property (nonatomic, assign) BOOL isLoading;
@@ -43,18 +44,11 @@ const NSInteger PAGE_LIMIT = 50;
     return dataSource;
 }
 
-- (NSMutableArray *)posts {
-    if (!_posts) {
-        _posts = @[].mutableCopy;
+- (NSMutableArray *)photos {
+    if (!_photos) {
+        _photos = [NSMutableArray new];
     }
-    return _posts;
-}
-
-- (NSMutableArray *)allPhotos {
-    if (!_allPhotos) {
-        _allPhotos = @[].mutableCopy;
-    }
-    return _allPhotos;
+    return _photos;
 }
 
 - (void)setChannel:(Channel *)channel {
@@ -63,20 +57,20 @@ const NSInteger PAGE_LIMIT = 50;
 }
 
 - (void)setupListeners {
-    FQuery *initialQuery = [[self.channel.ref childByAppendingPath:@"posts"] queryLimitedToLast:PAGE_LIMIT];
+    FQuery *initialQuery = [[self.channel.ref childByAppendingPath:@"photos"] queryLimitedToLast:PAGE_LIMIT];
     [self loadPageWithQuery:initialQuery removeObserverWhenLimitReached:NO];
 }
 
 - (void)loadNextPage {
-    if (self.isLoading || self.posts.count == 0) {
+    if (self.isLoading || self.photos.count == 0) {
         return;
     }
     
     NSLog(@"Loading next page");
     
-    Post *lastPost = self.posts.lastObject[@"post"];
-    NSString *lastKey = lastPost.objectId;
-    FQuery *query = [[[[self.channel.ref childByAppendingPath:@"posts"] queryOrderedByKey] queryEndingAtValue:lastKey] queryLimitedToLast:PAGE_LIMIT];
+    Photo *lastPhoto = self.photos.lastObject;
+    NSString *lastKey = lastPhoto.objectId;
+    FQuery *query = [[[[self.channel.ref childByAppendingPath:@"photos"] queryOrderedByKey] queryEndingAtValue:lastKey] queryLimitedToLast:PAGE_LIMIT];
     [self loadPageWithQuery:query removeObserverWhenLimitReached:YES];
 }
 
@@ -84,7 +78,7 @@ const NSInteger PAGE_LIMIT = 50;
     self.isLoading = YES;
     __block NSInteger count = 0;
     [query observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-        [self handleNewPostWithSnapshot:snapshot];
+        [self handleNewPhotoWithSnapshot:snapshot];
         
         count++;
         if (count >= PAGE_LIMIT - 1) {
@@ -97,56 +91,32 @@ const NSInteger PAGE_LIMIT = 50;
     }];
 }
 
-- (void)handleNewPostWithSnapshot:(FDataSnapshot *)snapshot {
-    Firebase *postRef = [[[self.channel.ref root] childByAppendingPath:@"posts"] childByAppendingPath:snapshot.key];
-    [[Post postFromRef:postRef inChannel:self.channel] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-        Post *post = task.result;
-        NSDictionary *postDict = @{@"post": post, @"photos": @[].mutableCopy};
-        NSString *objectID = post.objectId;
-        NSUInteger existingIndex = [self.posts indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSDictionary *testPostDict = (NSDictionary *)obj;
-            Post *testPost = testPostDict[@"post"];
-            return [testPost.objectId isEqualToString:objectID];
+- (void)handleNewPhotoWithSnapshot:(FDataSnapshot *)snapshot {
+    [[Photo photoFromRef:snapshot.ref inChannel:self.channel] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+        // Make sure the same photo is never added twice
+        Photo *photo = task.result;
+        NSUInteger existingIndex = [self.photos indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            Photo *testPhoto = (Photo *)obj;
+            return [testPhoto.objectId isEqualToString:photo.objectId];
         }];
         
         if (existingIndex != NSNotFound) {
             return nil;
         }
         
-        NSInteger index = [self.posts indexOfObject:postDict inSortedRange:NSMakeRange(0, self.posts.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(NSDictionary *p1Dict, NSDictionary *p2Dict) {
-            Post *p1 = p1Dict[@"post"];
-            Post *p2 = p2Dict[@"post"];
+        // Find the right place to insert it chronologically
+        NSInteger index = [self.photos indexOfObject:photo inSortedRange:NSMakeRange(0, self.photos.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
             return [p2.timestamp compare:p1.timestamp];
         }];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.posts insertObject:postDict atIndex:index];
+            [self.photos insertObject:photo atIndex:index];
+            [self debouncedReload];
         });
-        [self setupListenersForPostDict:postDict];
+
         return nil;
     }];
-}
 
-- (void)setupListenersForPostDict:(NSDictionary *)postDict {
-    Post *post = postDict[@"post"];
-    [[post.ref childByAppendingPath:@"photos"] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-        Firebase *photoRef = [[[post.ref root] childByAppendingPath:@"photos"] childByAppendingPath:snapshot.key];
-        [[Photo photoFromRef:photoRef inPost:post] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-            Photo *photo = task.result;
-            NSMutableArray *photosArray = postDict[@"photos"];
-            NSInteger index = [photosArray indexOfObject:photo inSortedRange:NSMakeRange(0, photosArray.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
-                return [p2.timestamp compare:p1.timestamp];
-            }];
-            NSInteger allPhotosIndex = [self.allPhotos indexOfObject:photo inSortedRange:NSMakeRange(0, self.allPhotos.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
-                return [p2.timestamp compare:p1.timestamp];
-            }];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [photosArray insertObject:photo atIndex:index];
-                [self.allPhotos insertObject:photo atIndex:allPhotosIndex];
-                [self debouncedReload];
-            });
-            return nil;
-        }];
-    }];
 }
 
 - (void)debouncedReload {
@@ -163,7 +133,7 @@ const NSInteger PAGE_LIMIT = 50;
 }
 
 - (Photo *)photoAtIndexPath:(NSIndexPath *)indexPath {
-    return self.allPhotos[indexPath.item];
+    return self.photos[indexPath.item];
 }
 
 #pragma mark - UICollectionViewDataSource Methods
@@ -173,7 +143,7 @@ const NSInteger PAGE_LIMIT = 50;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.allPhotos.count;
+    return self.photos.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {

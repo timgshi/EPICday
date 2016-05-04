@@ -10,7 +10,6 @@
 
 #import "User.h"
 #import "Photo.h"
-#import "Post.h"
 
 #import <Bolts/Bolts.h>
 #import <Firebase/Firebase.h>
@@ -85,18 +84,6 @@ NSString * const EPICChannelDidUpdatePostsNotification = @"EPICChannelDidUpdateP
         return [c2.objectId isEqualToString:self.objectId];
     }
     return NO;
-}
-
-- (Firebase *)createRefForNewPost {
-    Firebase *ref = [[[self.ref root] childByAppendingPath:@"posts"] childByAutoId];
-    NSDictionary *postValues = @{
-                                 @"channel": self.ref.key,
-                                 @"timestamp": @([[NSDate date] timeIntervalSince1970]),
-                                 @"user": self.ref.authData.uid
-                                 };
-    [ref setValue:postValues];
-    [self.ref updateChildValues:@{[NSString stringWithFormat:@"posts/%@", ref.key]: @YES}];
-    return ref;
 }
 
 @end
