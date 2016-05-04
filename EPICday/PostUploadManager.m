@@ -15,12 +15,13 @@
 #import <ImageIO/ImageIO.h>
 #import <Firebase/Firebase.h>
 #import <AWSS3/AWSS3.h>
+#import "SDImageCache.h"
 
 @import Photos;
 
 @interface PostUploadManager ()
 
-@property (copy, nonatomic) AWSS3TransferUtilityUploadCompletionHandlerBlock uploadCompletionHandler;
+//@property (copy, nonatomic) AWSS3TransferUtilityUploadCompletionHandlerBlock uploadCompletionHandler;
 
 @end
 
@@ -40,23 +41,6 @@ static NSString * const PostUploadManagerCompletionValueIsThumbnailKey = @"PostU
         sharedManager = [self new];
     });
     return sharedManager;
-}
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        __weak typeof(self) weakSelf = self;
-        self.uploadCompletionHandler = ^(AWSS3TransferUtilityUploadTask *task, NSError *error) {
-            __strong typeof(self) strongSelf = weakSelf;
-            [strongSelf handleUploadTaskComplete:task];
-        };
-        AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
-        [transferUtility enumerateToAssignBlocksForUploadTask:^(AWSS3TransferUtilityUploadTask * _Nonnull uploadTask, __autoreleasing AWSS3TransferUtilityUploadProgressBlock * _Nullable uploadProgressBlockReference, __autoreleasing AWSS3TransferUtilityUploadCompletionHandlerBlock * _Nullable completionHandlerReference) {
-            __strong typeof(self) strongSelf = weakSelf;
-            *completionHandlerReference = strongSelf.uploadCompletionHandler;
-        } downloadTask:nil];
-    }
-    return self;
 }
 
 - (BFTask *)postPhotoFromData:(NSData *)imageData withExifAttachments:(NSDictionary *)exifAttachments inChannel:(Channel *)channel {
@@ -144,20 +128,22 @@ static NSString * const PostUploadManagerCompletionValueIsThumbnailKey = @"PostU
         AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
         AWSS3TransferUtilityUploadExpression *uploadExpression = [AWSS3TransferUtilityUploadExpression new];
         [uploadExpression setValue:@"public-read" forRequestParameter:@"x-amz-acl"];
+                                                        
+        NSString *urlString = [NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@", PostUploadManagerBucketName, key];
+        NSString *modelKey = isThumbnail ? @"thumbnailUrl" : @"imageUrl";
+
+        [photoRef updateChildValues:@{modelKey: urlString}];
+                                                        
+        [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:imageData] forKey:urlString];
         return [[transferUtility uploadFile:fileURL
                                      bucket:PostUploadManagerBucketName
                                         key:key
                                 contentType:PostUploadManagerContentType
                                  expression:uploadExpression
-                           completionHander:self.uploadCompletionHandler] continueWithBlock:^id _Nullable(AWSTask<AWSS3TransferUtilityUploadTask *> * _Nonnull task) {
-            NSDictionary *completionValues = @{
-                                               PostUploadManagerCompletionValuesImageUrlKey:[NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@", PostUploadManagerBucketName, key],
-                                               PostUploadManagerCompletionValuesPhotoRefUrlKey: [photoRef description],
-                                               PostUploadManagerCompletionValueIsThumbnailKey: @(isThumbnail)
-                                               };
-            [self storeCompletionValuesDict:completionValues forUploadTask:task];
+                           completionHander:nil] continueWithBlock:^id _Nullable(AWSTask<AWSS3TransferUtilityUploadTask *> * _Nonnull task) {
             return nil;
         }];
+                                                        
     }];
 }
 
@@ -230,25 +216,6 @@ static NSString * const PostUploadManagerCompletionValueIsThumbnailKey = @"PostU
         CGImageRelease(thumbnailRef);
         return [BFTask taskWithResult:thumbnailData];
     }];
-}
-
-- (void)storeCompletionValuesDict:(NSDictionary *)dict forUploadTask:(AWSTask *)task {
-    AWSS3TransferUtilityUploadTask *uploadTask = task.result;
-    NSString *dictKey = [NSString stringWithFormat:@"%@/%@", PostUploadManagerCompletionValuesDictKey, @(uploadTask.taskIdentifier)];
-    [[NSUserDefaults standardUserDefaults] setObject:dict forKey:dictKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)handleUploadTaskComplete:(AWSS3TransferUtilityUploadTask *)uploadTask {
-    NSString *dictKey = [NSString stringWithFormat:@"%@/%@", PostUploadManagerCompletionValuesDictKey, @(uploadTask.taskIdentifier)];
-    NSDictionary *completionDict = [[NSUserDefaults standardUserDefaults] objectForKey:dictKey];
-    NSString *imageUrl = completionDict[PostUploadManagerCompletionValuesImageUrlKey];
-    Firebase *photoRef = [[Firebase alloc] initWithUrl:completionDict[PostUploadManagerCompletionValuesPhotoRefUrlKey]];
-    
-    NSString *key = [completionDict[PostUploadManagerCompletionValueIsThumbnailKey] boolValue] ? @"thumbnailUrl" : @"imageUrl";
-    [photoRef updateChildValues:@{key: imageUrl}];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:dictKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end
