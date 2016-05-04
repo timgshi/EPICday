@@ -27,6 +27,8 @@ class CameraViewController: UIViewController {
     @IBOutlet private weak var cameraOverlayView: UIView!
     @IBOutlet private weak var cameraStillWidthConstraint: NSLayoutConstraint!
     @IBOutlet private weak var cameraCaptureCheckMarkView: CheckMarkView!
+    @IBOutlet private weak var switchCameraButton: UIButton!
+    @IBOutlet private weak var pickFromLibraryButton: UIButton!
     
     private lazy var cameraPreviewView: GPUImageView = {
         let previewView = GPUImageView()
@@ -62,6 +64,8 @@ class CameraViewController: UIViewController {
         
         self.cameraPreviewView.frame = self.cameraPreviewContainerView.bounds
         self.cameraPreviewContainerView.addSubview(self.cameraPreviewView)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(didRotateNotification), name: UIDeviceOrientationDidChangeNotification, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -86,11 +90,11 @@ class CameraViewController: UIViewController {
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.All
+        return UIInterfaceOrientationMask.Portrait
     }
     
     override func shouldAutorotate() -> Bool {
-        return true
+        return false
     }
     
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
@@ -111,6 +115,10 @@ class CameraViewController: UIViewController {
         self.camera?.outputImageOrientation = .Portrait // TODO: make this reflect device's current orientation
         self.camera?.addTarget(self.captureFilter)
         self.camera?.startCameraCapture()
+    }
+    
+    func didRotateNotification (notification: NSNotification) {
+        self.reconfigureButtonsForOrientation(UIDevice.currentDevice().orientation)
     }
 
     // MARK: Button Actions
@@ -185,6 +193,31 @@ class CameraViewController: UIViewController {
                 self.cameraStillView.image = nil;
             })
         }
+    }
+    
+    //MARK: - Button Animation 
+    
+    func reconfigureButtonsForOrientation(orientation: UIDeviceOrientation) {
+        var angle: CGFloat = 0.0;
+        
+        switch orientation {
+        case .LandscapeLeft:
+            angle = CGFloat(M_PI) / 2
+            break
+        case .LandscapeRight:
+            angle = CGFloat(M_PI) / -2
+            break
+        case .PortraitUpsideDown:
+            angle = CGFloat(M_PI)
+            break
+        default:
+            break
+        }
+        
+        UIView.animateWithDuration(0.6, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.6, options: .CurveEaseInOut, animations: {
+            self.switchCameraButton.transform = CGAffineTransformMakeRotation(angle)
+            self.pickFromLibraryButton.transform = CGAffineTransformMakeRotation(angle)
+        }, completion: nil)
     }
 }
 

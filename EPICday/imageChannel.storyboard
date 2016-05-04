@@ -127,7 +127,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#epic-sqweeb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oqB-kW-qhY">
                                                     <rect key="frame" x="59" y="13" width="123" height="22"/>
                                                     <fontDescription key="fontDescription" name="FuturaBT-Heavy" family="Futura" pointSize="18"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -369,6 +369,8 @@
                         <outlet property="cameraStillWidthConstraint" destination="deE-IA-AmX" id="1ES-uE-igk"/>
                         <outlet property="cameraTransitionView" destination="6V1-eQ-2fv" id="HSO-FM-tll"/>
                         <outlet property="captureButton" destination="2vR-0G-ily" id="apK-GO-rAO"/>
+                        <outlet property="pickFromLibraryButton" destination="2tP-TA-m97" id="msM-JV-G1I"/>
+                        <outlet property="switchCameraButton" destination="RPk-fn-zHb" id="jHV-bF-DfT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9gw-zG-rr7" sceneMemberID="firstResponder"/>
