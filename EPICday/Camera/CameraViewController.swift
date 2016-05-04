@@ -142,19 +142,23 @@ class CameraViewController: UIViewController {
             self.cameraPreviewView.alpha = 1.0;
             self.cameraOverlayView.alpha = 1
         })
-        
-        self.camera?.capturePhotoAsJPEGProcessedUpToFilter(self.captureFilter, withOrientation:UIImageOrientation(deviceOrientation:UIDevice.currentDevice().orientation), withCompletionHandler: { (processedJPEG, error) in
+
+        self.camera?.capturePhotoAsImageProcessedUpToFilter(self.captureFilter, withOrientation:UIImageOrientation(deviceOrientation:UIDevice.currentDevice().orientation), withCompletionHandler: { (processedImage, error) in
             if let _ = error {
+                self.cameraOverlayView.alpha = 0
                 return
             }
-            
-            if let image = UIImage(data: processedJPEG) {
-                self.runCaptureAnimationWithImage(image)
-                PostUploadManager.sharedManager().postPhotoFromData(processedJPEG, withSize: image.size, inChannel: self.selectedChannel)
-            }
+            self.runCaptureAnimationWithImage(processedImage)
+            self.uploadImageAsynchronously(processedImage)
         })
     }
     
+    func  uploadImageAsynchronously(image: UIImage) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            let imageData = UIImageJPEGRepresentation(image, 0.7);
+            PostUploadManager.sharedManager().postPhotoFromData(imageData, withSize: image.size, inChannel: self.selectedChannel)
+        }
+    }
     
     //MARK: - Animation
     func reconfigureButtonsForOrientation(orientation: UIDeviceOrientation) {
@@ -190,7 +194,11 @@ class CameraViewController: UIViewController {
         self.cameraCaptureCheckMarkView.setupLayers()
         self.cameraCaptureCheckMarkView.runFullAnimation()
         
-        UIView.animateWithDuration(0.2, delay: 0.2, options: .CurveEaseOut, animations: { () -> Void in
+        UIView.animateWithDuration(0.3, delay: 0.0, options: .CurveEaseIn, animations: {
+            self.cameraOverlayView.alpha = 0
+        }, completion: nil)
+        
+        UIView.animateWithDuration(0.2, delay: 0.0, options: .CurveEaseOut, animations: { () -> Void in
             self.cameraStillView.alpha = 1
             self.cameraStillWidthConstraint.constant = 96
             self.view.layoutIfNeeded()
@@ -202,7 +210,6 @@ class CameraViewController: UIViewController {
                 self.cameraStillView.alpha = 1.0;
                 self.cameraStillWidthConstraint.constant = -self.screenSize.width + 1
                 self.view.layoutIfNeeded()
-                self.cameraOverlayView.alpha = 0
             }, completion: { (value: Bool) in
                 self.cameraStillView.alpha = 0
             })
