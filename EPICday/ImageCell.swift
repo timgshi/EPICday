@@ -35,7 +35,10 @@ class ImageCell: UICollectionViewCell {
     
     var thumbnailURL: NSURL? {
         didSet {
-            self.imageView.sd_setImageWithURL(thumbnailURL, placeholderImage: nil, options: .HighPriority)
+            guard let thumbnailURL = thumbnailURL else {
+                return
+            }
+            
             self.imageView.sd_setImageWithURL(thumbnailURL, placeholderImage: nil, options: .HighPriority) { (image, error, cacheType, url) in
                 if self.visible {
                     self.runAppearanceAnimation()

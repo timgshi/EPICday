@@ -280,6 +280,13 @@ extension ImageChannelViewController: UICollectionViewDelegate, CollectionViewWa
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
+        if offset > (scrollView.contentSize.height - (self.view.frame.height * 2))  && !(self.dataSource?.isLoading ?? true) {
+            self.dataSource?.loadNextPage()
+        }
+        
+        if (offset > self.view.frame.height) {
+            return
+        }
         
         var descriptionMultiplier: CGFloat = 18
         var usersMultiplier: CGFloat = 20
@@ -305,10 +312,8 @@ extension ImageChannelViewController: UICollectionViewDelegate, CollectionViewWa
             channelNameLabel.transform = CGAffineTransformMakeScale(titleScale, titleScale)
         }
         
-        channelNameLabel.alpha = 1 - headerContainerView.alpha
-        
-        if offset > (scrollView.contentSize.height - (self.view.frame.height * 2))  && !(self.dataSource?.isLoading ?? true) {
-            self.dataSource?.loadNextPage()
+        if offset >= 0 {
+            channelNameLabel.alpha = 1 - headerContainerView.alpha
         }
     }
 }
