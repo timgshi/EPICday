@@ -20,6 +20,7 @@ class ImageCell: UICollectionViewCell {
     
     var cellDidTapBlock: (ImageCell -> Void)?
     var cellDidLongPressBlock: (ImageCell -> Void)?
+    var visible = false
     
     var image: UIImage? {
         get {
@@ -35,6 +36,13 @@ class ImageCell: UICollectionViewCell {
     var thumbnailURL: NSURL? {
         didSet {
             self.imageView.sd_setImageWithURL(thumbnailURL, placeholderImage: nil, options: .HighPriority)
+            self.imageView.sd_setImageWithURL(thumbnailURL, placeholderImage: nil, options: .HighPriority) { (image, error, cacheType, url) in
+                if self.visible {
+                    self.runAppearanceAnimation()
+                } else {
+                    self.wrapperView.alpha = 1
+                }
+            }
         }
     }
     
@@ -67,6 +75,7 @@ class ImageCell: UICollectionViewCell {
         self.contentView.addGestureRecognizer(tapGR)
         let longPressGR = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGR))
         self.contentView.addGestureRecognizer(longPressGR)
+        wrapperView.alpha = 0
     }
     
     override func prepareForReuse() {
@@ -78,6 +87,8 @@ class ImageCell: UICollectionViewCell {
         photo = nil
         self.cellDidTapBlock = nil
         self.cellDidLongPressBlock = nil
+        visible = false
+        wrapperView.alpha = 0
     }
     
     func setTimeAgoTextFromDate(date: NSDate!) {
@@ -114,5 +125,14 @@ class ImageCell: UICollectionViewCell {
             
             self.delegate?.imageCellDidLongPress(self)
         }
+    }
+    
+    func runAppearanceAnimation() {
+        self.wrapperView.transform = CGAffineTransformMakeScale(0.9, 0.9)
+
+        UIView.animateWithDuration(1.0, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.6, options: .CurveEaseInOut, animations: {
+            self.wrapperView.alpha = 1
+            self.wrapperView.transform = CGAffineTransformIdentity
+        }, completion: nil)
     }
 }

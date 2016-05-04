@@ -68,8 +68,6 @@ const NSInteger PAGE_LIMIT = 20;
         return;
     }
     
-    NSLog(@"Loading next page");
-    
     Photo *lastPhoto = self.photos.lastObject;
     NSString *lastKey = lastPhoto.objectId;
     FQuery *query = [[[[self.channel.ref childByAppendingPath:@"photos"] queryOrderedByKey] queryEndingAtValue:lastKey] queryLimitedToLast:PAGE_LIMIT];

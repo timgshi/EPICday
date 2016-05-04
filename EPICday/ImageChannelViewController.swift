@@ -272,6 +272,12 @@ extension ImageChannelViewController: UICollectionViewDelegate, CollectionViewWa
         return cellSize
     }
     
+    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        if let cell = cell as? ImageCell {
+            cell.visible = true
+        }
+    }
+    
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
         
