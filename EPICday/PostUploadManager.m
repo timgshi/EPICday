@@ -43,14 +43,14 @@ static NSString * const PostUploadManagerCompletionValueIsThumbnailKey = @"PostU
     return sharedManager;
 }
 
-- (BFTask *)postPhotoFromData:(NSData *)imageData withExifAttachments:(NSDictionary *)exifAttachments inChannel:(Channel *)channel {
+- (BFTask *)postPhotoFromData:(NSData *)imageData withSize:(CGSize)size inChannel:(Channel *)channel {
     UIBackgroundTaskIdentifier taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         [[UIApplication sharedApplication] endBackgroundTask:taskId];
     }];
     Firebase *photoRef = [[channel.ref childByAppendingPath:@"photos"] childByAutoId];
     NSDictionary *dimensions = @{
-                                 @"width": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelYDimension],
-                                 @"height": exifAttachments[@"{Exif}"][(__bridge NSString *)kCGImagePropertyExifPixelXDimension]
+                                 @"width": @(size.width),
+                                 @"height": @(size.height)
                                  };
     NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
     [photoRef setValue:@{
@@ -60,8 +60,7 @@ static NSString * const PostUploadManagerCompletionValueIsThumbnailKey = @"PostU
                          @"user": channel.ref.authData.uid,
                          @"dimensions": dimensions,
                          }];
-    CGSize imgSize = CGSizeMake([dimensions[@"width"] floatValue], [dimensions[@"height"] floatValue]);
-    BFTask *thumbnailTask = [self createThumbnailForPhotoRef:photoRef channel:channel imageData:imageData andSize:imgSize];
+    BFTask *thumbnailTask = [self createThumbnailForPhotoRef:photoRef channel:channel imageData:imageData andSize:size];
     BFTask *s3UploadTask = [self uploadPhotoRef:photoRef toS3FromData:imageData inChannel:channel isThumbnail:NO];
     BFTask *saveTask = [self saveImageDataToLibrary:imageData];
     return [[BFTask taskForCompletionOfAllTasks:@[thumbnailTask, s3UploadTask, saveTask]] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
@@ -209,6 +208,7 @@ static NSString * const PostUploadManagerCompletionValueIsThumbnailKey = @"PostU
     return [[BFTask taskWithResult:@YES] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
         CGImageSourceRef imageRef = CGImageSourceCreateWithData((CFDataRef)imageData, nil);
         NSDictionary *options = @{(__bridge NSString *)kCGImageSourceThumbnailMaxPixelSize: @(MAX(size.width, size.height) * 0.2),
+                                  (__bridge NSString *)kCGImageSourceCreateThumbnailWithTransform: @YES,
                                   (__bridge NSString *)kCGImageSourceCreateThumbnailFromImageAlways: @YES};
         CGImageRef thumbnailRef = CGImageSourceCreateThumbnailAtIndex(imageRef, 0, (__bridge CFDictionaryRef)options);
         UIImage *thumbnailImage = [UIImage imageWithCGImage:thumbnailRef];

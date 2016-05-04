@@ -14,6 +14,16 @@ import SDWebImage
 import ReactiveCocoa
 import NYTPhotoViewer
 
+extension UINavigationController {
+    override public func shouldAutorotate() -> Bool {
+        return self.topViewController?.shouldAutorotate() ?? true
+    }
+
+    override public func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return self.topViewController?.supportedInterfaceOrientations() ?? UIInterfaceOrientationMask.All;
+    }
+}
+
 class ImageChannelViewController: UIViewController {
     
     @IBOutlet private weak var headerContainerView: UIView!
@@ -148,6 +158,10 @@ class ImageChannelViewController: UIViewController {
     
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.Portrait
+    }
+    
+    override func shouldAutorotate() -> Bool {
+        return false
     }
     
     @IBAction func cameraButtonTapped(sender: AnyObject?) {

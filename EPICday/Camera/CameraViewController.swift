@@ -12,10 +12,6 @@ import AVFoundation
 import GPUImage
 import Firebase
 
-enum Status: Int {
-    case Preview, Still, Error
-}
-
 class CameraViewController: UIViewController {
     
     var selectedChannel: Channel?
@@ -46,7 +42,6 @@ class CameraViewController: UIViewController {
     }()
     
     private var camera: GPUImageStillCamera?
-    private var status: Status = .Preview
     private let screenSize = UIScreen.mainScreen().bounds
 
     override func viewDidLoad() {
@@ -142,61 +137,26 @@ class CameraViewController: UIViewController {
     }
     
     @IBAction func captureFrame(sender: AnyObject) {
-        if self.status == .Preview {
-            captureButton.userInteractionEnabled = false
-            UIView.animateWithDuration(0.1, animations: { () -> Void in
-                self.cameraPreviewView.alpha = 1.0;
-                self.cameraOverlayView.alpha = 1
-            })
+        captureButton.userInteractionEnabled = false
+        UIView.animateWithDuration(0.1, animations: { () -> Void in
+            self.cameraPreviewView.alpha = 1.0;
+            self.cameraOverlayView.alpha = 1
+        })
+        
+        self.camera?.capturePhotoAsJPEGProcessedUpToFilter(self.captureFilter, withOrientation:UIImageOrientation(deviceOrientation:UIDevice.currentDevice().orientation), withCompletionHandler: { (processedJPEG, error) in
+            if let _ = error {
+                return
+            }
             
-            self.camera?.capturePhotoAsJPEGProcessedUpToFilter(self.captureFilter, withOrientation:UIImageOrientation(deviceOrientation:UIDevice.currentDevice().orientation), withCompletionHandler: { (processedJPEG, error) in
-                if let _ = error {
-                    self.status = .Error
-                    return
-                }
-                
-                let metadata = self.camera?.currentCaptureMetadata
-                PostUploadManager.sharedManager().postPhotoFromData(processedJPEG, withExifAttachments: metadata, inChannel: self.selectedChannel)
-                
-                self.cameraCaptureCheckMarkView.setupProperties()
-                self.cameraCaptureCheckMarkView.setupLayers()
-                self.cameraCaptureCheckMarkView.runFullAnimation()
-                
-                self.cameraStillView.image = UIImage(data: processedJPEG);
-                self.cameraStillWidthConstraint.constant = 0
-                self.view.layoutIfNeeded()
-                
-                UIView.animateWithDuration(0.2, delay: 0.2, options: .CurveEaseOut, animations: { () -> Void in
-                    self.cameraStillView.alpha = 1
-                    self.cameraStillWidthConstraint.constant = 96
-                    self.view.layoutIfNeeded()
-                }, completion: {(value: Bool) in
-                    self.captureButton.userInteractionEnabled = true
-                    
-                    UIView.animateWithDuration(0.4, delay: 0, options: .CurveEaseIn, animations: {
-                        self.cameraStillView.alpha = 1.0;
-                        self.cameraStillWidthConstraint.constant = -self.screenSize.width + 1
-                        self.view.layoutIfNeeded()
-                        self.cameraOverlayView.alpha = 0
-                    }, completion: { (value: Bool) in
-                        self.cameraStillView.alpha = 0
-                    })
-                })
-                self.status = .Preview
-            })
-        } else if self.status == .Still || self.status == .Error {
-            UIView.animateWithDuration(0.225, animations: { () -> Void in
-                self.cameraStillView.alpha = 0.0;
-                self.cameraPreviewView.alpha = 1.0;
-                self.captureButton.setTitle("", forState: UIControlState.Normal)
-            }, completion: { (done) -> Void in
-                self.cameraStillView.image = nil;
-            })
-        }
+            if let image = UIImage(data: processedJPEG) {
+                self.runCaptureAnimationWithImage(image)
+                PostUploadManager.sharedManager().postPhotoFromData(processedJPEG, withSize: image.size, inChannel: self.selectedChannel)
+            }
+        })
     }
     
-    //MARK: - Button Animation 
     
+    //MARK: - Animation
     func reconfigureButtonsForOrientation(orientation: UIDeviceOrientation) {
         var angle: CGFloat = 0.0;
         
@@ -218,6 +178,35 @@ class CameraViewController: UIViewController {
             self.switchCameraButton.transform = CGAffineTransformMakeRotation(angle)
             self.pickFromLibraryButton.transform = CGAffineTransformMakeRotation(angle)
         }, completion: nil)
+    }
+    
+    func runCaptureAnimationWithImage(image: UIImage) {
+        self.cameraStillView.image = image;
+        
+        self.cameraStillWidthConstraint.constant = 0
+        self.view.layoutIfNeeded()
+        
+        self.cameraCaptureCheckMarkView.setupProperties()
+        self.cameraCaptureCheckMarkView.setupLayers()
+        self.cameraCaptureCheckMarkView.runFullAnimation()
+        
+        UIView.animateWithDuration(0.2, delay: 0.2, options: .CurveEaseOut, animations: { () -> Void in
+            self.cameraStillView.alpha = 1
+            self.cameraStillWidthConstraint.constant = 96
+            self.view.layoutIfNeeded()
+        }, completion: {(value: Bool) in
+        
+            self.captureButton.userInteractionEnabled = true
+                
+            UIView.animateWithDuration(0.4, delay: 0, options: .CurveEaseIn, animations: {
+                self.cameraStillView.alpha = 1.0;
+                self.cameraStillWidthConstraint.constant = -self.screenSize.width + 1
+                self.view.layoutIfNeeded()
+                self.cameraOverlayView.alpha = 0
+            }, completion: { (value: Bool) in
+                self.cameraStillView.alpha = 0
+            })
+        })
     }
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class BFTask;
 @class Channel;
@@ -16,7 +17,7 @@
 
 + (instancetype)sharedManager;
 
-- (BFTask *)postPhotoFromData:(NSData *)imageData withExifAttachments:(NSDictionary *)exifAttachments inChannel:(Channel *)channel;
+- (BFTask *)postPhotoFromData:(NSData *)imageData withSize:(CGSize)size inChannel:(Channel *)channel;
 - (BFTask *)postPhotosFromUnfilteredGalleryImageAsData:(NSArray *)assets inSelectedChannel:(Channel *)channel;
 
 @end
