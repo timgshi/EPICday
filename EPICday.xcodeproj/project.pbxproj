@@ -62,6 +62,7 @@
 		4BB7EB3E1C8A7E3200AD6C83 /* QZCircleSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */; };
 		502C82471CD7D2F600425DB9 /* CheckMarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502C82461CD7D2F600425DB9 /* CheckMarkView.swift */; };
 		502C82491CD7D6B900425DB9 /* QCMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502C82481CD7D6B900425DB9 /* QCMethod.swift */; };
+		504A7F861CDA3C7D0064329D /* HighlightTintButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A7F851CDA3C7D0064329D /* HighlightTintButton.swift */; };
 		505601811CD7A77700D31716 /* CameraAccessRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505601801CD7A77700D31716 /* CameraAccessRequester.swift */; };
 		505963441CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505963431CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift */; };
 		50779A561CD7C72900F45972 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50779A551CD7C72900F45972 /* CameraViewController.swift */; };
@@ -159,6 +160,7 @@
 		4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QZCircleSegue.swift; sourceTree = "<group>"; };
 		502C82461CD7D2F600425DB9 /* CheckMarkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CheckMarkView.swift; path = Camera/CheckMarkView.swift; sourceTree = "<group>"; };
 		502C82481CD7D6B900425DB9 /* QCMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCMethod.swift; sourceTree = "<group>"; };
+		504A7F851CDA3C7D0064329D /* HighlightTintButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighlightTintButton.swift; sourceTree = "<group>"; };
 		505601801CD7A77700D31716 /* CameraAccessRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CameraAccessRequester.swift; path = Camera/CameraAccessRequester.swift; sourceTree = "<group>"; };
 		505963431CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImageOrientation+UIDeviceOrientation.swift"; path = "Camera/UIImageOrientation+UIDeviceOrientation.swift"; sourceTree = "<group>"; };
 		50779A551CD7C72900F45972 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CameraViewController.swift; path = Camera/CameraViewController.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */,
 				2244EDDF1C643C860026BE70 /* ChannelStreamDataSource.h */,
 				2244EDE01C643C860026BE70 /* ChannelStreamDataSource.m */,
+				504A7F851CDA3C7D0064329D /* HighlightTintButton.swift */,
 			);
 			name = Channel;
 			sourceTree = "<group>";
@@ -611,6 +614,7 @@
 				22254BAC1C585A630031BBC0 /* UIColor+EPIC.m in Sources */,
 				229532351C63280900C6124F /* User.m in Sources */,
 				22B4BBBC1C7EDD7400274E58 /* IntroParallaxView.swift in Sources */,
+				504A7F861CDA3C7D0064329D /* HighlightTintButton.swift in Sources */,
 				22083C121C6947D7002C947A /* NSIndexSet+Convenience.m in Sources */,
 				22B4BBC01C7EDDBD00274E58 /* MotionManager.swift in Sources */,
 				22B4BBC61C7EE0E500274E58 /* UIColorExtension.swift in Sources */,

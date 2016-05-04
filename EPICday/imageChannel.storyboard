@@ -152,7 +152,7 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XpB-j5-gtM">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XpB-j5-gtM" customClass="HighlightTintButton" customModule="EPICday" customModuleProvider="target">
                                 <rect key="frame" x="264" y="480" width="72" height="72"/>
                                 <color key="backgroundColor" red="0.0" green="0.85098039219999999" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -162,6 +162,11 @@
                                 <state key="normal" title="Button" image="cameraSymbol">
                                     <color key="titleColor" red="0.0" green="0.85098039219999999" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="highlightTintColor">
+                                        <color key="value" red="0.074509803920000006" green="0.5568627451" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="cameraButtonTapped:" destination="YdO-Hv-jZu" eventType="touchUpInside" id="p4B-m8-S64"/>
                                 </connections>

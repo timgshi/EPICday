@@ -145,10 +145,11 @@ class ImageChannelViewController: UIViewController {
         }
         
         cameraButton.layer.cornerRadius = cameraButton.frame.height / 2
-        cameraButton.layer.masksToBounds = true
+        cameraButton.layer.masksToBounds = false
         cameraButton.layer.shadowColor = UIColor.blackColor().CGColor
-        cameraButton.layer.shadowOpacity = 0.5
+        cameraButton.layer.shadowOpacity = 0.3
         cameraButton.layer.shadowRadius = 12.0
+        cameraButton.layer.shadowOffset = CGSize(width: 0, height: 11.0)
     }
     
     override func viewWillAppear(animated: Bool) {
