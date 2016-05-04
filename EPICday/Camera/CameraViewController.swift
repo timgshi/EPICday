@@ -184,8 +184,14 @@ class CameraViewController: UIViewController {
         }, completion: nil)
     }
     
-    func runCaptureAnimationWithImage(image: UIImage) {
-        self.cameraStillView.image = image;
+    func runCaptureAnimationWithImage(image: UIImage?) {
+        
+        if let image = image where image.imageOrientation != .Up,
+            let cgImage = image.CGImage {
+            self.cameraStillView.image = UIImage(CGImage: cgImage, scale: image.scale, orientation: .Up)
+        } else {
+            self.cameraStillView.image = image
+        }
         
         self.cameraStillWidthConstraint.constant = 0
         self.view.layoutIfNeeded()
