@@ -281,7 +281,7 @@ extension ImageChannelViewController: UICollectionViewDelegate, CollectionViewWa
             usersMultiplier = 10
         }
 
-        headerContainerTopConstraint.constant = (1 - (offset / (headerContainerTopConstraintInitialValue * 1.5))) * headerContainerTopConstraintInitialValue
+        headerContainerTopConstraint.constant = (1 - (offset / (headerContainerTopConstraintInitialValue * 1.75))) * headerContainerTopConstraintInitialValue
         descriptionLabelTopConstraint.constant = (1 - (offset / (descriptionLabelTopConstraintInitialValue * descriptionMultiplier))) * descriptionLabelTopConstraintInitialValue
         usersContainerTopConstraint.constant = (1 - (offset / (usersContainerTopConstraintInitialValue * usersMultiplier))) * usersContainerTopConstraintInitialValue
         

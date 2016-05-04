@@ -212,7 +212,7 @@ static NSString * const PostUploadManagerCompletionValueIsThumbnailKey = @"PostU
                                   (__bridge NSString *)kCGImageSourceCreateThumbnailFromImageAlways: @YES};
         CGImageRef thumbnailRef = CGImageSourceCreateThumbnailAtIndex(imageRef, 0, (__bridge CFDictionaryRef)options);
         UIImage *thumbnailImage = [UIImage imageWithCGImage:thumbnailRef];
-        NSData *thumbnailData = UIImageJPEGRepresentation(thumbnailImage, 1.0);
+        NSData *thumbnailData = UIImageJPEGRepresentation(thumbnailImage, 0.5);
         CGImageRelease(thumbnailRef);
         return [BFTask taskWithResult:thumbnailData];
     }];

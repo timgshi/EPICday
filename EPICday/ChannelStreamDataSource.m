@@ -14,6 +14,8 @@
 #import <Bolts/Bolts.h>
 #import <Firebase/Firebase.h>
 
+#import "SDWebImageDownloader.h"
+
 const NSInteger PAGE_LIMIT = 20;
 
 @interface ChannelStreamDataSource ()
@@ -108,6 +110,9 @@ const NSInteger PAGE_LIMIT = 20;
         NSInteger index = [self.photos indexOfObject:photo inSortedRange:NSMakeRange(0, self.photos.count) options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(Photo *p1, Photo *p2) {
             return [p2.timestamp compare:p1.timestamp];
         }];
+        
+        // Warm the cache with the thumbnail
+        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:photo.thumbnailUrl options:SDWebImageDownloaderLowPriority progress:nil completed:nil];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.photos insertObject:photo atIndex:index];

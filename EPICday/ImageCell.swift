@@ -34,7 +34,7 @@ class ImageCell: UICollectionViewCell {
     
     var thumbnailURL: NSURL? {
         didSet {
-            self.imageView.sd_setImageWithURL(thumbnailURL)
+            self.imageView.sd_setImageWithURL(thumbnailURL, placeholderImage: nil, options: .HighPriority)
         }
     }
     
