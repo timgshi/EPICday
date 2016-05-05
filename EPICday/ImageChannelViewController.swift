@@ -37,6 +37,8 @@ class ImageChannelViewController: UIViewController {
     @IBOutlet private weak var headerContainerTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var descriptionLabelTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var usersContainerTopConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var loadingContainerView: UIView!
+    @IBOutlet private weak var loadingView: EPICLoadingAnimationView!
     
     private var headerContainerTopConstraintInitialValue: CGFloat = 0.0
     private var descriptionLabelTopConstraintInitialValue: CGFloat = 0.0
@@ -96,7 +98,7 @@ class ImageChannelViewController: UIViewController {
             let imageCell = blockCell as! ImageCell
             imageCell.photo = photo
             imageCell.delegate = self
-            
+
             let userRef = photo.userRef
             let user = User(fromRef: userRef)
             let nameSignal = user.rac_valuesForKeyPath("displayName", observer: user)
@@ -123,6 +125,11 @@ class ImageChannelViewController: UIViewController {
         }
         
         channelInitialLoadTaskSource.task.continueWithBlock { (task) -> AnyObject? in
+            self.loadingView.stopAnimation()
+            UIView.animateWithDuration(0.2, animations: { 
+                self.loadingContainerView.alpha = 0
+            })
+            
             self.imageCollectionView.reloadData()
             self.channelDescriptionLabel.attributedText = self.channelDescriptionAttributedString()
             
@@ -155,6 +162,11 @@ class ImageChannelViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.setupInitialConstraintValues()
+        
+        if (self.selectedChannel?.name == nil) {
+            self.loadingContainerView.alpha = 1
+            self.loadingView.startAnimation()
+        }
     }
     
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -264,10 +276,11 @@ extension ImageChannelViewController: UICollectionViewDelegate, CollectionViewWa
     
     func collectionView(collectionView: UICollectionView, layout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         // create a cell size from the image size, and return the size
-        var cellSize = CGSize(width: 16, height: 16)
+        var cellSize = CGSize(width: 2448.0, height: 3264.0)
         if (collectionView == imageCollectionView) {
-            let photo = self.dataSource?.photoAtIndexPath(indexPath)
-            cellSize = (photo?.size)!
+            if let photo = self.dataSource?.photoAtIndexPath(indexPath) {
+                cellSize = photo.size
+            }
         }
         return cellSize
     }

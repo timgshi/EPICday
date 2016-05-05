@@ -171,22 +171,54 @@
                                     <action selector="cameraButtonTapped:" destination="YdO-Hv-jZu" eventType="touchUpInside" id="p4B-m8-S64"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ubw-wl-jZZ">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pKG-No-bGS" customClass="EPICLoadingAnimationView" customModule="EPICday" customModuleProvider="target">
+                                        <rect key="frame" x="236" y="236" width="128" height="128"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="128" id="Ojt-Cp-5dP"/>
+                                            <constraint firstAttribute="height" constant="128" id="SJJ-nq-xoU"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="pKG-No-bGS" firstAttribute="centerX" secondItem="Ubw-wl-jZZ" secondAttribute="centerX" id="0y1-EF-20T"/>
+                                    <constraint firstItem="pKG-No-bGS" firstAttribute="centerY" secondItem="Ubw-wl-jZZ" secondAttribute="centerY" id="FYb-zg-arG"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="0cp-oz-Xwd" firstAttribute="leading" secondItem="cQa-xo-EUt" secondAttribute="leading" id="4FG-5w-4K6"/>
+                            <constraint firstItem="Ubw-wl-jZZ" firstAttribute="top" secondItem="cQa-xo-EUt" secondAttribute="top" id="7WG-Wr-jIM"/>
+                            <constraint firstItem="Ubw-wl-jZZ" firstAttribute="leading" secondItem="cQa-xo-EUt" secondAttribute="leading" id="Ay5-w0-YQQ"/>
                             <constraint firstItem="5JG-wA-Tzy" firstAttribute="top" secondItem="cQa-xo-EUt" secondAttribute="topMargin" constant="168" id="Bim-Cz-Wnx"/>
                             <constraint firstItem="XpB-j5-gtM" firstAttribute="centerX" secondItem="cQa-xo-EUt" secondAttribute="centerX" id="CzA-18-pn9"/>
                             <constraint firstItem="nd5-hq-bds" firstAttribute="leading" secondItem="cQa-xo-EUt" secondAttribute="leading" id="Enq-4x-Beb"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ubw-wl-jZZ" secondAttribute="trailing" id="FM1-VD-9YZ"/>
                             <constraint firstItem="txN-ic-lHA" firstAttribute="top" secondItem="nd5-hq-bds" secondAttribute="bottom" id="JDn-u3-YDg"/>
                             <constraint firstAttribute="trailing" secondItem="nd5-hq-bds" secondAttribute="trailing" id="O4P-aF-XWM"/>
                             <constraint firstItem="5JG-wA-Tzy" firstAttribute="leading" secondItem="cQa-xo-EUt" secondAttribute="leadingMargin" constant="24" id="Pwe-Xv-FqV"/>
+                            <constraint firstAttribute="trailing" secondItem="Ubw-wl-jZZ" secondAttribute="trailing" id="WTH-np-UuT"/>
                             <constraint firstItem="nd5-hq-bds" firstAttribute="top" secondItem="cQa-xo-EUt" secondAttribute="topMargin" id="Xav-yA-sd2"/>
                             <constraint firstAttribute="trailingMargin" secondItem="5JG-wA-Tzy" secondAttribute="trailing" constant="24" id="YpJ-M3-Ivd"/>
+                            <constraint firstItem="5JG-wA-Tzy" firstAttribute="top" secondItem="Ubw-wl-jZZ" secondAttribute="bottom" id="a1S-ts-quu"/>
                             <constraint firstItem="txN-ic-lHA" firstAttribute="top" secondItem="XpB-j5-gtM" secondAttribute="bottom" constant="48" id="gij-xw-zev"/>
+                            <constraint firstItem="txN-ic-lHA" firstAttribute="top" secondItem="Ubw-wl-jZZ" secondAttribute="bottom" id="ob1-5L-4Fy"/>
                             <constraint firstAttribute="trailing" secondItem="0cp-oz-Xwd" secondAttribute="trailing" id="tv8-KB-X6w"/>
+                            <constraint firstItem="Ubw-wl-jZZ" firstAttribute="leading" secondItem="cQa-xo-EUt" secondAttribute="leadingMargin" id="uAH-4F-QHW"/>
                             <constraint firstItem="0cp-oz-Xwd" firstAttribute="top" secondItem="cQa-xo-EUt" secondAttribute="top" id="zwV-Xz-Z7u"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="FM1-VD-9YZ"/>
+                                <exclude reference="uAH-4F-QHW"/>
+                                <exclude reference="a1S-ts-quu"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="Q0Y-fS-stc">
                         <barButtonItem key="rightBarButtonItem" title="Item" id="ove-IT-ip5"/>
@@ -200,6 +232,8 @@
                         <outlet property="headerContainerTopConstraint" destination="Bim-Cz-Wnx" id="JIt-sz-8gy"/>
                         <outlet property="headerContainerView" destination="5JG-wA-Tzy" id="PBK-pD-q7M"/>
                         <outlet property="imageCollectionView" destination="nd5-hq-bds" id="HA2-PR-c3c"/>
+                        <outlet property="loadingContainerView" destination="Ubw-wl-jZZ" id="Cy8-08-NFH"/>
+                        <outlet property="loadingView" destination="pKG-No-bGS" id="6Sl-2C-eDH"/>
                         <outlet property="navigationBar" destination="0cp-oz-Xwd" id="svy-Er-GIE"/>
                         <outlet property="usersContainerTopConstraint" destination="kEz-PG-JUg" id="Kbl-hk-dq7"/>
                     </connections>

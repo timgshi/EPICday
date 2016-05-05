@@ -9,6 +9,7 @@
 import UIKit
 import FormatterKit
 import SDWebImage
+import QuartzCore
 
 protocol ImageCellDelegate: class {
     func imageCellDidLongPress(cell: ImageCell)
@@ -40,6 +41,7 @@ class ImageCell: UICollectionViewCell {
             }
             
             self.imageView.sd_setImageWithURL(thumbnailURL, placeholderImage: nil, options: .HighPriority) { (image, error, cacheType, url) in
+                self.hideLoadingView()
                 if self.visible {
                     self.runAppearanceAnimation()
                 } else {
@@ -54,6 +56,8 @@ class ImageCell: UICollectionViewCell {
     @IBOutlet private weak var timeAgoLabel: UILabel!
     @IBOutlet private weak var wrapperView: UIView!
     @IBOutlet private weak var stolenOverlayView: UIView!
+    
+    let loadingView = UIView()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -92,6 +96,7 @@ class ImageCell: UICollectionViewCell {
         self.cellDidLongPressBlock = nil
         visible = false
         wrapperView.alpha = 0
+        self.setupLoadingView()
     }
     
     func setTimeAgoTextFromDate(date: NSDate!) {
@@ -132,10 +137,38 @@ class ImageCell: UICollectionViewCell {
     
     func runAppearanceAnimation() {
         self.wrapperView.transform = CGAffineTransformMakeScale(0.9, 0.9)
-
         UIView.animateWithDuration(1.0, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.6, options: .CurveEaseInOut, animations: {
             self.wrapperView.alpha = 1
             self.wrapperView.transform = CGAffineTransformIdentity
         }, completion: nil)
+    }
+    
+    func  setupLoadingView() {
+        self.loadingView.subviews.forEach({ (view) in
+            view.removeFromSuperview()
+        })
+        loadingView.frame = self.bounds
+        loadingView.alpha = 1
+        let animationView = UIView(frame: loadingView.bounds)
+        loadingView.addSubview(animationView)
+        loadingView.backgroundColor = UIColor.whiteColor()
+        contentView.addSubview(loadingView)
+        animationView .backgroundColor = UIColor(red: 243/255, green: 243/255, blue: 243/255, alpha: 1)
+        let pulseAnimation = CABasicAnimation(keyPath: "opacity")
+        pulseAnimation.duration = 1;
+        pulseAnimation.fromValue = 0.5
+        pulseAnimation.toValue = 1.0;
+        pulseAnimation.timingFunction = CAMediaTimingFunction(name:kCAMediaTimingFunctionEaseInEaseOut)
+        pulseAnimation.autoreverses = true;
+        pulseAnimation.repeatCount = FLT_MAX;
+        animationView.layer.addAnimation(pulseAnimation, forKey: nil)
+    }
+    
+    func  hideLoadingView() {
+        UIView.animateWithDuration(0.3, animations: { 
+            self.loadingView.alpha = 0
+        }) { (finished) in
+            self.loadingView.removeFromSuperview()
+        }
     }
 }

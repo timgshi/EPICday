@@ -62,6 +62,7 @@
 		4BB7EB3E1C8A7E3200AD6C83 /* QZCircleSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */; };
 		502C82471CD7D2F600425DB9 /* CheckMarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502C82461CD7D2F600425DB9 /* CheckMarkView.swift */; };
 		502C82491CD7D6B900425DB9 /* QCMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502C82481CD7D6B900425DB9 /* QCMethod.swift */; };
+		503E31031CDA5B5200CDA891 /* EPICLoadingAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503E31021CDA5B5200CDA891 /* EPICLoadingAnimationView.swift */; };
 		504A7F861CDA3C7D0064329D /* HighlightTintButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A7F851CDA3C7D0064329D /* HighlightTintButton.swift */; };
 		505601811CD7A77700D31716 /* CameraAccessRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505601801CD7A77700D31716 /* CameraAccessRequester.swift */; };
 		505963441CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505963431CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift */; };
@@ -160,6 +161,7 @@
 		4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QZCircleSegue.swift; sourceTree = "<group>"; };
 		502C82461CD7D2F600425DB9 /* CheckMarkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CheckMarkView.swift; path = Camera/CheckMarkView.swift; sourceTree = "<group>"; };
 		502C82481CD7D6B900425DB9 /* QCMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCMethod.swift; sourceTree = "<group>"; };
+		503E31021CDA5B5200CDA891 /* EPICLoadingAnimationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPICLoadingAnimationView.swift; sourceTree = "<group>"; };
 		504A7F851CDA3C7D0064329D /* HighlightTintButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighlightTintButton.swift; sourceTree = "<group>"; };
 		505601801CD7A77700D31716 /* CameraAccessRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CameraAccessRequester.swift; path = Camera/CameraAccessRequester.swift; sourceTree = "<group>"; };
 		505963431CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImageOrientation+UIDeviceOrientation.swift"; path = "Camera/UIImageOrientation+UIDeviceOrientation.swift"; sourceTree = "<group>"; };
@@ -299,6 +301,7 @@
 				2244EDDF1C643C860026BE70 /* ChannelStreamDataSource.h */,
 				2244EDE01C643C860026BE70 /* ChannelStreamDataSource.m */,
 				504A7F851CDA3C7D0064329D /* HighlightTintButton.swift */,
+				503E31021CDA5B5200CDA891 /* EPICLoadingAnimationView.swift */,
 			);
 			name = Channel;
 			sourceTree = "<group>";
@@ -605,6 +608,7 @@
 			files = (
 				221D7ECA1C56E05F0090A542 /* Photo.m in Sources */,
 				22EE1A091C8674E100FE7862 /* ImageCell.swift in Sources */,
+				503E31031CDA5B5200CDA891 /* EPICLoadingAnimationView.swift in Sources */,
 				22083C131C6947D7002C947A /* UICollectionView+Convenience.m in Sources */,
 				505963441CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift in Sources */,
 				22254BAF1C585B350031BBC0 /* UIFont+EPIC.m in Sources */,

@@ -136,7 +136,10 @@ const NSInteger PAGE_LIMIT = 20;
 }
 
 - (Photo *)photoAtIndexPath:(NSIndexPath *)indexPath {
-    return self.photos[indexPath.item];
+    if (indexPath.row < self.photos.count) {
+        return self.photos[indexPath.item];
+    }
+    return nil;
 }
 
 #pragma mark - UICollectionViewDataSource Methods
@@ -146,14 +149,18 @@ const NSInteger PAGE_LIMIT = 20;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.photos.count;
+    if (self.photos.count == 0) {
+        return 2; // For loading views
+    } else {
+        return  self.photos.count;
+    }
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     id cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:self.reuseIdentifier
                                                              forIndexPath:indexPath];
     
-    if (self.populateCell) {
+    if (self.populateCell && self.photos.count > indexPath.row) {
         self.populateCell(cell, [self photoAtIndexPath:indexPath]);
     }
     
