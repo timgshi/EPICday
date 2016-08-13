@@ -14,5 +14,6 @@ target 'EPICday' do
   pod 'FormatterKit', '~> 1.8'
   pod 'Reveal-iOS-SDK'
   pod 'NYTPhotoViewer', '~> 1.1.0'
+  pod 'FastttCamera/Filters'
 end
 

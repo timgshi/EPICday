@@ -10,6 +10,10 @@ PODS:
   - Bolts/AppLinks (1.7.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.7.0)
+  - FastttCamera/Default (0.3.4)
+  - FastttCamera/Filters (0.3.4):
+    - FastttCamera/Default
+    - GPUImage (~> 0.1.0)
   - FBSDKCoreKit (4.11.0):
     - Bolts (~> 1.7)
   - FBSDKLoginKit (4.11.0):
@@ -74,6 +78,7 @@ PODS:
 DEPENDENCIES:
   - AWSCognito
   - AWSS3
+  - FastttCamera/Filters
   - FBSDKCoreKit (~> 4.9)
   - FBSDKLoginKit
   - Firebase
@@ -89,6 +94,7 @@ SPEC CHECKSUMS:
   AWSCore: 7e0da755786280a76ed4ab4ed8c1d38ced09b460
   AWSS3: dc00e788fb6733853ecd615a45f9d7dd6ce25823
   Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
+  FastttCamera: 51f16712cbd5bdb08bc6231b957325c6be5e478d
   FBSDKCoreKit: 686ac982723a14ec9ddb85e2f81235d7706c891b
   FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
   Firebase: 3565ea88b830f28f2c77ecc524622bc71a20d085

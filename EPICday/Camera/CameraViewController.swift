@@ -11,6 +11,7 @@ import UIKit
 import AVFoundation
 import GPUImage
 import Firebase
+import FastttCamera
 
 class CameraViewController: UIViewController {
     
@@ -26,27 +27,13 @@ class CameraViewController: UIViewController {
     @IBOutlet private weak var switchCameraButton: UIButton!
     @IBOutlet private weak var pickFromLibraryButton: UIButton!
     
-    private lazy var cameraPreviewView: GPUImageView = {
-        let previewView = GPUImageView()
-        previewView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
-        return previewView
-    }()
-    
-    private lazy var captureFilter: GPUImageFilter = {
-        guard let filterURL = NSBundle.mainBundle().URLForResource("Castillero", withExtension: "acv") else {
-            fatalError("Could not load filter")
-        }
-        let filter = GPUImageToneCurveFilter(ACVURL:filterURL)
-        filter.addTarget(self.cameraPreviewView)
-        return filter
-    }()
-    
-    private var camera: GPUImageStillCamera?
+
     private let screenSize = UIScreen.mainScreen().bounds
+    private let orientationManager = IFTTTDeviceOrientation()
+    private var cameraViewController = FastttFilterCamera(filterImage: UIImage(named: "CastilleroFilter"))
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.initializeCameraWithDevicePosition(.Back)
         
         self.captureButton.layer.cornerRadius = 32
 
@@ -57,10 +44,10 @@ class CameraViewController: UIViewController {
         self.cameraStillView.layer.masksToBounds = false
         self.cameraStillView.layer.shouldRasterize = true
         
-        self.cameraPreviewView.frame = self.cameraPreviewContainerView.bounds
-        self.cameraPreviewContainerView.addSubview(self.cameraPreviewView)
+        self.addCameraViewController()
+        orientationManager.updateListener = self
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(didRotateNotification), name: UIDeviceOrientationDidChangeNotification, object: nil)
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(didRotateNotification), name: UIDeviceOrientationDidChangeNotification, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -75,41 +62,38 @@ class CameraViewController: UIViewController {
         }, completion: { (value: Bool) in
                 self.cameraTransitionView.hidden = true
         })
-        self.camera?.startCameraCapture()
+        
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
-        self.camera?.stopCameraCapture()
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.Portrait
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        cameraViewController.view.frame = cameraPreviewContainerView.bounds
+    }
+    
     override func shouldAutorotate() -> Bool {
         return false
     }
     
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        self.camera?.outputImageOrientation = toInterfaceOrientation
-    }
-    
-    override func viewDidLayoutSubviews() {
-        self.cameraPreviewView.frame = self.cameraPreviewContainerView.bounds
-    }
-    
-    func initializeCameraWithDevicePosition(devicePosition:AVCaptureDevicePosition) {
-        if let camera = self.camera {
-            camera.removeAllTargets()
-            camera.stopCameraCapture()
-        }
+    private func addCameraViewController() {
+        cameraViewController.delegate = self
+        cameraViewController.willMoveToParentViewController(self)
+        cameraViewController.beginAppearanceTransition(true, animated: false)
+        addChildViewController(cameraViewController)
+        cameraPreviewContainerView.addSubview(cameraViewController.view)
+        cameraViewController.endAppearanceTransition()
+        cameraViewController.didMoveToParentViewController(self)
         
-        self.camera = GPUImageStillCamera(sessionPreset: AVCaptureSessionPresetPhoto, cameraPosition:devicePosition)
-        self.camera?.outputImageOrientation = .Portrait // TODO: make this reflect device's current orientation
-        self.camera?.addTarget(self.captureFilter)
-        self.camera?.startCameraCapture()
+        // Need to set the filter once more, for some reason.
+        cameraViewController.filterImage = UIImage(named: "CastilleroFilter")
     }
     
     func didRotateNotification (notification: NSNotification) {
@@ -122,11 +106,7 @@ class CameraViewController: UIViewController {
     }
     
     @IBAction func switchCameraButtonDidTouch(sender: AnyObject) {
-        var newPosition: AVCaptureDevicePosition = .Front
-        if let position = self.camera?.cameraPosition() where position == .Front {
-            newPosition = .Back
-        }
-        self.initializeCameraWithDevicePosition(newPosition)
+        cameraViewController.cameraDevice = cameraViewController.cameraDevice == .Front ? .Rear : .Front
     }
     
     @IBAction func chooseFromLibraryTapped(sender: AnyObject) {
@@ -138,30 +118,38 @@ class CameraViewController: UIViewController {
     
     @IBAction func captureFrame(sender: AnyObject) {
         captureButton.userInteractionEnabled = false
+
         UIView.animateWithDuration(0.1, animations: { () -> Void in
-            self.cameraPreviewView.alpha = 1.0;
+            self.cameraPreviewContainerView.alpha = 1.0;
             self.cameraOverlayView.alpha = 1
         })
 
-        self.camera?.capturePhotoAsImageProcessedUpToFilter(self.captureFilter, withOrientation:UIImageOrientation(deviceOrientation:UIDevice.currentDevice().orientation), withCompletionHandler: { (processedImage, error) in
-            if let _ = error {
-                self.cameraOverlayView.alpha = 0
-                return
-            }
-            self.runCaptureAnimationWithImage(processedImage)
-            self.uploadImageAsynchronously(processedImage)
-        })
+        cameraViewController.takePicture()
     }
     
-    func  uploadImageAsynchronously(image: UIImage) {
+    func handleCapturedImage(image: UIImage) {
+        self.runCaptureAnimationWithImage(image)
+        self.uploadImageAsynchronously(image)
+    }
+    
+    func uploadImageAsynchronously(image: UIImage) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             let imageData = UIImageJPEGRepresentation(image, 0.7);
             PostUploadManager.sharedManager().postPhotoFromData(imageData, withSize: image.size, inChannel: self.selectedChannel)
         }
     }
     
+    
+    var animating = false
     //MARK: - Animation
     func reconfigureButtonsForOrientation(orientation: UIDeviceOrientation) {
+        
+        if animating {
+            return
+        }
+        
+        animating = true
+        
         var angle: CGFloat = 0.0;
         
         switch orientation {
@@ -181,7 +169,9 @@ class CameraViewController: UIViewController {
         UIView.animateWithDuration(0.6, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.6, options: .CurveEaseInOut, animations: {
             self.switchCameraButton.transform = CGAffineTransformMakeRotation(angle)
             self.pickFromLibraryButton.transform = CGAffineTransformMakeRotation(angle)
-        }, completion: nil)
+        }, completion: { _ in
+            self.animating = false
+        })
     }
     
     func runCaptureAnimationWithImage(image: UIImage?) {
@@ -223,6 +213,14 @@ class CameraViewController: UIViewController {
     }
 }
 
+extension CameraViewController: FastttCameraDelegate {
+
+    func cameraController(cameraController: FastttCameraInterface!, didFinishCapturingImage capturedImage: FastttCapturedImage!) {
+        handleCapturedImage(capturedImage.fullImage)
+    }
+
+}
+
 extension CameraViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil)
@@ -237,4 +235,14 @@ extension CameraViewController: UIImagePickerControllerDelegate, UINavigationCon
         PostUploadManager.sharedManager().postPhotosFromUnfilteredGalleryImageAsData([data], inSelectedChannel: self.selectedChannel)
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
+}
+
+extension CameraViewController: IFTTTDeviceOrientationUpdatable {
+    
+    func deviceOrientationDidChange(orientation: UIDeviceOrientation) {
+        dispatch_async(dispatch_get_main_queue()) { 
+            self.reconfigureButtonsForOrientation(orientation)
+        }
+    }
+    
 }

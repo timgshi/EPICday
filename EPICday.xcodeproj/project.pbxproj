@@ -60,12 +60,16 @@
 		4B7D3A1C1C543E1A00E170FB /* EPICdayTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A1B1C543E1A00E170FB /* EPICdayTests.m */; };
 		4B7D3A271C543E1A00E170FB /* EPICdayUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A261C543E1A00E170FB /* EPICdayUITests.m */; };
 		4BB7EB3E1C8A7E3200AD6C83 /* QZCircleSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */; };
+		500E090E1D5FBB0D00483C70 /* IFTTTDeviceOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 500E090D1D5FBB0D00483C70 /* IFTTTDeviceOrientation.m */; };
 		502C82471CD7D2F600425DB9 /* CheckMarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502C82461CD7D2F600425DB9 /* CheckMarkView.swift */; };
 		502C82491CD7D6B900425DB9 /* QCMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502C82481CD7D6B900425DB9 /* QCMethod.swift */; };
 		503E31031CDA5B5200CDA891 /* EPICLoadingAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503E31021CDA5B5200CDA891 /* EPICLoadingAnimationView.swift */; };
 		504A7F861CDA3C7D0064329D /* HighlightTintButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A7F851CDA3C7D0064329D /* HighlightTintButton.swift */; };
 		505601811CD7A77700D31716 /* CameraAccessRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505601801CD7A77700D31716 /* CameraAccessRequester.swift */; };
 		505963441CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505963431CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift */; };
+		506F07E81D4D2AA30032DDA8 /* TestCurve.acv in Resources */ = {isa = PBXBuildFile; fileRef = 506F07E71D4D2A9A0032DDA8 /* TestCurve.acv */; };
+		506F07EA1D4D2E810032DDA8 /* CastilleroFilter.png in Resources */ = {isa = PBXBuildFile; fileRef = 506F07E91D4D2E810032DDA8 /* CastilleroFilter.png */; };
+		506F07EC1D4D2E900032DDA8 /* TestFilter.png in Resources */ = {isa = PBXBuildFile; fileRef = 506F07EB1D4D2E900032DDA8 /* TestFilter.png */; };
 		50779A561CD7C72900F45972 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50779A551CD7C72900F45972 /* CameraViewController.swift */; };
 		50A9CAC41CD2E38E005EBDD2 /* TradeGothic-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 50A9CAC31CD2E38E005EBDD2 /* TradeGothic-Bold.otf */; };
 		50A9CAC61CD2E578005EBDD2 /* PhotoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9CAC51CD2E578005EBDD2 /* PhotoProvider.swift */; };
@@ -159,12 +163,17 @@
 		4B7D3A261C543E1A00E170FB /* EPICdayUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EPICdayUITests.m; sourceTree = "<group>"; };
 		4B7D3A281C543E1A00E170FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4BB7EB3D1C8A7E3200AD6C83 /* QZCircleSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QZCircleSegue.swift; sourceTree = "<group>"; };
+		500E090C1D5FBB0D00483C70 /* IFTTTDeviceOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFTTTDeviceOrientation.h; sourceTree = "<group>"; };
+		500E090D1D5FBB0D00483C70 /* IFTTTDeviceOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFTTTDeviceOrientation.m; sourceTree = "<group>"; };
 		502C82461CD7D2F600425DB9 /* CheckMarkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CheckMarkView.swift; path = Camera/CheckMarkView.swift; sourceTree = "<group>"; };
 		502C82481CD7D6B900425DB9 /* QCMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCMethod.swift; sourceTree = "<group>"; };
 		503E31021CDA5B5200CDA891 /* EPICLoadingAnimationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPICLoadingAnimationView.swift; sourceTree = "<group>"; };
 		504A7F851CDA3C7D0064329D /* HighlightTintButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighlightTintButton.swift; sourceTree = "<group>"; };
 		505601801CD7A77700D31716 /* CameraAccessRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CameraAccessRequester.swift; path = Camera/CameraAccessRequester.swift; sourceTree = "<group>"; };
 		505963431CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImageOrientation+UIDeviceOrientation.swift"; path = "Camera/UIImageOrientation+UIDeviceOrientation.swift"; sourceTree = "<group>"; };
+		506F07E71D4D2A9A0032DDA8 /* TestCurve.acv */ = {isa = PBXFileReference; lastKnownFileType = file; path = TestCurve.acv; sourceTree = "<group>"; };
+		506F07E91D4D2E810032DDA8 /* CastilleroFilter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CastilleroFilter.png; sourceTree = "<group>"; };
+		506F07EB1D4D2E900032DDA8 /* TestFilter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestFilter.png; sourceTree = "<group>"; };
 		50779A551CD7C72900F45972 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CameraViewController.swift; path = Camera/CameraViewController.swift; sourceTree = "<group>"; };
 		50A9CAC31CD2E38E005EBDD2 /* TradeGothic-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TradeGothic-Bold.otf"; sourceTree = "<group>"; };
 		50A9CAC51CD2E578005EBDD2 /* PhotoProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoProvider.swift; sourceTree = "<group>"; };
@@ -250,6 +259,9 @@
 		227A2E7B1C658BEE00777ACE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				506F07E71D4D2A9A0032DDA8 /* TestCurve.acv */,
+				506F07E91D4D2E810032DDA8 /* CastilleroFilter.png */,
+				506F07EB1D4D2E900032DDA8 /* TestFilter.png */,
 				227A2E791C658BD600777ACE /* Castillero.acv */,
 				22083C061C693F33002C947A /* Fonts */,
 			);
@@ -348,6 +360,7 @@
 				22083C141C6947DE002C947A /* Convenience Categories */,
 				227A2E7B1C658BEE00777ACE /* Resources */,
 				4B7D3A011C543E1A00E170FB /* Supporting Files */,
+				506F07E41D4D25520032DDA8 /* Utility */,
 				22B4BBB61C7EDD7300274E58 /* EPICday-Bridging-Header.h */,
 			);
 			path = EPICday;
@@ -389,6 +402,15 @@
 				505963431CD7FE6E0029F030 /* UIImageOrientation+UIDeviceOrientation.swift */,
 			);
 			name = Camera;
+			sourceTree = "<group>";
+		};
+		506F07E41D4D25520032DDA8 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				500E090C1D5FBB0D00483C70 /* IFTTTDeviceOrientation.h */,
+				500E090D1D5FBB0D00483C70 /* IFTTTDeviceOrientation.m */,
+			);
+			name = Utility;
 			sourceTree = "<group>";
 		};
 		D372DB2E72A675A223AB2BE8 /* Frameworks */ = {
@@ -510,10 +532,12 @@
 				22B4BBD91C7EE12D00274E58 /* FuturaLT-CondensedLightObl.ttf in Resources */,
 				22EE1A071C8674E100FE7862 /* imageChannel.storyboard in Resources */,
 				227A2E7A1C658BDB00777ACE /* Castillero.acv in Resources */,
+				506F07EC1D4D2E900032DDA8 /* TestFilter.png in Resources */,
 				22B4BBC21C7EDEE900274E58 /* IntroParallaxView.xib in Resources */,
 				22B4BBE21C7EE12D00274E58 /* FuturaLT-BookOblique.ttf in Resources */,
 				22B4BBE41C7EE12D00274E58 /* FuturaLT-HeavyOblique.ttf in Resources */,
 				4B7D3A111C543E1A00E170FB /* LaunchScreen.storyboard in Resources */,
+				506F07EA1D4D2E810032DDA8 /* CastilleroFilter.png in Resources */,
 				22B4BBE51C7EE12D00274E58 /* FuturaLT-Bold.ttf in Resources */,
 				22B4BBE01C7EE12D00274E58 /* FuturaLT-LightOblique.ttf in Resources */,
 				22B4BBDD1C7EE12D00274E58 /* FuturaLT-CondensedBoldOblique.ttf in Resources */,
@@ -529,6 +553,7 @@
 				22083C081C69426D002C947A /* FuturaBTBook.otf in Resources */,
 				4B7D3A0E1C543E1A00E170FB /* Assets.xcassets in Resources */,
 				22B4BBDF1C7EE12D00274E58 /* FuturaLT-Light.ttf in Resources */,
+				506F07E81D4D2AA30032DDA8 /* TestCurve.acv in Resources */,
 				22B4BBDA1C7EE12D00274E58 /* FuturaLT-Condensed.ttf in Resources */,
 				22B4BBD81C7EE12D00274E58 /* FuturaLT-CondensedLight.ttf in Resources */,
 				50A9CAC41CD2E38E005EBDD2 /* TradeGothic-Bold.otf in Resources */,
@@ -624,6 +649,7 @@
 				22B4BBC61C7EE0E500274E58 /* UIColorExtension.swift in Sources */,
 				50779A561CD7C72900F45972 /* CameraViewController.swift in Sources */,
 				50A9CAC61CD2E578005EBDD2 /* PhotoProvider.swift in Sources */,
+				500E090E1D5FBB0D00483C70 /* IFTTTDeviceOrientation.m in Sources */,
 				22B4BBBD1C7EDD7400274E58 /* CharPageControl.swift in Sources */,
 				4B7D3A061C543E1A00E170FB /* AppDelegate.m in Sources */,
 				502C82491CD7D6B900425DB9 /* QCMethod.swift in Sources */,
