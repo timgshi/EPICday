@@ -13,11 +13,13 @@ import SDWebImage
 class PhotoProvider: NSObject, NYTPhoto {
     var image: UIImage?
     
-    init (imageURL: NSURL?, placeHolder: UIImage? = nil) {
-        self.imageURL = imageURL
-        self.placeholderImage = placeHolder
+    init (photo: Photo, placeholder: UIImage?) {
+        self.imageURL = photo.imageUrl
+        self.placeholderImage = placeholder
+        self.photo = photo
     }
     
+    var photo: Photo
     private var imageURL: NSURL?
     var imageData: NSData? = nil
     var placeholderImage: UIImage? = nil

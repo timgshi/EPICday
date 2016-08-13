@@ -263,12 +263,20 @@ class ImageChannelViewController: UIViewController {
         }
     }
     
+    func setCameraButtonVisible(visible: Bool) {
+        UIView.animateWithDuration(0.3) { 
+            self.cameraButton.alpha = visible ? 1 : 0
+        }
+    }
+    
     // MARK: Interactions
     func showFullScreenImageViewFromCell(cell: ImageCell, photo: Photo) {
-        let photoProvider = PhotoProvider(imageURL: photo.imageUrl, placeHolder: cell.image)
+        let photoProvider = PhotoProvider(photo: photo, placeholder: cell.image)
         let photoViewController = NYTPhotosViewController(photos: [photoProvider])
         photoViewController.leftBarButtonItem = nil;
         photoViewController.rightBarButtonItem = nil;
+        photoViewController.delegate = self
+        setCameraButtonVisible(false)
         self.presentViewController(photoViewController, animated: true, completion: nil)
         photoProvider.load({
             dispatch_async(dispatch_get_main_queue(), { 
@@ -344,5 +352,20 @@ extension ImageChannelViewController: ImageCellDelegate {
         } else {
             self.presentViewController(UIAlertController(title: "Error", message: "Could not save photo", preferredStyle: .Alert), animated: true, completion: nil)
         }
+    }
+}
+
+
+extension ImageChannelViewController: NYTPhotosViewControllerDelegate {
+    func photosViewController(photosViewController: NYTPhotosViewController, referenceViewForPhoto photoProvider: NYTPhoto) -> UIView? {
+        guard let photoProvider = photoProvider as? PhotoProvider else {
+            return nil
+        }
+
+        return imageCollectionView.visibleCells().flatMap({ $0 as? ImageCell }).filter({ $0.photo == photoProvider.photo }).first
+    }
+    
+    func photosViewControllerDidDismiss(photosViewController: NYTPhotosViewController) {
+        setCameraButtonVisible(true)
     }
 }
