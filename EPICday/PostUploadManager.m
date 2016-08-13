@@ -122,7 +122,7 @@ static NSString * const PostUploadManagerCompletionValueIsThumbnailKey = @"PostU
         NSString *dir = isThumbnail ? @"thumbnails" : @"photos";
         NSString *key = [NSString stringWithFormat:@"%@/%@.jpg", dir, photoRef.key];
         NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
-        NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:photoRef.key] URLByAppendingPathExtension:@"jpg"];
+        NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%@_%@", dir, photoRef.key]] URLByAppendingPathExtension:@"jpg"];
         [imageData writeToURL:fileURL atomically:YES];
         AWSS3TransferUtility *transferUtility = [AWSS3TransferUtility defaultS3TransferUtility];
         AWSS3TransferUtilityUploadExpression *uploadExpression = [AWSS3TransferUtilityUploadExpression new];
@@ -139,7 +139,9 @@ static NSString * const PostUploadManagerCompletionValueIsThumbnailKey = @"PostU
                                         key:key
                                 contentType:PostUploadManagerContentType
                                  expression:uploadExpression
-                           completionHander:nil] continueWithBlock:^id _Nullable(AWSTask<AWSS3TransferUtilityUploadTask *> * _Nonnull task) {
+                           completionHander:^(AWSS3TransferUtilityUploadTask * _Nonnull task, NSError * _Nullable error) {
+                               NSLog(error);
+                           }] continueWithBlock:^id _Nullable(AWSTask<AWSS3TransferUtilityUploadTask *> * _Nonnull task) {
             return nil;
         }];
                                                         
