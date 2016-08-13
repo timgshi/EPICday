@@ -265,10 +265,16 @@ class ImageChannelViewController: UIViewController {
     
     // MARK: Interactions
     func showFullScreenImageViewFromCell(cell: ImageCell, photo: Photo) {
-        let photoViewController = NYTPhotosViewController(photos: [PhotoProvider(image: cell.image)])
+        let photoProvider = PhotoProvider(imageURL: photo.imageUrl, placeHolder: cell.image)
+        let photoViewController = NYTPhotosViewController(photos: [photoProvider])
         photoViewController.leftBarButtonItem = nil;
         photoViewController.rightBarButtonItem = nil;
         self.presentViewController(photoViewController, animated: true, completion: nil)
+        photoProvider.load({
+            dispatch_async(dispatch_get_main_queue(), { 
+                photoViewController.updateImageForPhoto(photoProvider)
+            })
+        })
     }
 }
 

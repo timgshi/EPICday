@@ -8,17 +8,31 @@
 
 import UIKit
 import NYTPhotoViewer
+import SDWebImage
 
 class PhotoProvider: NSObject, NYTPhoto {
     var image: UIImage?
     
-    init (image: UIImage?) {
-        self.image = image
+    init (imageURL: NSURL?, placeHolder: UIImage? = nil) {
+        self.imageURL = imageURL
+        self.placeholderImage = placeHolder
     }
     
+    private var imageURL: NSURL?
     var imageData: NSData? = nil
     var placeholderImage: UIImage? = nil
     var attributedCaptionTitle: NSAttributedString? = nil
     var attributedCaptionCredit: NSAttributedString? = nil
     var attributedCaptionSummary: NSAttributedString? = nil
+    
+    func load(completion: () -> Void) {
+        guard let imageURL = imageURL else {
+            return
+        }
+        
+        SDWebImageManager.sharedManager().downloadImageWithURL(imageURL, options: [], progress: nil) { (image, _, _, _, _) in
+            self.image = image
+            completion()
+        }
+    }
 }
