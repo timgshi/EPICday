@@ -44,6 +44,7 @@ class ImageChannelViewController: UIViewController {
     private var descriptionLabelTopConstraintInitialValue: CGFloat = 0.0
     private var usersContainerTopConstraintInitialValue: CGFloat = 0.0
     private var headerContainerViewInitialMaxY: CGFloat = 0.0
+    private var transitionContainerViewController = UIViewController()
     
     var dataSource: ChannelStreamDataSource?
     var selectedChannel: Channel?
@@ -72,6 +73,7 @@ class ImageChannelViewController: UIViewController {
         
         //Layout setup
         setupCollectionView()
+        setupTransitionContainerViewController()
         
         //Register nibs
         registerNibs()
@@ -264,9 +266,18 @@ class ImageChannelViewController: UIViewController {
     }
     
     func setCameraButtonVisible(visible: Bool) {
-        UIView.animateWithDuration(0.3) { 
+        UIView.animateWithDuration(0.15) {
             self.cameraButton.alpha = visible ? 1 : 0
         }
+    }
+    
+    // Full screen view needs to appear above collection view but below camera button
+    func setupTransitionContainerViewController() {
+        transitionContainerViewController.view.frame = view.bounds
+        transitionContainerViewController.willMoveToParentViewController(self)
+        transitionContainerViewController.view.userInteractionEnabled = false
+        view.insertSubview(transitionContainerViewController.view, belowSubview: cameraButton)
+        transitionContainerViewController.didMoveToParentViewController(self)
     }
     
     // MARK: Interactions
@@ -276,8 +287,11 @@ class ImageChannelViewController: UIViewController {
         photoViewController.leftBarButtonItem = nil;
         photoViewController.rightBarButtonItem = nil;
         photoViewController.delegate = self
+        transitionContainerViewController.definesPresentationContext = true
+        transitionContainerViewController.modalPresentationStyle = .CurrentContext
+        photoViewController.modalPresentationStyle = .CurrentContext
         setCameraButtonVisible(false)
-        self.presentViewController(photoViewController, animated: true, completion: nil)
+        transitionContainerViewController.presentViewController(photoViewController, animated: true, completion: nil)
         photoProvider.load({
             dispatch_async(dispatch_get_main_queue(), { 
                 photoViewController.updateImageForPhoto(photoProvider)
@@ -365,7 +379,7 @@ extension ImageChannelViewController: NYTPhotosViewControllerDelegate {
         return imageCollectionView.visibleCells().flatMap({ $0 as? ImageCell }).filter({ $0.photo == photoProvider.photo }).first
     }
     
-    func photosViewControllerDidDismiss(photosViewController: NYTPhotosViewController) {
+    func photosViewControllerWillDismiss(photosViewController: NYTPhotosViewController) {
         setCameraButtonVisible(true)
     }
 }
